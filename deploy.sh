@@ -156,7 +156,6 @@ if [ $?  == 0 ];
 fi
 
 rm compose-school-experience.yml
-rm "${parametersFilePath}"
 
 ####################################################
 #SET UP DATABASE
