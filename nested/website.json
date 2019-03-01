@@ -34,6 +34,9 @@
         },
         "serverfarms_schoolExperienceServicePlan_name": {
             "type": "String"
+        },
+        "Redis_schoolexperience_dev_redis_name": {
+            "type": "String"
         }
     },
     "variables": {

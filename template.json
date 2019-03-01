@@ -195,6 +195,9 @@
                     "serverfarms_schoolExperienceServicePlan_name": {
                         "value": "[parameters('serverfarms_schoolExperienceServicePlan_name')]"
                     },
+                    "Redis_schoolexperience_dev_redis_name": {
+                        "value": "[parameters('Redis_schoolexperience_dev_redis_name')]"
+                    },
                     "postgresUserPassword": {
                         "reference": {
                             "keyVault": {
