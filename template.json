@@ -62,9 +62,6 @@
             "defaultValue": "railsappuser",
             "type": "String"
         },
-        "postgresUserPassword": {
-            "type": "securestring"
-        },
         "dockerComposeFile": {
             "defaultValue": null,
             "type": "String"
@@ -158,6 +155,52 @@
             }
         },
         {
+            "apiVersion": "2018-05-01",
+            "name": "website",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/website.json', parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                    "sites_school_experience_dev_name": {
+                        "value": "[parameters('sites_school_experience_dev_name')]"
+                    },
+                    "config_web_name": {
+                        "value": "[parameters('config_web_name')]"
+                    },
+                    "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
+                        "value": "[parameters('hostNameBindings_school_experience_dev.azurewebsites.net_name')]"
+                    },
+                    "servers_schoolexperience_dev_db_name": {
+                        "value": "[parameters('servers_schoolexperience_dev_db_name')]"
+                    },
+                    "databases_school_experience_test_name": {
+                        "value": "[parameters('databases_school_experience_test_name')]"
+                    },
+                    "postgresUserLoginName": {
+                        "value": "[parameters('postgresUserLoginName')]"
+                    },
+                    "dockerComposeFile": {
+                        "value": "[parameters('dockerComposeFile')]"
+                    },
+                    "redis_database_index": {
+                        "value": "[parameters('redis_database_index')]"
+                    },
+                    "postgresUserPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "postgresUserPassword"
+                        }
+                    }
+                }
+            }
+        },
+        {
             "type": "Microsoft.Cache/Redis",
             "name": "[parameters('Redis_schoolexperience_dev_redis_name')]",
             "apiVersion": "2017-10-01",
@@ -222,120 +265,6 @@
                 "targetWorkerSizeId": 0
             },
             "dependsOn": []
-        },
-        {
-            "type": "Microsoft.Web/sites",
-            "kind": "app,linux",
-            "name": "[parameters('sites_school_experience_dev_name')]",
-            "apiVersion": "2016-08-01",
-            "location": "UK South",
-            "scale": null,
-            "properties": {
-                "enabled": true,
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(parameters('sites_school_experience_dev_name'),'.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "virtualIP": null,
-                        "thumbprint": null,
-                        "toUpdate": null,
-                        "hostType": "Standard"
-                    },
-                    {
-                        "name": "[concat(parameters('sites_school_experience_dev_name'),'.scm.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "virtualIP": null,
-                        "thumbprint": null,
-                        "toUpdate": null,
-                        "hostType": "Repository"
-                    }
-                ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_schoolExperienceServicePlan_name'))]",
-                "reserved": true,
-                "siteConfig": {
-                    "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
-                    "alwaysOn": true,
-                    "appSettings": [
-                        {
-                            "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
-                            "value": "false"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_URL",
-                            "value": "[variables('dockerRegistryUrl')]"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_USERNAME",
-                            "value": "[parameters('registries_schoolExperienceRegistry_name')]"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
-                            "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_schoolExperienceRegistry_name')), '2017-10-01').passwords[0].value]"
-                        },
-                        {
-                            "name": "SECURE_USERNAME",
-                            "value": "school"
-                        },
-                        {
-                            "name": "SECURE_PASSWORD",
-                            "value": "experience"
-                        },
-                        {
-                            "name": "SECRET_KEY_BASE",
-                            "value": "stubbed"
-                        },
-                        {
-                            "name": "REDIS_URL",
-                            "value": "[concat('rediss://:',listKeys(resourceId('Microsoft.Cache/Redis', parameters('Redis_schoolexperience_dev_redis_name')), '2017-10-01').primaryKey, '@', parameters('Redis_schoolexperience_dev_redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'))]"
-                        },
-                        {
-                            "name": "DB_DATABASE",
-                            "value": "[parameters('databases_school_experience_test_name')]"
-                        },
-                        {
-                            "name": "DB_HOST",
-                            "value": "[concat(parameters('servers_schoolexperience_dev_db_name'), '.postgres.database.azure.com')]"
-                        },
-                        {
-                            "name": "DB_PASSWORD",
-                            "value": "[parameters('postgresUserPassword')]"
-                        },
-                        {
-                            "name": "DB_USERNAME",
-                            "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_schoolexperience_dev_db_name'))]"
-                        }
-                    ]
-                },
-                "scmSiteAlsoStopped": false,
-                "hostingEnvironmentProfile": null,
-                "clientAffinityEnabled": true,
-                "clientCertEnabled": false,
-                "hostNamesDisabled": false,
-                "containerSize": 0,
-                "dailyMemoryTimeQuota": 0,
-                "cloningInfo": null,
-                "httpsOnly": true
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_schoolExperienceServicePlan_name'))]",
-                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_schoolExperienceRegistry_name'))]",
-                "[resourceId('Microsoft.Cache/Redis', parameters('Redis_schoolexperience_dev_redis_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[concat(parameters('sites_school_experience_dev_name'), '/', parameters('hostNameBindings_school_experience_dev.azurewebsites.net_name'))]",
-            "apiVersion": "2016-08-01",
-            "location": "UK South",
-            "scale": null,
-            "properties": {
-                "siteName": "school-experience-dev",
-                "domainId": null,
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_dev_name'))]"
-            ]
         }
     ]
 }
