@@ -61,18 +61,6 @@ if [[ -z "$resourceGroupLocation" ]]; then
 	read resourceGroupLocation
 fi
 
-#####################################################
-#PARAMETER FILE SUBSTITUTIONS
-#####################################################
-
-export vaultGroup=schoolExperienceVaultGroup
-export vaultName=schoolExperienceVault
-
-sed -e "s/\${subscriptionId}/${subscriptionId}/" -e "s/\${vaultGroup}/${vaultGroup}/" -e "s/\${vaultName}/${vaultName}/" parameters.json.txt > parameters.json
-
-echo "Using the following parameters file..."
-cat parameters.json
-
 #parameter file path
 parametersFilePath="parameters.json"
 

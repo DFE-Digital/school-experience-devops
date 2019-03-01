@@ -16,14 +16,6 @@
         },
         "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
             "value": "schoolexperience-test.azurewebsites.net"
-        },
-        "postgresUserPassword": {
-            "reference": {
-                "keyVault": {
-                    "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
-                },
-                "secretName": "postgresUserPassword"
-            }
         }
     }
 }
