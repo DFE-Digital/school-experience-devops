@@ -140,6 +140,7 @@ export DATABASE_NAME=school_experience_test
 DATABASE_SERVER_NAME=schoolexperience-db-test
 VAULT_NAME=schoolExperienceVault
 VAULT_RESOURCE_GROUP_NAME=schoolExperienceVaultGroup 
+SERVICE_PLAN_NAME=schoolExperienceServicePlanTest
 
 echo "Starting deployment..."
 (
@@ -147,7 +148,7 @@ echo "Starting deployment..."
 	az group deployment create --name "$deploymentName" \
                                    --resource-group "$resourceGroupName" \
                                    --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/master/template.json \
-                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registries_schoolExperienceRegistry_name=${REGISTRY_NAME} databases_school_experience_test_name=${DATABASE_NAME} servers_schoolexperience_dev_db_name=${DATABASE_SERVER_NAME} vaultName=${VAULT_NAME} vaultResourceGroupName=${VAULT_RESOURCE_GROUP_NAME}
+                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registries_schoolExperienceRegistry_name=${REGISTRY_NAME} databases_school_experience_test_name=${DATABASE_NAME} servers_schoolexperience_dev_db_name=${DATABASE_SERVER_NAME} vaultName=${VAULT_NAME} vaultResourceGroupName=${VAULT_RESOURCE_GROUP_NAME} serverfarms_schoolExperienceServicePlan_name=${SERVICE_PLAN_NAME}
 )
 
 if [ $?  == 0 ];

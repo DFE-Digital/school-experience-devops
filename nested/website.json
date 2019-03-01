@@ -156,6 +156,32 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_dev_name'))]"
             ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "linux",
+            "name": "[parameters('serverfarms_schoolExperienceServicePlan_name')]",
+            "apiVersion": "2016-09-01",
+            "location": "UK South",
+            "scale": null,
+            "properties": {
+                "name": "[parameters('serverfarms_schoolExperienceServicePlan_name')]",
+                "workerTierName": null,
+                "adminSiteName": null,
+                "hostingEnvironmentProfile": null,
+                "perSiteScaling": false,
+                "reserved": true,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
+            },
+            "dependsOn": []
         }
     ]
 }
