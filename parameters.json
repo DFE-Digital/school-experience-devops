@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "servers_schoolexperience_dev_db_createMode": {
+            "value": "Default"
+        },
+        "sites_school_experience_dev_name": {
+            "value": "schoolexperience-test"
+        },
+        "Redis_schoolexperience_dev_redis_name": {
+            "value": "schoolexperience-redis-test"
+        },
+        "config_web_name": {
+            "value": "schoolexperience-test"
+        },
+        "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
+            "value": "schoolexperience-test.azurewebsites.net"
+        }
+    }
+}
