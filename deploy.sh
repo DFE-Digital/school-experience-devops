@@ -148,7 +148,7 @@ cat compose-school-experience.yml
 #START DEPLOYMENT
 ####################################################
 
-DATABASE_NAME=school_experience_test
+export DATABASE_NAME=school_experience_test
 DATABASE_SERVER_NAME=schoolexperience-db-test
 VAULT_NAME=schoolExperienceVault
 VAULT_RESOURCE_GROUP_NAME=schoolExperienceVaultGroup 
