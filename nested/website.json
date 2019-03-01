@@ -31,7 +31,7 @@
         },
         "registries_schoolExperienceRegistry_name": {
             "type": "String"
-        },
+        }
     },
     "variables": {
         "dockerRegistryUrl": "[concat('https://',toLower(parameters('registries_schoolExperienceRegistry_name')), '.azurecr.io')]"
