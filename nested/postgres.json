@@ -36,13 +36,6 @@
         },
         "postgresAdminPassword": {
             "type": "securestring"
-        },
-        "postgresUserLoginName": {
-            "defaultValue": "railsappuser",
-            "type": "String"
-        },
-        "postgresUserPassword": {
-            "type": "securestring"
         }
     },
     "resources": [
