@@ -193,7 +193,7 @@
                         "value": "[parameters('registries_schoolExperienceRegistry_name')]"
                     },
                     "serverfarms_schoolExperienceServicePlan_name": {
-                        "value": "[parameters('serverfarms_schoolExperienceServicePlan_name')]",
+                        "value": "[parameters('serverfarms_schoolExperienceServicePlan_name')]"
                     },
                     "postgresUserPassword": {
                         "reference": {
