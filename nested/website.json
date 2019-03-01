@@ -31,6 +31,9 @@
         },
         "registries_schoolExperienceRegistry_name": {
             "type": "String"
+        },
+        "serverfarms_schoolExperienceServicePlan_name": {
+            "type": "String"
         }
     },
     "variables": {
