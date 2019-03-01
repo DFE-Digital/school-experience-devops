@@ -137,9 +137,7 @@
                 "httpsOnly": true
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_schoolExperienceServicePlan_name'))]",
-                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_schoolExperienceRegistry_name'))]",
-                "[resourceId('Microsoft.Cache/Redis', parameters('Redis_schoolexperience_dev_redis_name'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_schoolExperienceServicePlan_name'))]"
             ]
         },
         {
