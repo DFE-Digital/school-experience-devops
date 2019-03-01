@@ -3,35 +3,27 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "servers_schoolexperience_dev_db_createMode": {
-            "defaultValue": null,
             "type": "SecureString"
         },
         "servers_schoolexperience_dev_db_name": {
-            "defaultValue": "schoolexperience-dev-db",
             "type": "String"
         },
         "databases_postgres_name": {
-            "defaultValue": "postgres",
             "type": "String"
         },
         "databases_azure_sys_name": {
-            "defaultValue": "azure_sys",
             "type": "String"
         },
         "databases_azure_maintenance_name": {
-            "defaultValue": "azure_maintenance",
             "type": "String"
         },
         "databases_school_experience_test_name": {
-            "defaultValue": "school_experience_test",
             "type": "String"
         },
         "firewallRules_AllowAzureResourceIps_name": {
-            "defaultValue": "AllowAzureResourceIps",
             "type": "String"
         },
         "postgresAdminLoginName": {
-            "defaultValue": "adminuser",
             "type": "String"
         },
         "postgresAdminPassword": {

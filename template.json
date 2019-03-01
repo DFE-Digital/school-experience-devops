@@ -143,6 +143,9 @@
                     "postgresAdminLoginName": {
                         "value": "[parameters('postgresAdminLoginName')]"
                     },
+                    "registries_schoolExperienceRegistry_name": {
+                        "value": "[parameters('registries_schoolExperienceRegistry_name')]"
+                    },                    
                     "postgresAdminPassword": {
                         "reference": {
                             "keyVault": {

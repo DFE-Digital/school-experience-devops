@@ -3,40 +3,35 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_school_experience_dev_name": {
-            "defaultValue": "school-experience-dev",
             "type": "String"
         },
         "config_web_name": {
-            "defaultValue": "web",
             "type": "String"
         },
         "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
-            "defaultValue": "school-experience-dev.azurewebsites.net",
             "type": "String"
         },
         "servers_schoolexperience_dev_db_name": {
-            "defaultValue": "schoolexperience-dev-db",
             "type": "String"
         },
         "databases_school_experience_test_name": {
-            "defaultValue": "school_experience_test",
             "type": "String"
         },
         "postgresUserLoginName": {
-            "defaultValue": "railsappuser",
             "type": "String"
         },
         "postgresUserPassword": {
             "type": "securestring"
         },
         "dockerComposeFile": {
-            "defaultValue": null,
             "type": "String"
         },
         "redis_database_index": {
-            "defaultValue": "15",
             "type": "String"
-        }
+        },
+        "registries_schoolExperienceRegistry_name": {
+            "type": "String"
+        },
     },
     "variables": {
         "dockerRegistryUrl": "[concat('https://',toLower(parameters('registries_schoolExperienceRegistry_name')), '.azurecr.io')]"
