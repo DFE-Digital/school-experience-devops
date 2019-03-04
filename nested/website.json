@@ -135,13 +135,9 @@
                 "dailyMemoryTimeQuota": 0,
                 "cloningInfo": null,
                 "httpsOnly": true,
-                "httpLogs": {
-                     "fileSystem": {
-                          "retentionInMb": 35,
-                          "retentionInDays": null,
-                          "enabled": true
-                     }
-                }
+                "httpLoggingEnabled": true,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
