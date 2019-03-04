@@ -6,15 +6,21 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName>" 1>&2; exit 1; }
 
 declare subscriptionId=""
 declare resourceGroupName=""
 declare deploymentName=""
 declare resourceGroupLocation=""
+declare registryName=""
+declare vaultResourceGroup=""
+declare vaultName=""
+declare databaseServerName=""
+declare databaseName=""
+declare servicePlanName=""
 
 # Initialize parameters specified from command line
-while getopts ":i:g:n:l:" arg; do
+while getopts ":i:g:n:l:m:o:p:q:r:s:" arg; do
 	case "${arg}" in
 		i)
 			subscriptionId=${OPTARG}
@@ -28,6 +34,24 @@ while getopts ":i:g:n:l:" arg; do
 		l)
 			resourceGroupLocation=${OPTARG}
 			;;
+                m)
+                        registryName=${OPTARG}
+                        ;;
+                o)
+                        vaultResourceGroup=${OPTARG}
+                        ;;
+                p)
+                        vaultName=${OPTARG}
+                        ;;
+                q)
+                        databaseServerName=${OPTARG}
+                        ;;
+                r) 
+                        databaseName=${OPTARG}
+                        ;;
+                s)
+                        servicePlanName=${OPTARG}
+                        ;;
 		esac
 done
 shift $((OPTIND-1))
@@ -61,6 +85,35 @@ if [[ -z "$resourceGroupLocation" ]]; then
 	read resourceGroupLocation
 fi
 
+if [[ -z "$registryName" ]]; then
+        echo "Enter a name for the registry:"
+        read registryName
+fi
+
+if [[ -z "$vaultResourceGroup" ]]; then
+        echo "Enter the name of the (already existing) vault resource group:"
+        read vaultResourceGroup
+fi
+
+if [[ -z "$vaultName" ]]; then
+        echo "Enter the name of the (already existing) vault:"
+        read vaultName
+fi
+
+if [[ -z "$databaseServerName" ]]; then
+        echo "Enter a name for the database server:"
+        read databaseServerName
+fi
+
+if [[ -z "$databaseName" ]]; then
+        echo "Enter a name for the database:"
+        read databaseName
+fi
+
+if [[ -z "$servicePlanName" ]]; then
+        echo "Enter a name for the service plan:"
+        read servicePlanName
+fi
 #parameter file path
 parametersFilePath="parameters.json"
 
@@ -105,8 +158,8 @@ fi
 #DOCKER COMPOSE FILE CREATION
 #####################################################
 
-REGISTRY_NAME=schoolExperienceRegistryTest
-REGISTRY_HOST="$(echo $REGISTRY_NAME | tr '[:upper:]' '[:lower:]').azurecr.io"
+#REGISTRY_NAME=schoolExperienceRegistryTest
+REGISTRY_HOST="$(echo $registryName | tr '[:upper:]' '[:lower:]').azurecr.io"
 IMAGE_NAME=school-experience
 IMAGE_TAG=latest
 
@@ -136,12 +189,13 @@ cat compose-school-experience.yml
 #START DEPLOYMENT
 ####################################################
 
-export DATABASE_NAME=school_experience_test
-DATABASE_SERVER_NAME=schoolexperience-db-test
-VAULT_NAME=schoolExperienceVault
-VAULT_RESOURCE_GROUP_NAME=schoolExperienceVaultGroup 
-SERVICE_PLAN_NAME=schoolExperienceServicePlanTest
-VAULT_NAME_LOWER_CASE="$(echo $VAULT_NAME | tr '[:upper:]' '[:lower:]')"
+export DATABASE_NAME=$databaseName
+#export DATABASE_NAME=school_experience_test
+#DATABASE_SERVER_NAME=schoolexperience-db-test
+#VAULT_NAME=schoolExperienceVault
+#VAULT_RESOURCE_GROUP_NAME=schoolExperienceVaultGroup 
+#SERVICE_PLAN_NAME=schoolExperienceServicePlanTest
+VAULT_NAME_LOWER_CASE="$(echo $vaultName | tr '[:upper:]' '[:lower:]')"
 
 echo "Starting deployment..."
 (
@@ -149,7 +203,7 @@ echo "Starting deployment..."
 	az group deployment create --name "$deploymentName" \
                                    --resource-group "$resourceGroupName" \
                                    --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/master/template.json \
-                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registry_name=${REGISTRY_NAME} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${DATABASE_SERVER_NAME} vaultName=${VAULT_NAME} vaultResourceGroupName=${VAULT_RESOURCE_GROUP_NAME} serverfarms_serviceplan_name=${SERVICE_PLAN_NAME}
+                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registry_name=${registryName} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName}
 )
 
 if [ $?  == 0 ];
@@ -166,14 +220,14 @@ rm compose-school-experience.yml
 postgresAdminPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresAdminPassword -o tsv --query value)
 export postgresUserPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresUserPassword -o tsv --query value)
 
-PGPASSWORD=$postgresAdminPassword psql -U adminuser@"${DATABASE_SERVER_NAME}" -h "${DATABASE_SERVER_NAME}".postgres.database.azure.com postgres -f createdb.sql
+PGPASSWORD=$postgresAdminPassword psql -U adminuser@"${databaseServerName}" -h "${databaseServerName}".postgres.database.azure.com postgres -f createdb.sql
 
 ####################################################
 #BOOTSTRAP IMAGE
 ####################################################
 
-REGISTRY_USER=$REGISTRY_NAME
-REGISTRY_PASSWORD=$(az acr credential show -n $REGISTRY_NAME --output tsv --query passwords[0].value)
+REGISTRY_USER=$registryName
+REGISTRY_PASSWORD=$(az acr credential show -n $registryName --output tsv --query passwords[0].value)
 
 if [ -n "${BUILD_APP+set}" ]; then
   git clone https://github.com/DFE-Digital/schools-experience.git /tmp/schools-experience
@@ -181,7 +235,7 @@ if [ -n "${BUILD_APP+set}" ]; then
   docker build -f Dockerfile -t $REGISTRY_HOST/school-experience:latest .
 
   echo 'RUNNING  db:migrate db:seed'
-  docker run -e RAILS_ENV=production -e DB_HOST="${DATABASE_SERVER_NAME}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="railsappuser@${DATABASE_SERVER_NAME}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/school-experience:latest rails db:migrate db:seed
+  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="railsappuser@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/school-experience:latest rails db:migrate db:seed
 
   docker login $REGISTRY_HOST -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   docker push $REGISTRY_HOST/school-experience:latest
