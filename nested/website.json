@@ -137,7 +137,7 @@
                 "httpsOnly": true,
                 "applicationLogs": {
                     "fileSystem": {
-                        "level": "On"
+                        "enabled": true
                     }
                 }
             },
