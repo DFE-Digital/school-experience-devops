@@ -141,6 +141,7 @@ DATABASE_SERVER_NAME=schoolexperience-db-test
 VAULT_NAME=schoolExperienceVault
 VAULT_RESOURCE_GROUP_NAME=schoolExperienceVaultGroup 
 SERVICE_PLAN_NAME=schoolExperienceServicePlanTest
+VAULT_NAME_LOWER_CASE="$(echo $VAULT_NAME | tr '[:upper:]' '[:lower:]')"
 
 echo "Starting deployment..."
 (
@@ -162,7 +163,8 @@ rm compose-school-experience.yml
 #SET UP DATABASE
 ####################################################
 
-postgresAdminPassword=$(az keyvault secret show --id https://schoolexperiencevault.vault.azure.net/secrets/postgresAdminPassword -o tsv --query value)
+postgresAdminPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresAdminPassword -o tsv --query value)
+export postgresUserPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresUserPassword -o tsv --query value)
 
 PGPASSWORD=$postgresAdminPassword psql -U adminuser@"${DATABASE_SERVER_NAME}" -h "${DATABASE_SERVER_NAME}".postgres.database.azure.com postgres -f createdb.sql
 
@@ -177,6 +179,10 @@ if [ -n "${BUILD_APP+set}" ]; then
   git clone https://github.com/DFE-Digital/schools-experience.git /tmp/schools-experience
   cd /tmp/schools-experience
   docker build -f Dockerfile -t $REGISTRY_HOST/school-experience:latest .
+
+  echo 'RUNNING  db:migrate db:seed'
+  docker run -e RAILS_ENV=production -e DB_HOST="${DATABASE_SERVER_NAME}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="railsappuser@${DATABASE_SERVER_NAME}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/school-experience:latest rails db:migrate db:seed
+
   docker login $REGISTRY_HOST -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   docker push $REGISTRY_HOST/school-experience:latest
   rm -rf /tmp/schools-experience
