@@ -11,9 +11,6 @@
         "redis_name": {
             "value": "schoolexperience-redis-test"
         },
-        "config_web_name": {
-            "value": "schoolexperience-test"
-        },
         "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
             "value": "schoolexperience-test.azurewebsites.net"
         }
