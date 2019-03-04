@@ -106,7 +106,7 @@
                         },
                         {
                             "name": "REDIS_URL",
-                            "value": "[concat('rediss://:',uriComponent(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01')).primaryKey, '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'))]"
+                            "value": "[concat('rediss://:',uriComponent(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'))]"
                         },
                         {
                             "name": "DB_DATABASE",
