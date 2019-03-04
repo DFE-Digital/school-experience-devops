@@ -134,7 +134,12 @@
                 "containerSize": 0,
                 "dailyMemoryTimeQuota": 0,
                 "cloningInfo": null,
-                "httpsOnly": true
+                "httpsOnly": true,
+                "applicationLogs": {
+                    "fileSystem": {
+                        "level": "On"
+                    }
+                }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
