@@ -135,10 +135,12 @@
                 "dailyMemoryTimeQuota": 0,
                 "cloningInfo": null,
                 "httpsOnly": true,
-                "applicationLogs": {
-                    "fileSystem": {
-                        "enabled": true
-                    }
+                "httpLogs": {
+                     "fileSystem": {
+                          "retentionInMb": 35,
+                          "retentionInDays": null,
+                          "enabled": true
+                     }
                 }
             },
             "dependsOn": [
