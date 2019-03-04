@@ -148,7 +148,7 @@ echo "Starting deployment..."
 	az group deployment create --name "$deploymentName" \
                                    --resource-group "$resourceGroupName" \
                                    --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/master/template.json \
-                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registries_schoolExperienceRegistry_name=${REGISTRY_NAME} databases_school_experience_test_name=${DATABASE_NAME} servers_schoolexperience_dev_db_name=${DATABASE_SERVER_NAME} vaultName=${VAULT_NAME} vaultResourceGroupName=${VAULT_RESOURCE_GROUP_NAME} serverfarms_schoolExperienceServicePlan_name=${SERVICE_PLAN_NAME}
+                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registry_name=${REGISTRY_NAME} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${DATABASE_SERVER_NAME} vaultName=${VAULT_NAME} vaultResourceGroupName=${VAULT_RESOURCE_GROUP_NAME} serverfarms_serviceplan_name=${SERVICE_PLAN_NAME}
 )
 
 if [ $?  == 0 ];
@@ -173,7 +173,7 @@ PGPASSWORD=$postgresAdminPassword psql -U adminuser@"${DATABASE_SERVER_NAME}" -h
 REGISTRY_USER=$REGISTRY_NAME
 REGISTRY_PASSWORD=$(az acr credential show -n $REGISTRY_NAME --output tsv --query passwords[0].value)
 
-if [ "$BUILD_APP" = "true" ]; then
+if [ -n "${BUILD_APP+set}" ]; then
   git clone https://github.com/DFE-Digital/schools-experience.git /tmp/schools-experience
   cd /tmp/schools-experience
   docker build -f Dockerfile -t $REGISTRY_HOST/school-experience:latest .

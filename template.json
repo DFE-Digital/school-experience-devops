@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "servers_schoolexperience_dev_db_createMode": {
+        "servers_db_createMode": {
             "defaultValue": null,
             "type": "SecureString"
         },
@@ -10,7 +10,7 @@
             "defaultValue": "school-experience-dev",
             "type": "String"
         },
-        "Redis_schoolexperience_dev_redis_name": {
+        "redis_name": {
             "defaultValue": "schoolexperience-dev-redis",
             "type": "String"
         },
@@ -18,15 +18,15 @@
             "defaultValue": "web",
             "type": "String"
         },
-        "serverfarms_schoolExperienceServicePlan_name": {
+        "serverfarms_serviceplan_name": {
             "defaultValue": "schoolExperienceServicePlan",
             "type": "String"
         },
-        "servers_schoolexperience_dev_db_name": {
+        "servers_db_name": {
             "defaultValue": "schoolexperience-dev-db",
             "type": "String"
         },
-        "registries_schoolExperienceRegistry_name": {
+        "registry_name": {
             "defaultValue": "schoolExperienceRegistry",
             "type": "String"
         },
@@ -42,7 +42,7 @@
             "defaultValue": "azure_maintenance",
             "type": "String"
         },
-        "databases_school_experience_test_name": {
+        "databases_school_experience_name": {
             "defaultValue": "school_experience_test",
             "type": "String"
         },
@@ -105,7 +105,7 @@
         }
     },
     "variables": {
-        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registries_schoolExperienceRegistry_name')), '.azurecr.io')]"
+        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]"
     },
     "resources": [
         {
@@ -119,11 +119,11 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
-                    "servers_schoolexperience_dev_db_createMode": {
-                        "value": "[parameters('servers_schoolexperience_dev_db_createMode')]"
+                    "servers_db_createMode": {
+                        "value": "[parameters('servers_db_createMode')]"
                     },
-                    "servers_schoolexperience_dev_db_name": {
-                        "value": "[parameters('servers_schoolexperience_dev_db_name')]"
+                    "servers_db_name": {
+                        "value": "[parameters('servers_db_name')]"
                     },
                     "databases_postgres_name": {
                         "value": "[parameters('databases_postgres_name')]"
@@ -134,8 +134,8 @@
                     "databases_azure_maintenance_name": {
                         "value": "[parameters('databases_azure_maintenance_name')]"
                     },
-                    "databases_school_experience_test_name": {
-                        "value": "[parameters('databases_school_experience_test_name')]"
+                    "databases_school_experience_name": {
+                        "value": "[parameters('databases_school_experience_name')]"
                     },
                     "firewallRules_AllowAzureResourceIps_name": {
                         "value": "[parameters('firewallRules_AllowAzureResourceIps_name')]"
@@ -174,11 +174,11 @@
                     "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
                         "value": "[parameters('hostNameBindings_school_experience_dev.azurewebsites.net_name')]"
                     },
-                    "servers_schoolexperience_dev_db_name": {
-                        "value": "[parameters('servers_schoolexperience_dev_db_name')]"
+                    "servers_db_name": {
+                        "value": "[parameters('servers_db_name')]"
                     },
-                    "databases_school_experience_test_name": {
-                        "value": "[parameters('databases_school_experience_test_name')]"
+                    "databases_school_experience_name": {
+                        "value": "[parameters('databases_school_experience_name')]"
                     },
                     "postgresUserLoginName": {
                         "value": "[parameters('postgresUserLoginName')]"
@@ -189,14 +189,14 @@
                     "redis_database_index": {
                         "value": "[parameters('redis_database_index')]"
                     },
-                    "registries_schoolExperienceRegistry_name": {
-                        "value": "[parameters('registries_schoolExperienceRegistry_name')]"
+                    "registry_name": {
+                        "value": "[parameters('registry_name')]"
                     },
-                    "serverfarms_schoolExperienceServicePlan_name": {
-                        "value": "[parameters('serverfarms_schoolExperienceServicePlan_name')]"
+                    "serverfarms_serviceplan_name": {
+                        "value": "[parameters('serverfarms_serviceplan_name')]"
                     },
-                    "Redis_schoolexperience_dev_redis_name": {
-                        "value": "[parameters('Redis_schoolexperience_dev_redis_name')]"
+                    "redis_name": {
+                        "value": "[parameters('redis_name')]"
                     },
                     "postgresUserPassword": {
                         "reference": {
@@ -211,7 +211,7 @@
         },
         {
             "type": "Microsoft.Cache/Redis",
-            "name": "[parameters('Redis_schoolexperience_dev_redis_name')]",
+            "name": "[parameters('redis_name')]",
             "apiVersion": "2017-10-01",
             "location": "UK South",
             "tags": {},
@@ -239,7 +239,7 @@
                 "name": "Standard",
                 "tier": "Standard"
             },
-            "name": "[parameters('registries_schoolExperienceRegistry_name')]",
+            "name": "[parameters('registry_name')]",
             "apiVersion": "2017-10-01",
             "location": "uksouth",
             "tags": {},
