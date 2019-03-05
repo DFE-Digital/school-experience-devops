@@ -199,7 +199,11 @@
                             "secretName": "postgresUserPassword"
                         }
                     }
-                }
+                },
+                "dependsOn": [
+                    "[resourceId('Microsoft.Resources/deployments', 'postgresdb')]",
+                    "[resourceId('Microsoft.Resources/Redis', parameters('redis_name'))]"
+                ]
             }
         },
         {
