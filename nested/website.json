@@ -8,9 +8,6 @@
         "config_web_name": {
             "type": "String"
         },
-        "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
-            "type": "String"
-        },
         "servers_db_name": {
             "type": "String"
         },
@@ -138,21 +135,6 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('hostNameBindings_school_experience_dev.azurewebsites.net_name'))]",
-            "apiVersion": "2016-08-01",
-            "location": "UK South",
-            "scale": null,
-            "properties": {
-                "siteName": "school-experience-dev",
-                "domainId": null,
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
             ]
         },
         {
