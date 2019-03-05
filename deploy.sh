@@ -6,7 +6,7 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName>" 1>&2; exit 1; }
 
 declare subscriptionId=""
 declare resourceGroupName=""
@@ -19,9 +19,10 @@ declare databaseServerName=""
 declare databaseName=""
 declare servicePlanName=""
 declare sitesName=""
+declare redisName=""
 
 # Initialize parameters specified from command line
-while getopts ":i:g:n:l:m:o:p:q:r:s:w:" arg; do
+while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:" arg; do
 	case "${arg}" in
 		i)
 			subscriptionId=${OPTARG}
@@ -55,6 +56,9 @@ while getopts ":i:g:n:l:m:o:p:q:r:s:w:" arg; do
                         ;;
                 w)     
                         sitesName=${OPTARG}
+                        ;;
+                t)
+                        redisName=${OPTARG}
                         ;;
 		esac
 done
@@ -122,6 +126,11 @@ fi
 if [[ -z "$sitesName" ]]; then
         echo "Enter a name for the School Experience web site:"
         read sitesName
+fi
+
+if [[ -z "$redisName" ]]; then
+        echo "Enter a name for the Redis instance (will be result in a hostname <name>.redis.cache.windows.net):"
+        read redisName
 fi
 
 #parameter file path
@@ -213,7 +222,7 @@ echo "Starting deployment..."
 	az group deployment create --name "$deploymentName" \
                                    --resource-group "$resourceGroupName" \
                                    --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/master/template.json \
-                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registry_name=${registryName} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName}
+                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registry_name=${registryName} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName}
 )
 
 if [ $?  == 0 ];
