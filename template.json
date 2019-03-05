@@ -10,6 +10,7 @@
             "type": "String"
         },
         "redis_name": {
+            "defaultValue": "schoolexperience-dev-redis",
             "type": "String"
         },
         "config_web_name": {
@@ -48,6 +49,10 @@
             "defaultValue": "AllowAzureResourceIps",
             "type": "String"
         },
+        "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
+            "defaultValue": "school-experience-dev.azurewebsites.net",
+            "type": "String"
+        },
         "postgresAdminLoginName": {
             "defaultValue": "adminuser",
             "type": "String"
@@ -66,14 +71,12 @@
         },
         "vaultName": {
             "type": "string",
-            "defaultValue": "schoolExperienceVault",
             "metadata": {
                 "description": "The name of the keyvault that contains the secret."
             }
         },
         "vaultResourceGroupName": {
             "type": "string",
-            "defaultValue": "schoolExperienceVaultGroup",
             "metadata": {
                 "description": "The name of the resource group that contains the keyvault."
             }
@@ -167,6 +170,9 @@
                     "config_web_name": {
                         "value": "[parameters('config_web_name')]"
                     },
+                    "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
+                        "value": "[parameters('hostNameBindings_school_experience_dev.azurewebsites.net_name')]"
+                    },
                     "servers_db_name": {
                         "value": "[parameters('servers_db_name')]"
                     },
@@ -200,11 +206,7 @@
                         }
                     }
                 }
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'postgresdb')]",
-                "[resourceId('Microsoft.Resources/Redis', parameters('redis_name'))]"
-            ]
+            }
         },
         {
             "type": "Microsoft.Cache/Redis",

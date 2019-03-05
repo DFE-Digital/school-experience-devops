@@ -4,6 +4,12 @@
     "parameters": {
         "servers_db_createMode": {
             "value": "Default"
+        },
+        "redis_name": {
+            "value": "schoolexperience-redis-test"
+        },
+        "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
+            "value": "schoolexperience-test.azurewebsites.net"
         }
     }
 }
