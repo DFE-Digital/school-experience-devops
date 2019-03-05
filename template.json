@@ -66,12 +66,14 @@
         },
         "vaultName": {
             "type": "string",
+            "defaultValue", "schoolExperienceVault",
             "metadata": {
                 "description": "The name of the keyvault that contains the secret."
             }
         },
         "vaultResourceGroupName": {
             "type": "string",
+            "defaultValue", "schoolExperienceVaultGroup",
             "metadata": {
                 "description": "The name of the resource group that contains the keyvault."
             }
