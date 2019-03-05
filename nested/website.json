@@ -139,7 +139,7 @@
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net_name')]",
+            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
             "apiVersion": "2016-08-01",
             "location": "UK South",
             "scale": null,
