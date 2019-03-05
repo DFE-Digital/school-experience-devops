@@ -73,7 +73,7 @@
         },
         "vaultResourceGroupName": {
             "type": "string",
-            "defaultValue", "schoolExperienceVaultGroup",
+            "defaultValue": "schoolExperienceVaultGroup",
             "metadata": {
                 "description": "The name of the resource group that contains the keyvault."
             }
