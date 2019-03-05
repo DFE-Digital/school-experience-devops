@@ -5,9 +5,6 @@
         "servers_db_createMode": {
             "value": "Default"
         },
-        "sites_school_experience_dev_name": {
-            "value": "schoolexperience-test"
-        },
         "redis_name": {
             "value": "schoolexperience-redis-test"
         },

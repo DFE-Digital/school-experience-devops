@@ -6,8 +6,7 @@
             "defaultValue": null,
             "type": "SecureString"
         },
-        "sites_school_experience_dev_name": {
-            "defaultValue": "school-experience-dev",
+        "sites_school_experience_name": {
             "type": "String"
         },
         "redis_name": {
@@ -165,8 +164,8 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/website.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
-                    "sites_school_experience_dev_name": {
-                        "value": "[parameters('sites_school_experience_dev_name')]"
+                    "sites_school_experience_name": {
+                        "value": "[parameters('sites_school_experience_name')]"
                     },
                     "config_web_name": {
                         "value": "[parameters('config_web_name')]"

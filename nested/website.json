@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_school_experience_dev_name": {
+        "sites_school_experience_name": {
             "type": "String"
         },
         "config_web_name": {
@@ -46,7 +46,7 @@
         {
             "type": "Microsoft.Web/sites",
             "kind": "app,linux",
-            "name": "[parameters('sites_school_experience_dev_name')]",
+            "name": "[parameters('sites_school_experience_name')]",
             "apiVersion": "2016-08-01",
             "location": "UK South",
             "scale": null,
@@ -54,7 +54,7 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(parameters('sites_school_experience_dev_name'),'.azurewebsites.net')]",
+                        "name": "[concat(parameters('sites_school_experience_name'),'.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "virtualIP": null,
                         "thumbprint": null,
@@ -62,7 +62,7 @@
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(parameters('sites_school_experience_dev_name'),'.scm.azurewebsites.net')]",
+                        "name": "[concat(parameters('sites_school_experience_name'),'.scm.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "virtualIP": null,
                         "thumbprint": null,
@@ -142,7 +142,7 @@
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[concat(parameters('sites_school_experience_dev_name'), '/', parameters('hostNameBindings_school_experience_dev.azurewebsites.net_name'))]",
+            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('hostNameBindings_school_experience_dev.azurewebsites.net_name'))]",
             "apiVersion": "2016-08-01",
             "location": "UK South",
             "scale": null,
@@ -152,7 +152,7 @@
                 "hostNameType": "Verified"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_dev_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
             ]
         },
         {
@@ -183,7 +183,7 @@
         },
         {
             "type": "Microsoft.Web/sites/config",
-            "name": "[concat(parameters('sites_school_experience_dev_name'), '/', parameters('config_web_name'))]",
+            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('config_web_name'))]",
             "apiVersion": "2016-08-01",
             "location": "UK South",
             "scale": null,
@@ -199,7 +199,7 @@
                 "ftpsState": "Disabled"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_dev_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
             ]
         }
     ]
