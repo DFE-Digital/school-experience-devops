@@ -48,10 +48,6 @@
             "defaultValue": "AllowAzureResourceIps",
             "type": "String"
         },
-        "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
-            "defaultValue": "school-experience-dev.azurewebsites.net",
-            "type": "String"
-        },
         "postgresAdminLoginName": {
             "defaultValue": "adminuser",
             "type": "String"
@@ -170,9 +166,6 @@
                     },
                     "config_web_name": {
                         "value": "[parameters('config_web_name')]"
-                    },
-                    "hostNameBindings_school_experience_dev.azurewebsites.net_name": {
-                        "value": "[parameters('hostNameBindings_school_experience_dev.azurewebsites.net_name')]"
                     },
                     "servers_db_name": {
                         "value": "[parameters('servers_db_name')]"
