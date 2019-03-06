@@ -120,6 +120,10 @@
                         {
                             "name": "DB_USERNAME",
                             "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
+                        },
+                        {
+                            "name": "RAILS_ENV",
+                            "value": "servertest"
                         }
                     ]
                 },
