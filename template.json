@@ -133,9 +133,6 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
-                    "environmentName": {
-                        "value": "[parameters('environmentName')]"
-                    },
                     "location": {
                         "value": "[parameters('location')]"
                     },
@@ -185,6 +182,9 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/website.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
+                   "environmentName": {
+                        "value": "[parameters('environmentName')]"
+                    },
                     "location": {
                         "value": "[parameters('location')]"
                     },
