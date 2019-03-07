@@ -2,6 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "location": {
+            "defaultValue": "uksouth",
+            "type": "String",
+            "metadata": {
+                "description": "The location where resources will be deployed."
+            }       
+        }
         "servers_db_createMode": {
             "defaultValue": null,
             "type": "SecureString"
@@ -115,6 +122,9 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
                     "servers_db_createMode": {
                         "value": "[parameters('servers_db_createMode')]"
                     },
@@ -161,6 +171,9 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/website.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
                     "sites_school_experience_name": {
                         "value": "[parameters('sites_school_experience_name')]"
                     },
@@ -206,7 +219,7 @@
             "type": "Microsoft.Cache/Redis",
             "name": "[parameters('redis_name')]",
             "apiVersion": "2017-10-01",
-            "location": "UK South",
+            "location": "[parameters('location')]",
             "tags": {},
             "scale": null,
             "properties": {
@@ -234,7 +247,7 @@
             },
             "name": "[parameters('registry_name')]",
             "apiVersion": "2017-10-01",
-            "location": "uksouth",
+            "location": "[parameters('location')]",
             "tags": {},
             "scale": null,
             "properties": {

@@ -34,6 +34,9 @@
         },
         "redis_name": {
             "type": "String"
+        },
+        "location": {
+            "type": "String"
         }
     },
     "variables": {
@@ -45,7 +48,7 @@
             "kind": "app,linux",
             "name": "[parameters('sites_school_experience_name')]",
             "apiVersion": "2016-08-01",
-            "location": "UK South",
+            "location": "[parameters('location')]",
             "scale": null,
             "properties": {
                 "enabled": true,
@@ -145,7 +148,7 @@
             "type": "Microsoft.Web/sites/hostNameBindings",
             "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
             "apiVersion": "2016-08-01",
-            "location": "UK South",
+            "location": "[parameters('location')]",
             "scale": null,
             "properties": {
                 "siteName": "[parameters('sites_school_experience_name')]",
@@ -168,7 +171,7 @@
             "kind": "linux",
             "name": "[parameters('serverfarms_serviceplan_name')]",
             "apiVersion": "2016-09-01",
-            "location": "UK South",
+            "location": "[parameters('location')]",
             "scale": null,
             "properties": {
                 "name": "[parameters('serverfarms_serviceplan_name')]",
@@ -186,7 +189,7 @@
             "type": "Microsoft.Web/sites/config",
             "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('config_web_name'))]",
             "apiVersion": "2016-08-01",
-            "location": "UK South",
+            "location": "[parameters('location')]",
             "scale": null,
             "properties": {
                 "requestTracingEnabled": false,

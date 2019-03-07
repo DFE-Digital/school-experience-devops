@@ -28,6 +28,9 @@
         },
         "postgresAdminPassword": {
             "type": "securestring"
+        },
+        "location": {
+            "type": "String"
         }
     },
     "resources": [
@@ -42,7 +45,7 @@
             },
             "name": "[parameters('servers_db_name')]",
             "apiVersion": "2017-12-01-preview",
-            "location": "uksouth",
+            "location": "[parameters('location')]",
             "scale": null,
             "properties": {
                 "storageProfile": {
