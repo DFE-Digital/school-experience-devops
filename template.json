@@ -227,7 +227,7 @@
                         }
                     },
                     "dockerPassword": {
-                        "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('registry_name')), '2017-10-01').passwords[0].value]"
+                        "value": "rubbish"
                     }
                 }
             }
