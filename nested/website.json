@@ -2,9 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "environmentName": {
-            "type": "String"
-        },
         "sites_school_experience_name": {
             "type": "String"
         },
@@ -40,103 +37,10 @@
         },
         "location": {
             "type": "String"
-        },
-        "slackWebhook": {
-            "defaultValue": "rubbish",
-            "type": "String"
-        },
-        "dockerPassword": {
-            "type": "securestring"
         }
     },
     "variables": {
-        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]",
-        "appSettings": {
-            "base": [
-                        {
-                            "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
-                            "value": "false"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_URL",
-                            "value": "[variables('dockerRegistryUrl')]"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_USERNAME",
-                            "value": "[parameters('registry_name')]"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
-                            "value": "[parameters('dockerPassword')]"
-                        },
-                        {
-                            "name": "SECURE_USERNAME",
-                            "value": "school"
-                        },
-                        {
-                            "name": "SECURE_PASSWORD",
-                            "value": "experience"
-                        },
-                        {
-                            "name": "SECRET_KEY_BASE",
-                            "value": "stubbed"
-                        },
-                        {
-                            "name": "REDIS_URL",
-                            "value": "[concat('rediss://:',uriComponent(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'))]"
-                        },
-                        {
-                            "name": "DB_DATABASE",
-                            "value": "[parameters('databases_school_experience_name')]"
-                        },
-                        {
-                            "name": "DB_HOST",
-                            "value": "[concat(parameters('servers_db_name'), '.postgres.database.azure.com')]"
-                        },
-                        {
-                            "name": "DB_PASSWORD",
-                            "value": "[parameters('postgresUserPassword')]"
-                        },
-                        {
-                            "name": "DB_USERNAME",
-                            "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
-                        }
-                    ],
-            "dev": [
-                        {
-                            "name": "RAILS_ENV",
-                            "value": "servertest"
-                        }
-                    ],
-            "staging": [
-                        {
-                            "name": "RAILS_ENV",
-                            "value": "production"
-                        },
-                        {
-                            "name": "SLACK_ENV",
-                            "value": "staging"
-                        },
-                        {
-                            "name": "SLACK_WEBHOOK",
-                            "value": "[parameters('slackWebhook')]"
-                        }
-                    ],
-            "prod": [
-                        {
-                            "name": "RAILS_ENV",
-                            "value": "production"
-                        },
-                        {
-                            "name": "SLACK_ENV",
-                            "value": "production"
-                        },
-                        {
-                            "name": "SLACK_WEBHOOK",
-                            "value": "[parameters('slackWebhook')]"
-                        }
-                    ]
-        }      
+        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]"
     },
     "resources": [
         {
@@ -171,7 +75,60 @@
                 "siteConfig": {
                     "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
                     "alwaysOn": true,
-                    "appSettings": "[concat(variables('appSettings')['base'], variables('appSettings')[parameters('environmentName')])]"
+                    "appSettings": [
+                        {
+                            "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
+                            "value": "false"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_URL",
+                            "value": "[variables('dockerRegistryUrl')]"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+                            "value": "[parameters('registry_name')]"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+                            "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('registry_name')), '2017-10-01').passwords[0].value]"
+                        },
+                        {
+                            "name": "SECURE_USERNAME",
+                            "value": "school"
+                        },
+                        {
+                            "name": "SECURE_PASSWORD",
+                            "value": "experience"
+                        },
+                        {
+                            "name": "SECRET_KEY_BASE",
+                            "value": "stubbed"
+                        },
+                        {
+                            "name": "REDIS_URL",
+                            "value": "[concat('rediss://:',uriComponent(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'))]"
+                        },
+                        {
+                            "name": "DB_DATABASE",
+                            "value": "[parameters('databases_school_experience_name')]"
+                        },
+                        {
+                            "name": "DB_HOST",
+                            "value": "[concat(parameters('servers_db_name'), '.postgres.database.azure.com')]"
+                        },
+                        {
+                            "name": "DB_PASSWORD",
+                            "value": "[parameters('postgresUserPassword')]"
+                        },
+                        {
+                            "name": "DB_USERNAME",
+                            "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
+                        },
+                        {
+                            "name": "RAILS_ENV",
+                            "value": "servertest"
+                        }
+                    ]
                 },
                 "scmSiteAlsoStopped": false,
                 "hostingEnvironmentProfile": null,
