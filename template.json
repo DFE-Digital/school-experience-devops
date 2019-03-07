@@ -8,7 +8,7 @@
             "metadata": {
                 "description": "The location where resources will be deployed."
             }       
-        }
+        },
         "servers_db_createMode": {
             "defaultValue": null,
             "type": "SecureString"
