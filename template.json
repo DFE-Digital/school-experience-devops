@@ -2,6 +2,17 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "environmentName": {
+            "type": "string",
+            "allowedValues": [
+              "dev",
+              "staging",
+              "prod"
+            ],
+            "metadata": {
+                "description": "Specify dev, staging or prod for configuration values."
+            }
+        },
         "location": {
             "defaultValue": "uksouth",
             "type": "String",
@@ -122,6 +133,9 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
+                    "environmentName": {
+                        "value": "[parameters('environmentName')]"
+                    },
                     "location": {
                         "value": "[parameters('location')]"
                     },

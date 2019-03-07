@@ -2,6 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "environmentName": {
+            "type": "String"
+        },
         "sites_school_experience_name": {
             "type": "String"
         },
@@ -37,45 +40,16 @@
         },
         "location": {
             "type": "String"
+        },
+        "slackWebhook": {
+            "defaultValue": "rubbish",
+            "type": "String"
         }
     },
     "variables": {
-        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]"
-    },
-    "resources": [
-        {
-            "type": "Microsoft.Web/sites",
-            "kind": "app,linux",
-            "name": "[parameters('sites_school_experience_name')]",
-            "apiVersion": "2016-08-01",
-            "location": "[parameters('location')]",
-            "scale": null,
-            "properties": {
-                "enabled": true,
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(parameters('sites_school_experience_name'),'.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "virtualIP": null,
-                        "thumbprint": null,
-                        "toUpdate": null,
-                        "hostType": "Standard"
-                    },
-                    {
-                        "name": "[concat(parameters('sites_school_experience_name'),'.scm.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "virtualIP": null,
-                        "thumbprint": null,
-                        "toUpdate": null,
-                        "hostType": "Repository"
-                    }
-                ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]",
-                "reserved": true,
-                "siteConfig": {
-                    "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
-                    "alwaysOn": true,
-                    "appSettings": [
+        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]",
+        "appSettings": {
+            "base": [
                         {
                             "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
                             "value": "false"
@@ -123,12 +97,78 @@
                         {
                             "name": "DB_USERNAME",
                             "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
-                        },
+                        }
+                    ],
+            "dev": [
                         {
                             "name": "RAILS_ENV",
                             "value": "servertest"
                         }
+                    ],
+            "staging": [
+                        {
+                            "name": "RAILS_ENV",
+                            "value": "production"
+                        },
+                        {
+                            "name": "SLACK_ENV",
+                            "value": "staging"
+                        },
+                        {
+                            "name": "SLACK_WEBHOOK",
+                            "value": "[parameters('slackWebhook')]"
+                        }
+                    ],
+            "prod": [
+                        {
+                            "name": "RAILS_ENV",
+                            "value": "production"
+                        },
+                        {
+                            "name": "SLACK_ENV",
+                            "value": "production"
+                        },
+                        {
+                            "name": "SLACK_WEBHOOK",
+                            "value": "[parameters('slackWebhook')]"
+                        }
                     ]
+        }      
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "kind": "app,linux",
+            "name": "[parameters('sites_school_experience_name')]",
+            "apiVersion": "2016-08-01",
+            "location": "[parameters('location')]",
+            "scale": null,
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_school_experience_name'),'.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "virtualIP": null,
+                        "thumbprint": null,
+                        "toUpdate": null,
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_school_experience_name'),'.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "virtualIP": null,
+                        "thumbprint": null,
+                        "toUpdate": null,
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]",
+                "reserved": true,
+                "siteConfig": {
+                    "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
+                    "alwaysOn": true,
+                    "appSettings": "[concat(variables('appSettings')['base'], variables('appSettings')[parameters('environmentName')])]"
                 },
                 "scmSiteAlsoStopped": false,
                 "hostingEnvironmentProfile": null,
