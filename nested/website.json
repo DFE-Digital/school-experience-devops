@@ -2,6 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "environmentName": {
+            "type": "String"
+        },
         "sites_school_experience_name": {
             "type": "String"
         },
@@ -37,6 +40,18 @@
         },
         "location": {
             "type": "String"
+        },
+        "slackWebhook": {
+            "type": "String"
+        },
+        "railsEnv": {
+            "type": "String"
+        },
+        "slackEnv": {
+            "type": "String"
+        },
+        "slackWebhook": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -126,7 +141,16 @@
                         },
                         {
                             "name": "RAILS_ENV",
-                            "value": "servertest"
+                            "value": "[parameters('railsEnv')]"
+                        },
+                        {
+                            "name": "SLACK_ENV",
+                            "value": "[parameters('slackEnv')]"
+                        },
+                        {
+                            "name": "SLACK_WEBHOOK",
+                            "value": "[parameters('slackWebhook')]"
+                            "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackEnv'))]",
                         }
                     ]
                 },
