@@ -105,6 +105,23 @@
                 "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
             },
             "defaultValue": ""
+        },
+        "railsEnv": {
+            "type": "string",
+            "defaultValue": "servertest",
+            "allowedValues": [
+                "servertest",
+                "production"
+            ]
+        },
+        "slackEnv": {
+            "type": "string",
+            "allowedValues": [
+                "",
+                "staging",
+                "production",
+                "research"
+            ]
         }
     },
     "variables": {
@@ -210,6 +227,20 @@
                                 "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
                             },
                             "secretName": "postgresUserPassword"
+                        }
+                    },
+                    "railsEnv": {
+                        "value": "[parameters('railsEnv')]"
+                    },
+                    "slackEnv": {
+                        "value": "[parameters('slackEnv')]"
+                    },
+                    "slackWebhook": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "slackWebhook"
                         }
                     }
                 }
