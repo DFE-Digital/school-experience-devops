@@ -149,8 +149,7 @@
                         },
                         {
                             "name": "SLACK_WEBHOOK",
-                            "value": "[parameters('slackWebhook')]"
-                            "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackEnv'))]",
+                            "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackEnv'))]"
                         }
                     ]
                 },
