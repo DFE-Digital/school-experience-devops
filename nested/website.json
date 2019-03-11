@@ -219,7 +219,7 @@
                 "minTlsVersion": "1.2",
                 "ftpsState": "Disabled",
                 "ipSecurityRestrictions": {
-                    "ipAddress": "0.0.0.0/0",
+                    "ipAddress": "131.107.159.0/24",
                     "action": "Allow",
                     "tag": "Default",
                     "priority": 100,
