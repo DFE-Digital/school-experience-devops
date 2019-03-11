@@ -302,8 +302,7 @@
                     },
                     "sku": {
                         "value": "[parameters('webAppSku')]"
-                    },
-                    "ipSecurityRestrictions": "[parameters('ipSecurityRestrictions')]"
+                    }
                 }
             }
         },
