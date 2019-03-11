@@ -54,7 +54,7 @@
             "type": "object"
         },
         "ipSecurityRestrictions": {
-           "type": "object"
+           "type": "array"
         }
     },
     "variables": {
