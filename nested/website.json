@@ -228,4 +228,9 @@
             ]
         }
     ]
+    "outputs": {
+        "exampleOutput1": {
+            "value": "[parameters('ipSecurityRestrictions')]",
+            "type": "object"
+        },
 }
