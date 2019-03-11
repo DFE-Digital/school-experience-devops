@@ -226,8 +226,8 @@
                 "ftpsState": "Disabled",
                 "ipSecurityRestrictions": [
                     {
-                        "ipAddress": "[parameters('ipAddressRestriction')",
-                        "subnetMask": "[parameters('subnetMaskRestriction')",
+                        "ipAddress": "131.107.159.0",
+                        "subnetMask": "255.255.255.0",
                         "name": "test",
                         "description": "test"
                     }
