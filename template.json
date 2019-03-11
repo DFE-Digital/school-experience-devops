@@ -150,6 +150,14 @@
                 "family": "B",
                 "capacity": 1
             }
+        },
+        "ipAddressRestriction": {
+            "type": "string",
+            "defaultValue": "0.0.0.0"
+        },
+        "subnetMaskRestriction": {
+            "type": "string",
+            "defaultValue": "0.0.0.0""
         }
     },
     "variables": {
@@ -292,6 +300,12 @@
                     },
                     "sku": {
                         "value": "[parameters('webAppSku')]"
+                    },
+                    "ipAddressRestriction": {
+                        "value": "[parameters('ipAddressRestriction')]"
+                    },
+                    "subnetMaskRestriction": {
+                        "value": "[parameters('subnetMaskRestriction')]"
                     }
                 }
             }
