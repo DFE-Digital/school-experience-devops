@@ -31,18 +31,16 @@
         },
         "location": {
             "type": "String"
+        },
+        "sku": {
+            "type": "object"
         }
     },
     "resources": [
         {
             "comments": "Generalized from resource: '/subscriptions/0799a149-b8da-402c-a6da-961a63182224/resourceGroups/schoolExperienceGroup/providers/Microsoft.DBforPostgreSQL/servers/schoolexperience-dev-db'.",
             "type": "Microsoft.DBforPostgreSQL/servers",
-            "sku": {
-                "name": "B_Gen5_2",
-                "tier": "Basic",
-                "family": "Gen5",
-                "capacity": 2
-            },
+            "sku": "[parameters('sku')]",
             "name": "[parameters('servers_db_name')]",
             "apiVersion": "2017-12-01-preview",
             "location": "[parameters('location')]",

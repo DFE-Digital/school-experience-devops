@@ -2,6 +2,17 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "environmentName": {
+            "type": "string",
+            "allowedValues": [
+              "dev",
+              "staging",
+              "prod"
+            ],
+            "metadata": {
+                "description": "Specify either dev, test or prod for configuration values."
+            }
+        },
         "location": {
             "defaultValue": "uksouth",
             "type": "String",
@@ -106,26 +117,57 @@
             },
             "defaultValue": ""
         },
-        "railsEnv": {
-            "type": "string",
-            "defaultValue": "servertest",
-            "allowedValues": [
-                "servertest",
-                "production"
-            ]
+        "registrySku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "Standard",
+                "tier": "Standard"
+            }
         },
-        "slackEnv": {
-            "type": "string",
-            "allowedValues": [
-                "",
-                "staging",
-                "production",
-                "research"
-            ]
+        "postgresSku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "B_Gen5_2",
+                "tier": "Basic",
+                "family": "Gen5",
+                "capacity": 2
+            }
+        },
+        "redisSku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "Basic",
+                "family": "C",
+                "capacity": 0
+            }
+        },
+        "webAppSku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            }
         }
     },
     "variables": {
-        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]"
+        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]",
+        "environmentSettings": {
+            "dev": {
+                "railsEnv": "servertest",
+                "slackEnv": ""
+            },
+            "staging": {
+                "railsEnv": "production",
+                "slackEnv": "staging"
+            },
+            "prod": {
+                "railsEnv": "production",
+                "slackEnv": "production"
+            }
+        }
     },
     "resources": [
         {
@@ -173,6 +215,9 @@
                             },
                             "secretName": "postgresAdminPassword"
                         }
+                    },
+                    "sku": {
+                        "value": "[parameters('postgresSku')]"
                     }
                 }
             }
@@ -230,10 +275,10 @@
                         }
                     },
                     "railsEnv": {
-                        "value": "[parameters('railsEnv')]"
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].railsEnv]"
                     },
                     "slackEnv": {
-                        "value": "[parameters('slackEnv')]"
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
                     },
                     "slackWebhook": {
                         "reference": {
@@ -242,6 +287,9 @@
                             },
                             "secretName": "slackWebhook"
                         }
+                    },
+                    "sku": {
+                        "value": "[parameters('webAppSku')]"
                     }
                 }
             }
@@ -254,11 +302,7 @@
             "tags": {},
             "scale": null,
             "properties": {
-                "sku": {
-                    "name": "Basic",
-                    "family": "C",
-                    "capacity": 0
-                },
+                "sku": "[parameters('redisSku')]",
                 "enableNonSslPort": false,
                 "redisConfiguration": {
                     "maxclients": "256",
@@ -272,10 +316,7 @@
         },
         {
             "type": "Microsoft.ContainerRegistry/registries",
-            "sku": {
-                "name": "Standard",
-                "tier": "Standard"
-            },
+            "sku": "[parameters('registrySku')]",
             "name": "[parameters('registry_name')]",
             "apiVersion": "2017-10-01",
             "location": "[parameters('location')]",
