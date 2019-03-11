@@ -150,16 +150,6 @@
                 "family": "B",
                 "capacity": 1
             }
-        },
-        "ipSecurityRestrictions": {
-            "type": "object",
-            "defaultValue": {
-                "ipAddress": "0.0.0.0/0",
-                "action": "Allow",
-                "tag": "Default",
-                "priority": 100,
-                "name": "allowed access"
-            }
         }
     },
     "variables": {
