@@ -165,13 +165,13 @@
             "dev": {
                 "railsEnv": "servertest",
                 "slackEnv": "",
-                "ipSecurityRestrictions": {
+                "ipSecurityRestrictions": [{
                     "ipAddress": "[parameters('ipSecurityRestrictionsIpAddress')]",
                     "action": "Allow",
                     "tag": "Default",
                     "priority": 100,
                     "name": "allowed access"
-                }
+                }]
             },
             "staging": {
                 "railsEnv": "production",
