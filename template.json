@@ -151,12 +151,13 @@
                 "capacity": 1
             }
         },
-        "ipSecurityRestrictionsIpAddress": {
+        "ipAddressRestriction": {
             "type": "string",
-            "defaultValue": "0.0.0.0/0",
-            "metadata": {
-                "description": "Will mean that access is restricted to the web site for the IP address, ONLY USED when the environmentName is 'dev'."
-            }
+            "defaultValue": "0.0.0.0"
+        },
+        "subnetMaskRestriction": {
+            "type": "string",
+            "defaultValue": "0"
         }
     },
     "variables": {
@@ -164,14 +165,7 @@
         "environmentSettings": {
             "dev": {
                 "railsEnv": "servertest",
-                "slackEnv": "",
-                "ipSecurityRestrictions": {
-                    "ipAddress": "[parameters('ipSecurityRestrictionsIpAddress')]",
-                    "action": "Allow",
-                    "tag": "Default",
-                    "priority": 100,
-                    "name": "allowed access"
-                }
+                "slackEnv": ""
             },
             "staging": {
                 "railsEnv": "production",
@@ -307,7 +301,12 @@
                     "sku": {
                         "value": "[parameters('webAppSku')]"
                     },
-                    "ipSecurityRestrictions": "[variables('environmentSettings')[parameters('environmentName')].ipSecurityRestrictions]"
+                    "ipAddressRestriction": {
+                        "value": "[parameters('ipAddressRestriction')]"
+                    },
+                    "subnetMaskRestriction": {
+                        "value": "[parameters('subnetMaskRestriction')]"
+                    }
                 }
             }
         },
