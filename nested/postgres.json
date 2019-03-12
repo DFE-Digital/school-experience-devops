@@ -41,7 +41,6 @@
     },
     "resources": [
         {
-            "comments": "Generalized from resource: '/subscriptions/0799a149-b8da-402c-a6da-961a63182224/resourceGroups/schoolExperienceGroup/providers/Microsoft.DBforPostgreSQL/servers/schoolexperience-dev-db'.",
             "type": "Microsoft.DBforPostgreSQL/servers",
             "sku": "[parameters('sku')]",
             "name": "[parameters('servers_db_name')]",
@@ -59,7 +58,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/0799a149-b8da-402c-a6da-961a63182224/resourceGroups/schoolExperienceGroup/providers/Microsoft.DBforPostgreSQL/servers/schoolexperience-dev-db/databases/postgres'.",
             "type": "Microsoft.DBforPostgreSQL/servers/databases",
             "name": "[concat(parameters('servers_db_name'), '/', parameters('databases_postgres_name'))]",
             "apiVersion": "2017-12-01-preview",
@@ -73,7 +71,6 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/0799a149-b8da-402c-a6da-961a63182224/resourceGroups/schoolExperienceGroup/providers/Microsoft.DBforPostgreSQL/servers/schoolexperience-dev-db/databases/azure_maintenance'.",
             "type": "Microsoft.DBforPostgreSQL/servers/databases",
             "name": "[concat(parameters('servers_db_name'), '/', parameters('databases_azure_maintenance_name'))]",
             "apiVersion": "2017-12-01-preview",
@@ -87,7 +84,6 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/0799a149-b8da-402c-a6da-961a63182224/resourceGroups/schoolExperienceGroup/providers/Microsoft.DBforPostgreSQL/servers/schoolexperience-dev-db/databases/azure_sys'.",
             "type": "Microsoft.DBforPostgreSQL/servers/databases",
             "name": "[concat(parameters('servers_db_name'), '/', parameters('databases_azure_sys_name'))]",
             "apiVersion": "2017-12-01-preview",
@@ -101,14 +97,13 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/0799a149-b8da-402c-a6da-961a63182224/resourceGroups/schoolExperienceGroup/providers/Microsoft.DBforPostgreSQL/servers/schoolexperience-dev-db/firewallRules/AllowAzureResourceIps'.",
             "type": "Microsoft.DBforPostgreSQL/servers/firewallRules",
             "name": "[concat(parameters('servers_db_name'), '/', parameters('firewallRules_AllowAzureResourceIps_name'))]",
             "apiVersion": "2017-12-01-preview",
             "scale": null,
             "properties": {
                 "startIpAddress": "0.0.0.0",
-                "endIpAddress": "255.255.255.255"
+                "endIpAddress": "0.0.0.0"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('servers_db_name'))]"
