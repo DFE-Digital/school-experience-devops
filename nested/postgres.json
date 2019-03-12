@@ -34,6 +34,9 @@
         },
         "sku": {
             "type": "object"
+        },
+        "storageProfile": {
+            "type": "object"
         }
     },
     "resources": [
@@ -46,11 +49,7 @@
             "location": "[parameters('location')]",
             "scale": null,
             "properties": {
-                "storageProfile": {
-                    "storageMB": 51200,
-                    "backupRetentionDays": 7,
-                    "geoRedundantBackup": "Disabled"
-                },
+                "storageProfile": "[parameters('storageProfile')]",
                 "version": "10",
                 "sslEnforcement": "Enabled",
                 "createMode": "[parameters('servers_db_createMode')]",
