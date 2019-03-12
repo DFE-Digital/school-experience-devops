@@ -344,6 +344,7 @@
             "properties": {
                 "sku": "[parameters('redisSku')]",
                 "enableNonSslPort": false,
+                "minimumTlsVersion": "1.2",
                 "redisConfiguration": {
                     "maxclients": "256",
                     "maxmemory-reserved": "0",
