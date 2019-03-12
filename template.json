@@ -151,6 +151,10 @@
                 "capacity": 1
             }
         },
+        "public_host_name": {
+            "type": "string",
+            "defaultValue": ""
+        },
         "ipAddressRestriction": {
             "type": "string",
             "defaultValue": "0.0.0.0"
@@ -297,6 +301,12 @@
                             },
                             "secretName": "slackWebhook"
                         }
+                    },
+                    "environmentName": {
+                        "value": "[parameters('environmentName')]"
+                    },
+                    "public_host_name": {
+                        "value": "[parameters('public_host_name')]"
                     },
                     "sku": {
                         "value": "[parameters('webAppSku')]"
