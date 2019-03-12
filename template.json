@@ -177,17 +177,20 @@
         "environmentSettings": {
             "dev": {
                 "railsEnv": "servertest",
-                "slackEnv": ""
+                "slackEnv": "",
+                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]"
             },
             "staging": {
                 "railsEnv": "production",
                 "slackEnv": "staging",
-                "ipSecurityRestrictions": null
+                "ipSecurityRestrictions": null,
+                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]"
             },
             "prod": {
                 "railsEnv": "production",
                 "slackEnv": "production",
-                "ipSecurityRestrictions": null
+                "ipSecurityRestrictions": null,
+                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]"
             }
         }
     },
@@ -315,9 +318,6 @@
                     },
                     "environmentName": {
                         "value": "[parameters('environmentName')]"
-                    },
-                    "public_host_name": {
-                        "value": "[parameters('public_host_name')]"
                     },
                     "sku": {
                         "value": "[parameters('webAppSku')]"

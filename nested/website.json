@@ -61,9 +61,6 @@
         },
         "environmentName": {
             "type": "String"
-        },
-        "public_host_name": {
-            "type": "String"
         }
     },
     "variables": {
@@ -181,24 +178,7 @@
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
-            "condition": "[not(equals(parameters('environmentName'), 'prod'))]",
-            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-            "apiVersion": "2016-08-01",
-            "location": "[parameters('location')]",
-            "scale": null,
-            "properties": {
-                "siteName": "[parameters('sites_school_experience_name')]",
-                "domainId": null,
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "condition": "[equals(parameters('environmentName'), 'prod')]",
-            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
+            "name": "[variables('environmentSettings')[parameters('environmentName')].hostNameBindingsName]",
             "apiVersion": "2016-08-01",
             "location": "[parameters('location')]",
             "scale": null,
