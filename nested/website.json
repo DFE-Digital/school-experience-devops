@@ -61,6 +61,9 @@
         },
         "environmentName": {
             "type": "String"
+        },
+        "hostNameBindingsName": {
+            "type": "String"
         }
     },
     "variables": {
@@ -178,7 +181,7 @@
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[variables('environmentSettings')[parameters('environmentName')].hostNameBindingsName]",
+            "name": "[parameters('hostNameBindingsName')]",
             "apiVersion": "2016-08-01",
             "location": "[parameters('location')]",
             "scale": null,

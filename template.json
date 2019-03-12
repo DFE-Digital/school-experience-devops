@@ -327,6 +327,9 @@
                     },
                     "subnetMaskRestriction": {
                         "value": "[parameters('subnetMaskRestriction')]"
+                    },
+                    "hostNameBindingsName": {
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].hostNameBindingsName]"
                     }
                 }
             }
