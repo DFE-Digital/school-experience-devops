@@ -357,7 +357,7 @@
         },
         {
             "apiVersion": "2018-05-01",
-            "name": "website",
+            "name": "redis",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
