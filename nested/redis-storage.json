@@ -1,0 +1,70 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "String"
+        },
+        "redis_name": {
+            "type": "String"
+        },
+        "redisSku": {
+            "type": "object"
+        },
+        "redisStorageAccountName": {
+            "type": "String"
+        },
+        "redisStorageAccountType": {
+            "type": "String"
+        },
+        "redisStorageAccessTier": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Cache/Redis",
+            "name": "[parameters('redis_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "sku": "[parameters('redisSku')]",
+                "enableNonSslPort": false,
+                "minimumTlsVersion": "1.2",
+                "redisConfiguration": {
+                    "maxclients": "256",
+                    "maxmemory-reserved": "0",
+                    "maxfragmentationmemory-reserved": "0",
+                    "maxmemory-policy": "volatile-lru",
+                    "aof-backup-enabled": "true",
+                    "rdb-backup-enabled": "false",
+                    "maxmemory-delta": "0",
+                    "aof-storage-connection-string-0": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('redisStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('redisStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+                    "aof-storage-connection-string-1": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('redisStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('redisStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[1].value)]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('redisStorageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "[parameters('redisStorageAccountType')]"
+            },
+            "kind": "StorageV2",
+            "name": "[parameters('redisStorageAccountName')]",
+            "apiVersion": "2018-07-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "accessTier": "[parameters('redisStorageAccessTier')]"
+            },
+            "dependsOn": []
+        }
+    ]
+}

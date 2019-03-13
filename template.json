@@ -173,15 +173,24 @@
         },
         "redisStorageAccountName": {
             "type": "string",
-            "defaultValue": "schoolexperiencestorage"
+            "defaultValue": "schoolexperiencestorage",
+            "metadata": {
+                "description": "The storage account name used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+            }
         },
         "redisStorageAccountType": {
             "type": "string",
-            "defaultValue": "Standard_LRS"
+            "defaultValue": "Standard_LRS",
+            "metadata": {
+                "description": "The storage account type used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+            }
         },
         "redisStorageAccessTier": {
             "type": "string",
-            "defaultValue": "Hot"
+            "defaultValue": "Hot",
+            "metadata": {
+                "description": "The storage access tier used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+            }
         }
     },
     "variables": {
@@ -347,48 +356,36 @@
             }
         },
         {
-            "type": "Microsoft.Cache/Redis",
-            "name": "[parameters('redis_name')]",
-            "apiVersion": "2017-10-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "scale": null,
+            "apiVersion": "2018-05-01",
+            "name": "website",
+            "type": "Microsoft.Resources/deployments",
             "properties": {
-                "sku": "[parameters('redisSku')]",
-                "enableNonSslPort": false,
-                "minimumTlsVersion": "1.2",
-                "redisConfiguration": {
-                    "maxclients": "256",
-                    "maxmemory-reserved": "0",
-                    "maxfragmentationmemory-reserved": "0",
-                    "maxmemory-policy": "volatile-lru",
-                    "aof-backup-enabled": "[if(equals(parameters('environmentName'), 'prod'), 'true', 'false')]",
-                    "rdb-backup-enabled": "false",
-                    "maxmemory-delta": "0",
-                    "aof-storage-connection-string-0": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('redisStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('redisStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-                    "aof-storage-connection-string-1": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('redisStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('redisStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[1].value)]"
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/', if(equals(parameters('environmentName'), 'prod'), 'redis-storage.json', 'redis-nostorage.json'), parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "redis_name": {
+                        "value": "[parameters('redis_name')]"
+                    },
+                    "redisSku": {
+                        "value": "[parameters('redisSku')]"
+                    },
+                    "redisStorageAccountName": {
+                        "value": "[parameters('redisStorageAccountName')]"
+                    },
+                    "redisStorageAccountType": {
+                        "value": "[parameters('redisStorageAccountType')]"
+                    },
+                    "redisStorageAccessTier": {
+                        "value": "[parameters('redisStorageAccessTier')]"
+                    }
                 }
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('redisStorageAccountName'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "[parameters('redisStorageAccountType')]"
-            },
-            "kind": "StorageV2",
-            "name": "[parameters('redisStorageAccountName')]",
-            "apiVersion": "2018-07-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "scale": null,
-            "properties": {
-                "supportsHttpsTrafficOnly": true,
-                "accessTier": "[parameters('redisStorageAccessTier')]"
-            },
-            "dependsOn": []
+            }
         },
         {
             "type": "Microsoft.ContainerRegistry/registries",
