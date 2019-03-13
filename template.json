@@ -170,6 +170,18 @@
                 "backupRetentionDays": 7,
                 "geoRedundantBackup": "Disabled"
             }
+        },
+        "redisStorageAccountName": {
+            "type": "string",
+            "defaultValue": "schoolexperiencestorage"
+        },
+        "redisStorageAccountType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS"
+        },
+        "redisStorageAccessTier": {
+            "type": "string",
+            "defaultValue": "Hot"
         }
     },
     "variables": {
@@ -352,6 +364,26 @@
                     "maxmemory-policy": "volatile-lru",
                     "maxmemory-delta": "0"
                 }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('redisStorageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "[parameters('redisStorageAccountType')]"
+            },
+            "kind": "StorageV2",
+            "condition": "[equals(parameters('environmentName'), 'prod')]",
+            "name": "[parameters('redisStorageAccountName')]",
+            "apiVersion": "2018-07-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "accessTier": "[parameters('redisStorageAccessTier')]"
             },
             "dependsOn": []
         },
