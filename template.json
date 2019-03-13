@@ -353,7 +353,11 @@
                         "value": "[variables('environmentSettings')[parameters('environmentName')].hostNameBindingsName]"
                     }
                 }
-            }
+            },
+            "dependsOn": [
+                "postgresdb",
+                "redis"
+            ]
         },
         {
             "apiVersion": "2018-05-01",
