@@ -75,8 +75,7 @@
     "variables": {
         "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]",
         "ipSecurityRestriction": {
-            "ipAddress": "[parameters('subnetMaskRestriction')]",
-            "subnetMask": "[parameters('ipAddressRestriction')]",
+            "ipAddress": "[parameters('ipAddressRestriction')]",
             "name": "denyaccess",
             "description": "Deny Access",
             "action": "Deny"
