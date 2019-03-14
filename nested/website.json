@@ -64,6 +64,12 @@
         },
         "hostNameBindingsName": {
             "type": "String"
+        },
+        "appSecureUsername": {
+            "type": "String"
+        },
+        "appSecurePassword": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -121,11 +127,11 @@
                         },
                         {
                             "name": "SECURE_USERNAME",
-                            "value": "school"
+                            "value": "[parameters('appSecureUsername')]"
                         },
                         {
                             "name": "SECURE_PASSWORD",
-                            "value": "experience"
+                            "value": "[parameters('appSecurePassword')]"
                         },
                         {
                             "name": "SECRET_KEY_BASE",

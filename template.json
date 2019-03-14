@@ -191,6 +191,14 @@
             "metadata": {
                 "description": "The storage access tier used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
             }
+        },
+        "appSecureUsername": {
+            "type": "string",
+            "defaultValue": "school"
+        },
+        "appSecurePassword": {
+            "type": "securestring",
+            "defaultValue": "experience"
         }
     },
     "variables": {
@@ -351,6 +359,12 @@
                     },
                     "hostNameBindingsName": {
                         "value": "[variables('environmentSettings')[parameters('environmentName')].hostNameBindingsName]"
+                    },
+                    "appSecureUsername": {
+                        "value": "[parameters('appSecureUsername')]"
+                    },
+                    "appSecurePassword": {
+                        "value": "[parameters('appSecurePassword')]"
                     }
                 }
             },
