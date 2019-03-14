@@ -73,7 +73,14 @@
         }
     },
     "variables": {
-        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]"
+        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]",
+        "ipSecurityRestriction": {
+            "ipAddress": "[parameters('subnetMaskRestriction')]",
+            "subnetMask": "[parameters('ipAddressRestriction')]",
+            "name": "onlyAzureDevopsAgent",
+            "description": "restrict access to the Azure Devops Agent"
+        },
+        "emptyArray": []
     },
     "resources": [
         {
@@ -235,7 +242,8 @@
                 "alwaysOn": true,
                 "managedPipelineMode": "Integrated",
                 "minTlsVersion": "1.2",
-                "ftpsState": "Disabled"
+                "ftpsState": "Disabled",
+                "ipSecurityRestrictions": "[if(equals(parameters('environmentName'), 'dev'),  , variables('emptyArray'))]"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
