@@ -199,6 +199,10 @@
         "appSecurePassword": {
             "type": "securestring",
             "defaultValue": "experience"
+        },
+        "googleAnalyticsTrackingId": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -365,6 +369,9 @@
                     },
                     "appSecurePassword": {
                         "value": "[parameters('appSecurePassword')]"
+                    },
+                    "googleAnalyticsTrackingId": {
+                        "value": "[parameters('googleAnalyticsTrackingId')]"
                     }
                 }
             },

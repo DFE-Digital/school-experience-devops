@@ -70,6 +70,9 @@
         },
         "appSecurePassword": {
             "type": "securestring"
+        },
+        "googleAnalyticsTrackingId": {
+            "type": "String"
         }
     },
     "variables": {
@@ -175,6 +178,10 @@
                         {
                             "name": "SLACK_WEBHOOK",
                             "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackWebhook'))]"
+                        },
+                        {
+                            "name": "GA_TRACKING_ID",
+                            "value": "[parameters('googleAnalyticsTrackingId')]"
                         }
                     ]
                 },
