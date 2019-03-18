@@ -88,7 +88,7 @@
     "resources": [
         {
             "type": "Microsoft.Web/sites",
-            "kind": "app,linux",
+            "kind": "app,linux,container",
             "name": "[parameters('sites_school_experience_name')]",
             "apiVersion": "2016-08-01",
             "location": "[parameters('location')]",
@@ -193,7 +193,8 @@
                 "containerSize": 0,
                 "dailyMemoryTimeQuota": 0,
                 "cloningInfo": null,
-                "httpsOnly": true
+                "httpsOnly": true,
+                "clientAffinityEnabled": false
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
