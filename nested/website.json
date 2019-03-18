@@ -187,14 +187,13 @@
                 },
                 "scmSiteAlsoStopped": false,
                 "hostingEnvironmentProfile": null,
-                "clientAffinityEnabled": true,
+                "clientAffinityEnabled": false,
                 "clientCertEnabled": false,
                 "hostNamesDisabled": false,
                 "containerSize": 0,
                 "dailyMemoryTimeQuota": 0,
                 "cloningInfo": null,
-                "httpsOnly": true,
-                "clientAffinityEnabled": false
+                "httpsOnly": true
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
