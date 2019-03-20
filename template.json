@@ -372,6 +372,14 @@
                     },
                     "googleAnalyticsTrackingId": {
                         "value": "[parameters('googleAnalyticsTrackingId')]"
+                    },
+                    "sentryDsn": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "sentryDsn"
+                        }
                     }
                 }
             },

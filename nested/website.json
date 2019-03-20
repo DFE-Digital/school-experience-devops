@@ -73,6 +73,9 @@
         },
         "googleAnalyticsTrackingId": {
             "type": "String"
+        },
+        "sentryDsn": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -182,6 +185,10 @@
                         {
                             "name": "GA_TRACKING_ID",
                             "value": "[parameters('googleAnalyticsTrackingId')]"
+                        },
+                        {
+                            "name": "SENTRY_DSN",
+                            "value": "[parameters('sentryDsn')]"
                         }
                     ]
                 },
