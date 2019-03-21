@@ -400,7 +400,7 @@
             "apiVersion": "2018-05-01",
             "name": "customdomain",
             "type": "Microsoft.Resources/deployments",
-            "condition": "[equals(parameters('environmentName'), 'prod')]",
+            "condition": "[equals(parameters('environmentName'), 'disabled')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
