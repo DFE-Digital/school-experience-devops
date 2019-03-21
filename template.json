@@ -398,14 +398,14 @@
         },
         {
             "apiVersion": "2018-05-01",
-            "name": "redis",
+            "name": "customdomain",
             "type": "Microsoft.Resources/deployments",
             "condition": "[equals(parameters('environmentName'), 'prod')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/', 'customdomain.json'), parameters('_artifactsLocationSasToken')))]"
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/', 'customdomain.json'), parameters('_artifactsLocationSasToken'))]"
                 },
                 "parameters": {
                     "sites_school_experience_name": {
