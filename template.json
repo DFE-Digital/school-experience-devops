@@ -215,6 +215,9 @@
         "secretKeyBase": {
             "type": "string",
             "defaultValue": "stubbed"
+        },
+        "notifyApiKey": {
+            "type": "string"
         }
     },
     "variables": {
@@ -395,6 +398,9 @@
                     },
                     "secretKeyBase": {
                         "value": "[parameters('secretKeyBase')]"
+                    },
+                    "notifyApiKey": {
+                        "value": "[parameters('notifyApiKey')]"
                     }
                 }
             },

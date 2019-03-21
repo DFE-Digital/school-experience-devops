@@ -79,6 +79,9 @@
         },
         "secretKeyBase": {
             "type": "string"
+        },
+        "notifyApiKey": {
+             "type": "string"
         }
     },
     "variables": {
@@ -192,6 +195,10 @@
                         {
                             "name": "SENTRY_DSN",
                             "value": "[parameters('sentryDsn')]"
+                        },
+                        {
+                            "name": "NOTIFY_API_KEY",
+                            "value": "[parameters('notifyApiKey')]"
                         }
                     ]
                 },
