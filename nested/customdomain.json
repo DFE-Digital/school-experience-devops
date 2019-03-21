@@ -35,7 +35,7 @@
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[parameters('hostNameBindingsName')]",
+            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('hostNameBindingsName'))]",
             "apiVersion": "2016-08-01",
             "location": "[parameters('location')]",
             "scale": null,
