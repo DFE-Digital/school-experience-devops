@@ -211,6 +211,10 @@
         "websiteCertificateSecretName": {
             "type": "string",
             "defaultValue": "website-certificate"
+        },
+        "secretKeyBase": {
+            "type": "string",
+            "defaultValue": "stubbed"
         }
     },
     "variables": {
@@ -388,6 +392,9 @@
                             },
                             "secretName": "sentryDsn"
                         }
+                    },
+                    "secretKeyBase": {
+                        "value": "[parameters('secretKeyBase')]"
                     }
                 }
             },

@@ -76,6 +76,9 @@
         },
         "sentryDsn": {
             "type": "securestring"
+        },
+        "secretKeyBase": {
+            "type": "string"
         }
     },
     "variables": {
@@ -148,7 +151,7 @@
                         },
                         {
                             "name": "SECRET_KEY_BASE",
-                            "value": "stubbed"
+                            "value": "[parameters('secretKeyBase')]"
                         },
                         {
                             "name": "REDIS_URL",
