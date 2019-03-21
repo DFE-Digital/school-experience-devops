@@ -427,7 +427,10 @@
                         "value": "[parameters('websiteCertificateSecretName')]"
                     }
                 }
-            }
+            },
+            "dependsOn": [
+                "website"
+            ]
         },        
         {
             "apiVersion": "2018-05-01",
