@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_school_experience_name": {
+            "type": "String"
+        },
+        "location": {
+            "type": "String"
+        },
+        "hostNameBindingsName": {
+            "type": "String"
+        },
+        "certificateName": {
+            "type": "String",
+            "defaultValue": "schoolExperienceCertificate"
+        },
+        "keyVaultId": {
+            "type": "String"
+        },
+        "keyVaultSecretName": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/certificates",
+            "name": "[parameters('certificateName')]",
+            "apiVersion": "2016-03-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "keyVaultId": "[parameters('keyVaultId')]",
+                "keyVaultSecretName": "[parameters('keyVaultSecretName')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "name": "[parameters('hostNameBindingsName')]",
+            "apiVersion": "2016-08-01",
+            "location": "[parameters('location')]",
+            "scale": null,
+            "properties": {
+                "siteName": "[parameters('sites_school_experience_name')]",
+                "domainId": null,
+                "hostNameType": "Verified",
+                "sslState": "SniEnabled",
+                "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('certificateName'))).Thumbprint]"
+            }
+        }
+    ]
+}

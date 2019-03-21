@@ -203,6 +203,14 @@
         "googleAnalyticsTrackingId": {
             "type": "string",
             "defaultValue": ""
+        },
+        "websiteCertificateResourceName": {
+            "type": "string",
+            "defaultValue": "school-experience-certificate"
+        },
+        "websiteCertificateSecretName": {
+            "type": "string",
+            "defaultValue": "website-certificate"
         }
     },
     "variables": {
@@ -388,6 +396,39 @@
                 "redis"
             ]
         },
+        {
+            "apiVersion": "2018-05-01",
+            "name": "redis",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[equals(parameters('environmentName'), 'prod')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/', 'customdomain.json'), parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                    "sites_school_experience_name": {
+                        "value": "[parameters('sites_school_experience_name')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "hostNameBindingsName": {
+                        "value": "[parameters('hostNameBindingsName')"
+                    },
+                    "certificateName": {
+                        "value": "[parameters('websiteCertificateResourceName')]"
+                    },
+                    "keyVaultId": {
+                        "value": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                    },
+                    "keyVaultSecretName": {
+                        "value": "[parameters('websiteCertificateSecretName')]"
+                    }
+                }
+            }
+        },        
         {
             "apiVersion": "2018-05-01",
             "name": "redis",
