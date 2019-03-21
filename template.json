@@ -217,7 +217,12 @@
             "defaultValue": "stubbed"
         },
         "notifyApiKey": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
+        },
+        "bingMapsKey": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -401,6 +406,9 @@
                     },
                     "notifyApiKey": {
                         "value": "[parameters('notifyApiKey')]"
+                    },
+                    "bingMapsKey": {
+                        "value": "[parameters('bingMapsKey')]"
                     }
                 }
             },

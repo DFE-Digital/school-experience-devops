@@ -82,6 +82,9 @@
         },
         "notifyApiKey": {
              "type": "string"
+        },
+        "bingMapsKey": {
+             "type": "string"
         }
     },
     "variables": {
@@ -199,6 +202,10 @@
                         {
                             "name": "NOTIFY_API_KEY",
                             "value": "[parameters('notifyApiKey')]"
+                        },
+                        {
+                            "name": "BING_MAPS_KEY",
+                            "value": "[parameters('bingMapsKey')]"
                         }
                     ]
                 },
