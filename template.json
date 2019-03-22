@@ -223,6 +223,10 @@
         "bingMapsKey": {
             "type": "string",
             "defaultValue": ""
+        },
+        "logsDirectorySizeLimit": {
+            "type": "string",
+            "defaultValue": "100"
         }
     },
     "variables": {
@@ -409,6 +413,9 @@
                     },
                     "bingMapsKey": {
                         "value": "[parameters('bingMapsKey')]"
+                    },
+                    "logsDirectorySizeLimit": {
+                        "value": "[parameters('logsDirectorySizeLimit')]"
                     }
                 }
             },

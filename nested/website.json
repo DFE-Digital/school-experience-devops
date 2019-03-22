@@ -85,6 +85,9 @@
         },
         "bingMapsKey": {
              "type": "string"
+        },
+        "logsDirectorySizeLimit": {
+             "type": "string"
         }
     },
     "variables": {
@@ -252,7 +255,7 @@
             "properties": {
                 "requestTracingEnabled": false,
                 "httpLoggingEnabled": true,
-                "logsDirectorySizeLimit": 35,
+                "logsDirectorySizeLimit": "[parameters('logsDirectorySizeLimit')]",
                 "detailedErrorLoggingEnabled": false,
                 "webSocketsEnabled": false,
                 "alwaysOn": true,
