@@ -235,19 +235,22 @@
             "dev": {
                 "railsEnv": "servertest",
                 "slackEnv": "",
-                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]"
+                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "railsMaxThreads": "5"
             },
             "staging": {
                 "railsEnv": "production",
                 "slackEnv": "staging",
                 "ipSecurityRestrictions": null,
-                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]"
+                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "railsMaxThreads": "5"
             },
             "prod": {
                 "railsEnv": "production",
                 "slackEnv": "production",
                 "ipSecurityRestrictions": null,
-                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]"
+                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
+                "railsMaxThreads": "15"
             }
         }
     },
@@ -416,6 +419,9 @@
                     },
                     "logsDirectorySizeLimit": {
                         "value": "[parameters('logsDirectorySizeLimit')]"
+                    },
+                    "railsMaxThreads": {
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].railsMaxThreads]"
                     }
                 }
             },

@@ -88,6 +88,9 @@
         },
         "logsDirectorySizeLimit": {
              "type": "string"
+        },
+        "railsMaxThreads": {
+             "type": "string"
         }
     },
     "variables": {
@@ -209,6 +212,10 @@
                         {
                             "name": "BING_MAPS_KEY",
                             "value": "[parameters('bingMapsKey')]"
+                        },
+                        {
+                            "name": "RAILS_MAX_THREADS",
+                            "value": "[parameters('railsMaxThreads')]"
                         }
                     ]
                 },
