@@ -422,6 +422,9 @@
                     },
                     "railsMaxThreads": {
                         "value": "[variables('environmentSettings')[parameters('environmentName')].railsMaxThreads]"
+                    },
+                    "public_host_name": {
+                        "value": "[parameters('public_host_name')]"
                     }
                 }
             },

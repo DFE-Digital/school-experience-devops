@@ -91,6 +91,9 @@
         },
         "railsMaxThreads": {
              "type": "string"
+        },
+        "public_host_name": {
+             "type": "string"
         }
     },
     "variables": {
@@ -216,6 +219,10 @@
                         {
                             "name": "RAILS_MAX_THREADS",
                             "value": "[parameters('railsMaxThreads')]"
+                        },
+                        {
+                            "name": "CANONICAL_DOMAIN",
+                            "value": "[parameters('public_host_name')]"
                         }
                     ]
                 },
