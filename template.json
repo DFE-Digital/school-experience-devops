@@ -442,7 +442,7 @@
                     }
                 }
             },
-            "dependsOn": "[variables('websiteDependsOn')]"
+            "dependsOn": ["redis"]
         },
         {
             "apiVersion": "2018-05-01",
