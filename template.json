@@ -227,6 +227,14 @@
         "logsDirectorySizeLimit": {
             "type": "string",
             "defaultValue": "100"
+        },
+        "applyPostgres": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "applyRedis": {
+            "type": "bool",
+            "defaultValue": true
         }
     },
     "variables": {
@@ -252,12 +260,17 @@
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
                 "railsMaxThreads": "15"
             }
-        }
+        },
+        "emptyArray": [],
+        "postgres": ["postgresdb"],
+        "redis": ["redis"],
+        "websiteDependsOn": "[concat(if(parameters('applyPostgres'), variables('postgres'), variables('emptyArray')),if(parameters('applyRedis'), variables('redis'), variables('emptyArray')))]"
     },
     "resources": [
         {
             "apiVersion": "2018-05-01",
             "name": "postgresdb",
+            "condition": "[parameters('applyPostgres')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -428,10 +441,7 @@
                     }
                 }
             },
-            "dependsOn": [
-                "postgresdb",
-                "redis"
-            ]
+            "dependsOn": "[variables('websiteDependsOn')]"
         },
         {
             "apiVersion": "2018-05-01",
@@ -472,6 +482,7 @@
         {
             "apiVersion": "2018-05-01",
             "name": "redis",
+            "condition": "[parameters('applyRedis')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
