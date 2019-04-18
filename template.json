@@ -62,10 +62,6 @@
             "defaultValue": "school_experience_test",
             "type": "String"
         },
-        "firewallRules_AllowAzureResourceIps_name": {
-            "defaultValue": "AllowAzureResourceIps",
-            "type": "String"
-        },
         "postgresAdminLoginName": {
             "defaultValue": "adminuser",
             "type": "String"
@@ -260,24 +256,18 @@
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
                 "railsMaxThreads": "15"
             }
-        },
-        "emptyArray": [],
-        "postgres": ["postgresdb"],
-        "redis": ["redis"],
-        "websiteDependsOn": ["postgresdb", "redis"],
-        "websiteDependsOnX": "[concat(if(parameters('applyPostgres'), variables('postgres'), variables('emptyArray')),if(parameters('applyRedis'), variables('redis'), variables('emptyArray')))]"
+        }
     },
     "resources": [
         {
             "apiVersion": "2018-05-01",
-            "name": "postgresdb",
-            "condition": "[parameters('applyPostgres')]",
+            "name": "backend",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres.json', parameters('_artifactsLocationSasToken')))]"
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./backend.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
                     "location": {
@@ -301,9 +291,6 @@
                     "databases_school_experience_name": {
                         "value": "[parameters('databases_school_experience_name')]"
                     },
-                    "firewallRules_AllowAzureResourceIps_name": {
-                        "value": "[parameters('firewallRules_AllowAzureResourceIps_name')]"
-                    },
                     "postgresAdminLoginName": {
                         "value": "[parameters('postgresAdminLoginName')]"
                     },
@@ -315,11 +302,35 @@
                             "secretName": "postgresAdminPassword"
                         }
                     },
-                    "sku": {
+                    "postgresSku": {
                         "value": "[parameters('postgresSku')]"
                     },
-                    "storageProfile": {
+                    "postgresStorageProfile": {
                         "value": "[parameters('postgresStorageProfile')]"
+                    },
+                    "redis_name": {
+                        "value": "[parameters('redis_name')]"
+                    },
+                    "redisSku": {
+                        "value": "[parameters('redisSku')]"
+                    },
+                    "redisStorageAccountName": {
+                        "value": "[parameters('redisStorageAccountName')]"
+                    },
+                    "redisStorageAccountType": {
+                        "value": "[parameters('redisStorageAccountType')]"
+                    },
+                    "redisStorageAccessTier": {
+                        "value": "[parameters('redisStorageAccessTier')]"
+                    },
+                    "environmentName": {
+                        "value": "[parameters('environmentName')]"
+                    },
+                    "registry_name": {
+                        "value": "[parameters('registry_name')]"
+                    },
+                    "_artifactsLocation": {
+                        "value": "[parameters('_artifactsLocation')]"
                     }
                 }
             }
@@ -442,89 +453,7 @@
                     }
                 }
             },
-            "dependsOn": ["redis"]
-        },
-        {
-            "apiVersion": "2018-05-01",
-            "name": "customdomain",
-            "type": "Microsoft.Resources/deployments",
-            "condition": "[equals(parameters('environmentName'), 'disabled')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/customdomain.json', parameters('_artifactsLocationSasToken')))]"
-                },
-                "parameters": {
-                    "sites_school_experience_name": {
-                        "value": "[parameters('sites_school_experience_name')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "hostNameBindingsName": {
-                        "value": "[parameters('hostNameBindingsName')"
-                    },
-                    "certificateName": {
-                        "value": "[parameters('websiteCertificateResourceName')]"
-                    },
-                    "keyVaultId": {
-                        "value": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                    },
-                    "keyVaultSecretName": {
-                        "value": "[parameters('websiteCertificateSecretName')]"
-                    }
-                }
-            },
-            "dependsOn": [
-                "website"
-            ]
-        },        
-        {
-            "apiVersion": "2018-05-01",
-            "name": "redis",
-            "condition": "[parameters('applyRedis')]",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/', if(equals(parameters('environmentName'), 'prod'), 'redis-storage.json', 'redis-nostorage.json'), parameters('_artifactsLocationSasToken')))]"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "redis_name": {
-                        "value": "[parameters('redis_name')]"
-                    },
-                    "redisSku": {
-                        "value": "[parameters('redisSku')]"
-                    },
-                    "redisStorageAccountName": {
-                        "value": "[parameters('redisStorageAccountName')]"
-                    },
-                    "redisStorageAccountType": {
-                        "value": "[parameters('redisStorageAccountType')]"
-                    },
-                    "redisStorageAccessTier": {
-                        "value": "[parameters('redisStorageAccessTier')]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.ContainerRegistry/registries",
-            "sku": "[parameters('registrySku')]",
-            "name": "[parameters('registry_name')]",
-            "apiVersion": "2017-10-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "scale": null,
-            "properties": {
-                "adminUserEnabled": true
-            },
-            "dependsOn": []
+            "dependsOn": ["backend"]
         }
     ]
 }

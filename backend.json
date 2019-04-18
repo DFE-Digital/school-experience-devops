@@ -1,0 +1,260 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentName": {
+            "type": "String"
+        },
+        "location": {
+            "defaultValue": "uksouth",
+            "type": "String",
+            "metadata": {
+                "description": "The location where resources will be deployed."
+            }       
+        },
+        "servers_db_createMode": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "redis_name": {
+            "type": "String"
+        },
+        "servers_db_name": {
+            "defaultValue": "schoolexperience-dev-db",
+            "type": "String"
+        },
+        "registry_name": {
+            "defaultValue": "schoolExperienceRegistry",
+            "type": "String"
+        },
+        "databases_postgres_name": {
+            "defaultValue": "postgres",
+            "type": "String"
+        },
+        "databases_azure_sys_name": {
+            "defaultValue": "azure_sys",
+            "type": "String"
+        },
+        "databases_azure_maintenance_name": {
+            "defaultValue": "azure_maintenance",
+            "type": "String"
+        },
+        "databases_school_experience_name": {
+            "defaultValue": "school_experience_test",
+            "type": "String"
+        },
+        "postgresAdminLoginName": {
+            "defaultValue": "adminuser",
+            "type": "String"
+        },
+        "postgresUserLoginName": {
+            "defaultValue": "railsappuser",
+            "type": "String"
+        },
+        "postgresAdminPassword": {
+            "type": "SecureString"        
+        },
+        "redis_database_index": {
+            "defaultValue": "15",
+            "type": "String"
+        },
+        "vaultName": {
+            "type": "string",
+            "defaultValue": "schoolExperienceVault",
+            "metadata": {
+                "description": "The name of the keyvault that contains the secret."
+            }
+        },
+        "vaultResourceGroupName": {
+            "type": "string",
+            "defaultValue": "schoolExperienceVaultGroup",
+            "metadata": {
+                "description": "The name of the resource group that contains the keyvault."
+            }
+        },
+        "vaultSubscription": {
+            "type": "string",
+            "defaultValue": "[subscription().subscriptionId]",
+            "metadata": {
+                "description": "The name of the subscription that contains the keyvault."
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+            },
+            "defaultValue": "https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/master/"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+            },
+            "defaultValue": ""
+        },
+        "registrySku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "Standard",
+                "tier": "Standard"
+            }
+        },
+        "postgresSku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "B_Gen5_2",
+                "tier": "Basic",
+                "family": "Gen5",
+                "capacity": 2
+            }
+        },
+        "redisSku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "Basic",
+                "family": "C",
+                "capacity": 0
+            }
+        },
+        "postgresStorageProfile": {
+            "type": "object",
+            "defaultValue": {
+                "storageMB": 51200,
+                "backupRetentionDays": 7,
+                "geoRedundantBackup": "Disabled"
+            }
+        },
+        "redisStorageAccountName": {
+            "type": "string",
+            "defaultValue": "schoolexperiencestorage",
+            "metadata": {
+                "description": "The storage account name used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+            }
+        },
+        "redisStorageAccountType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "metadata": {
+                "description": "The storage account type used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+            }
+        },
+        "redisStorageAccessTier": {
+            "type": "string",
+            "defaultValue": "Hot",
+            "metadata": {
+                "description": "The storage access tier used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+            }
+        },
+        "applyPostgres": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "applyRedis": {
+            "type": "bool",
+            "defaultValue": true
+        }
+    },
+    "variables": {
+        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-05-01",
+            "name": "postgresdb",
+            "condition": "[parameters('applyPostgres')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres.json', parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "servers_db_createMode": {
+                        "value": "[parameters('servers_db_createMode')]"
+                    },
+                    "servers_db_name": {
+                        "value": "[parameters('servers_db_name')]"
+                    },
+                    "databases_postgres_name": {
+                        "value": "[parameters('databases_postgres_name')]"
+                    },
+                    "databases_azure_sys_name": {
+                        "value": "[parameters('databases_azure_sys_name')]"
+                    },
+                    "databases_azure_maintenance_name": {
+                        "value": "[parameters('databases_azure_maintenance_name')]"
+                    },
+                    "databases_school_experience_name": {
+                        "value": "[parameters('databases_school_experience_name')]"
+                    },
+                    "postgresAdminLoginName": {
+                        "value": "[parameters('postgresAdminLoginName')]"
+                    },
+                    "postgresAdminPassword": {
+                        "value": "[parameters('postgresAdminPassword')]"
+                    },
+                    "sku": {
+                        "value": "[parameters('postgresSku')]"
+                    },
+                    "storageProfile": {
+                        "value": "[parameters('postgresStorageProfile')]"
+                    },
+                    "environmentName": {
+                        "value": "[parameters('environmentName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-05-01",
+            "name": "redis",
+            "condition": "[parameters('applyRedis')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/', if(equals(parameters('environmentName'), 'prod'), 'redis-storage.json', 'redis-nostorage.json'), parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "redis_name": {
+                        "value": "[parameters('redis_name')]"
+                    },
+                    "redisSku": {
+                        "value": "[parameters('redisSku')]"
+                    },
+                    "redisStorageAccountName": {
+                        "value": "[parameters('redisStorageAccountName')]"
+                    },
+                    "redisStorageAccountType": {
+                        "value": "[parameters('redisStorageAccountType')]"
+                    },
+                    "redisStorageAccessTier": {
+                        "value": "[parameters('redisStorageAccessTier')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "sku": "[parameters('registrySku')]",
+            "name": "[parameters('registry_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "adminUserEnabled": true
+            },
+            "dependsOn": []
+        }
+    ]
+}
