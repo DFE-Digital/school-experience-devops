@@ -20,9 +20,6 @@
         "databases_school_experience_name": {
             "type": "String"
         },
-        "firewallRules_AllowAzureResourceIps_name": {
-            "type": "String"
-        },
         "postgresAdminLoginName": {
             "type": "String"
         },
@@ -37,6 +34,9 @@
         },
         "storageProfile": {
             "type": "object"
+        },
+        "environmentName": {
+            "type": "String"
         }
     },
     "resources": [
@@ -98,12 +98,12 @@
         },
         {
             "type": "Microsoft.DBforPostgreSQL/servers/firewallRules",
-            "name": "[concat(parameters('servers_db_name'), '/', parameters('firewallRules_AllowAzureResourceIps_name'))]",
+            "name": "[concat(parameters('servers_db_name'), '/', if(equals(parameters('environmentName'), 'dev'), 'AllowAllIps', 'AllowAzureResourceIps'))]",
             "apiVersion": "2017-12-01-preview",
             "scale": null,
             "properties": {
                 "startIpAddress": "0.0.0.0",
-                "endIpAddress": "0.0.0.0"
+                "endIpAddress": "[if(equals(parameters('environmentName'), 'dev'), '255.255.255.255', '0.0.0.0')]"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('servers_db_name'))]"

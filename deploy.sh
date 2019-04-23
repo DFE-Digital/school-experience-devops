@@ -6,7 +6,7 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch>" 1>&2; exit 1; }
 
 declare subscriptionId=""
 declare resourceGroupName=""
@@ -21,9 +21,10 @@ declare servicePlanName=""
 declare sitesName=""
 declare redisName=""
 declare environmentName=""
+declare branch=""
 
 # Initialize parameters specified from command line
-while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:" arg; do
+while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:b:" arg; do
 	case "${arg}" in
 		i)
 			subscriptionId=${OPTARG}
@@ -63,6 +64,9 @@ while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:" arg; do
                         ;;
                 v)
                         environmentName=${OPTARG}
+                        ;;
+                b)
+                        branch=${OPTARG}
                         ;;
 		esac
 done
@@ -155,6 +159,11 @@ if [ -z "$subscriptionId" ] || [ -z "$resourceGroupName" ] || [ -z "$deploymentN
 	usage
 fi
 
+if [[ -z "$branch" ]]; then
+        echo "Enter a value for the branch:"
+        read branch
+fi
+
 #login to azure using your credentials
 az account show 1> /dev/null
 
@@ -218,20 +227,15 @@ cat compose-school-experience.yml
 ####################################################
 
 export DATABASE_NAME=$databaseName
-#export DATABASE_NAME=school_experience_test
-#DATABASE_SERVER_NAME=schoolexperience-db-test
-#VAULT_NAME=schoolExperienceVault
-#VAULT_RESOURCE_GROUP_NAME=schoolExperienceVaultGroup 
-#SERVICE_PLAN_NAME=schoolExperienceServicePlanTest
 VAULT_NAME_LOWER_CASE="$(echo $vaultName | tr '[:upper:]' '[:lower:]')"
 
 echo "Starting deployment..."
 (
 	set -x
-	az group deployment create --name "$deploymentName" \
-                                   --resource-group "$resourceGroupName" \
-                                   --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/master/template.json \
-                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registry_name=${registryName} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName} environmentName=${environmentName}
+	az group deployment create --name ${deploymentName} \
+                                   --resource-group ${resourceGroupName} \
+                                   --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/template.json \
+                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registry_name=${registryName} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName} environmentName=${environmentName} _artifactsLocation=https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/ 
 )
 
 if [ $?  == 0 ];
