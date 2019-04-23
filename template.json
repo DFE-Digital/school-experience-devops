@@ -231,6 +231,18 @@
         "applyRedis": {
             "type": "bool",
             "defaultValue": true
+        },
+        "dfeSigninBaseUrl": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dfeSigninClientId": {
+            "type": "string",
+            "defaultValue": "schoolexperience"
+        },
+        "dfeSigninHost": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -450,6 +462,23 @@
                     },
                     "public_host_name": {
                         "value": "[parameters('public_host_name')]"
+                    },
+                    "dfeSigninBaseUrl": {
+                        "value": "[parameters('dfeSigninBaseUrl')]"
+                    },
+                    "dfeSigninClientId": {
+                        "value": "[parameters('dfeSigninClientId')]"
+                    },
+                    "dfeSigninHost": {
+                        "value": "[parameters('dfeSigninHost')]"
+                    },
+                    "dfeSigninSecret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "dfeSigninSecret"
+                        }
                     }
                 }
             },
