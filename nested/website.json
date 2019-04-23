@@ -94,6 +94,18 @@
         },
         "public_host_name": {
              "type": "string"
+        },
+        "dfeSigninBaseUrl": {
+             "type": "string"
+        },
+        "dfeSigninClientId": {
+             "type": "string"
+        },
+        "dfeSigninHost": {
+             "type": "string"
+        },
+        "dfeSigninSecret": {
+             "type": "securestring"
         }
     },
     "variables": {
@@ -223,6 +235,22 @@
                         {
                             "name": "CANONICAL_DOMAIN",
                             "value": "[parameters('public_host_name')]"
+                        },
+                        {
+                            "name": "DFE_SIGNIN_BASE_URL",
+                            "value": "[parameters('dfeSigninBaseUrl')]"
+                        },
+                        {
+                            "name": "DFE_SIGNIN_CLIENT_ID",
+                            "value": "[parameters('dfeSigninClientId')]"
+                        },
+                        {
+                            "name": "DFE_SIGNIN_HOST",
+                            "value": "[parameters('dfeSigninHost')]"
+                        },
+                        {
+                            "name": "DFE_SIGNIN_SECRET",
+                            "value": "[parameters('dfeSigninSecret')]"
                         }
                     ]
                 },
