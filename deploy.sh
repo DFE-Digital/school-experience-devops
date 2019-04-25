@@ -251,6 +251,7 @@ rm compose-school-experience.yml
 
 postgresAdminPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresAdminPassword -o tsv --query value)
 export postgresUserPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresUserPassword -o tsv --query value)
+export dbuser=railsappuser
 
 PGPASSWORD=$postgresAdminPassword psql -U adminuser@"${databaseServerName}" -h "${databaseServerName}".postgres.database.azure.com postgres -f createdb.sql
 
@@ -267,7 +268,7 @@ if [ -n "${BUILD_APP+set}" ]; then
   docker build -f Dockerfile -t $REGISTRY_HOST/school-experience:latest .
 
   echo 'RUNNING  db:migrate db:seed'
-  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="railsappuser@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/school-experience:latest rails db:migrate db:seed
+  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/school-experience:latest rails db:migrate db:seed
 
   docker login $REGISTRY_HOST -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   docker push $REGISTRY_HOST/school-experience:latest
