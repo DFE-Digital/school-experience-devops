@@ -1,6 +1,7 @@
 \set postgresUserPassword `echo ${postgresUserPassword}`
 \set schoolExperienceDB `echo ${DATABASE_NAME}`
 \set dbuser `echo ${dbuser}`
+DROP USER :dbuser;
 CREATE DATABASE :schoolExperienceDB;
 CREATE USER :dbuser WITH PASSWORD :'postgresUserPassword';
 GRANT ALL PRIVILEGES ON DATABASE :schoolExperienceDB TO :dbuser;
