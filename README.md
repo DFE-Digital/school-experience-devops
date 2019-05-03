@@ -36,12 +36,12 @@ It is assumed that the user is in posession of a certificate in pfx format and k
 
 This can be done manually or via the command line. Storing the certificates in a key vault and then creating the website certificate resource is just adding additional steps (the certificate still has to be uploaded into the key vault, and NOT as a certificate but as a secret with lots of hoops and loops that have to be gone through via PowerShell). Here is the command line steps
 
-CERTIFICATE_FILE=<the location of the pfx file>
-WEBAPP_NAME=<the name of the webapp>
-GROUP_NAME=<the name of the resource group>
-read -s CERTIFICATE_PASSWORD
-CERTIFICATE_NAME=$(az webapp config ssl upload --certificate-password $CERTIFICATE_PASSWORD --certificate-file $CERTIFICATE_FILE -n $WEBAPP_NAME -g $GROUP_NAME -o tsv --query name)
-echo $CERTIFICATE_NAME
+    CERTIFICATE_FILE=<the location of the pfx file>
+    WEBAPP_NAME=<the name of the webapp>
+    GROUP_NAME=<the name of the resource group>
+    read -s CERTIFICATE_PASSWORD
+    CERTIFICATE_NAME=$(az webapp config ssl upload --certificate-password $CERTIFICATE_PASSWORD --certificate-file $CERTIFICATE_FILE -n $WEBAPP_NAME -g $GROUP_NAME -o tsv --query name)
+    echo $CERTIFICATE_NAME
 
 The cerificate name is now stored as a variable in the CD pipeline.
 
@@ -49,7 +49,7 @@ The cerificate name is now stored as a variable in the CD pipeline.
 
 This is done via an Azure Resource Manager (ARM) template.
 
-WEBAPP_NAME=<the name of the webapp>
-GROUP_NAME=<the name of the resource group>
-CUSTOM_DOMAIN=<the custom domain>
-az group deployment create -g $GROUP_NAME --parameters webAppName=$WEBAPP_NAME customDomain=$CUSTOM_DOMAIN certificateName='"${CERTIFICATE_NAME}"' --template-file customdomainssl.json
+    WEBAPP_NAME=<the name of the webapp>
+    GROUP_NAME=<the name of the resource group>
+    CUSTOM_DOMAIN=<the custom domain>
+    az group deployment create -g $GROUP_NAME --parameters webAppName=$WEBAPP_NAME customDomain=$CUSTOM_DOMAIN certificateName='"${CERTIFICATE_NAME}"' --template-file customdomainssl.json
