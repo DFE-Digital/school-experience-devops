@@ -43,7 +43,7 @@ This can be done manually or via the command line. Storing the certificates in a
     CERTIFICATE_NAME=$(az webapp config ssl upload --certificate-password $CERTIFICATE_PASSWORD --certificate-file $CERTIFICATE_FILE -n $WEBAPP_NAME -g $GROUP_NAME -o tsv --query name)
     echo $CERTIFICATE_NAME
 
-The cerificate name is now stored as a variable in the CD pipeline.
+The certificate name can now be stored as a variable in the CD pipeline.
 
 ## Adding a custom domain corresponding to the SSL certificate that has been uploaded.
 
