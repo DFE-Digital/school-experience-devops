@@ -26,4 +26,30 @@ Usage:
 
     ./deploy.sh -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch of this repo>
 
+## Upload the SSL certificate
 
+As background read
+
+https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-ssl?toc=%2fazure%2fapp-service%2fcontainers%2ftoc.json
+
+It is assumed that the user is in posession of a certificate in pfx format and knows the password for this pfx file.
+
+This can be done manually or via the command line. Storing the certificates in a key vault and then creating the website certificate resource is just adding additional steps (the certificate still has to be uploaded into the key vault, and NOT as a certificate but as a secret with lots of hoops and loops that have to be gone through via PowerShell). Here is the command line steps
+
+CERTIFICATE_FILE=<the location of the pfx file>
+WEBAPP_NAME=<the name of the webapp>
+GROUP_NAME=<the name of the resource group>
+read -s CERTIFICATE_PASSWORD
+CERTIFICATE_NAME=$(az webapp config ssl upload --certificate-password $CERTIFICATE_PASSWORD --certificate-file $CERTIFICATE_FILE -n $WEBAPP_NAME -g $GROUP_NAME -o tsv --query name)
+echo $CERTIFICATE_NAME
+
+The cerificate name is now stored as a variable in the CD pipeline.
+
+## Adding a custom domain corresponding to the SSL certificate that has been uploaded.
+
+This is done via an Azure Resource Manager (ARM) template.
+
+WEBAPP_NAME=<the name of the webapp>
+GROUP_NAME=<the name of the resource group>
+CUSTOM_DOMAIN=<the custom domain>
+az group deployment create -g $GROUP_NAME --parameters webAppName=$WEBAPP_NAME customDomain=$CUSTOM_DOMAIN certificateName='"${CERTIFICATE_NAME}"' --template-file customdomainssl.json

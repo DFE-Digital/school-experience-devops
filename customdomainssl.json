@@ -22,14 +22,16 @@
         }
     },
     "resources": [
-        {
-            "type":"Microsoft.Web/sites/hostnameBindings",
-            "name":"[concat(parameters('webAppName'), '/', parameters('customDomain'))]",
-            "apiVersion":"2016-03-01",
-            "location":"[resourceGroup().location]",
-            "properties":{
-                "sslState":"SniEnabled",
-                "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('certificateName'))).Thumbprint]"
+       {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('webAppName'), '/', parameters('customDomain'))]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "siteName": "[parameters('webAppName')]",
+                "hostNameType": "Verified",
+                "sslState": "SniEnabled",
+                "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('certificateName')),'2016-03-01').Thumbprint]"
             }
         }
     ]
