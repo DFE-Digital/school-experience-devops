@@ -52,4 +52,4 @@ This is done via an Azure Resource Manager (ARM) template.
 WEBAPP_NAME=<the name of the webapp>
 GROUP_NAME=<the name of the resource group>
 CUSTOM_DOMAIN=<the custom domain>
-az group deployment create -g $GROUP_NAME --parameters webAppName=$WEBAPP_NAME customDomain=$CUSTOM_DOMAIN certificateName='"${CERTIFICATE_NAME}"' --template-file customdomainssl.json
+az group deployment create -g $GROUP_NAME --parameters webAppName=$WEBAPP_NAME customDomain=$CUSTOM_DOMAIN certificateName="$CERTIFICATE_NAME" --template-file customdomainssl.json
