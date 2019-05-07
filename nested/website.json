@@ -338,7 +338,7 @@
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2016-08-01",
-            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('customDomainsWithCerts')[copyIndex()].certificateName)]",
+            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('customDomainsWithCerts')[copyIndex()].customDomain)]",
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "domains",
