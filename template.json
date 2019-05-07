@@ -243,6 +243,10 @@
         "dfeSigninHost": {
             "type": "string",
             "defaultValue": ""
+        },
+        "customDomainsWithCerts": {
+            "type": "array",
+            "defaultValue": []
         }
     },
     "variables": {
@@ -479,6 +483,12 @@
                             },
                             "secretName": "dfeSigninSecret"
                         }
+                    },
+                    "customDomainsWithCerts": {
+                        "value": "[parameters('customDomainsWithCerts')]"
+                    },
+                    "existingKeyVaultId": {
+                        "value": "[resourceId(parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
                     }
                 }
             },

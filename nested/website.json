@@ -106,6 +106,13 @@
         },
         "dfeSigninSecret": {
              "type": "securestring"
+        },
+        "customDomainsWithCerts": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "existingKeyVaultId": {
+            "type": "string"
         }
     },
     "variables": {
@@ -309,6 +316,40 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
             ]
+        },
+        {
+            "type":"Microsoft.Web/certificates",
+            "name":"[parameters('customDomainsWithCerts')[copyIndex()].certificateSecretName]",
+            "apiVersion":"2016-03-01",
+            "location":"[resourceGroup().location]",
+            "copy": { 
+                "name": "domains", 
+                "count": "[length(parameters('customDomainsWithCerts'))]" 
+            },
+            "properties":{
+                "keyVaultId": "[parameters('existingKeyVaultId']",
+                "keyVaultSecretName":"[parameters('customDomainsWithCerts')[copyIndex()].certificateSecretName]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms',parameters('serverfarms_serviceplan_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('customDomainsWithCerts')[copyIndex()].certificateName)]",
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "domains",
+                "count": "[length(parameters('customDomainsWithCerts'))]"
+            },
+            "properties": {
+                "siteName": "[parameters('sites_school_experience_name')]",
+                "hostNameType": "Verified",
+                "sslState": "SniEnabled",
+                "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('customDomainsWithCerts')[copyIndex()].certificateName)).Thumbprint]"
+            }
         }
     ]
 }
