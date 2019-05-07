@@ -352,6 +352,33 @@
                 "sslState": "SniEnabled",
                 "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('customDomainsWithCerts')[copyIndex()].certificateName)).Thumbprint]"
             }
+        },
+        {
+            "apiVersion": "2018-05-01",
+            "name": "customdomain",
+            "condition": "[greater(length(parameters('customDomainsWithCerts')),0)]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/customdomain.json', parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                   "customDomainsWithCerts": {
+                        "value": "[parameters('customDomainsWithCerts')]"
+                    },
+                    "existingKeyVaultId": {
+                        "value": "[parameters('existingKeyVaultId')]"
+                    },
+                    "sites_school_experience_name": {
+                        "value": "[parameters('sites_school_experience_name')]"
+                   },
+                    "serverfarms_serviceplan_name": {
+                        "value": "[parameters('serverfarms_serviceplan_name')]"
+                    }
+                }
+            }
         }
     ]
 }

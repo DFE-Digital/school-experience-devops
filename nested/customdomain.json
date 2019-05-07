@@ -5,46 +5,53 @@
         "sites_school_experience_name": {
             "type": "String"
         },
-        "location": {
-            "type": "String"
-        },
-        "hostNameBindingsName": {
-            "type": "String"
-        },
-        "certificateName": {
-            "type": "String",
-            "defaultValue": "schoolExperienceCertificate"
-        },
-        "keyVaultId": {
+        "serverfarms_serviceplan_name": {
             "type": "String"
         },
         "keyVaultSecretName": {
             "type": "String"
+        },
+        "customDomainsWithCerts": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "existingKeyVaultId": {
+            "type": "string"
         }
     },
     "resources": [
         {
-            "type": "Microsoft.Web/certificates",
-            "name": "[parameters('certificateName')]",
-            "apiVersion": "2016-03-01",
-            "location": "[parameters('location')]",
-            "properties": {
-                "keyVaultId": "[parameters('keyVaultId')]",
-                "keyVaultSecretName": "[parameters('keyVaultSecretName')]"
-            }
+            "type":"Microsoft.Web/certificates",
+            "name":"[parameters('customDomainsWithCerts')[copyIndex()].certificateSecretName]",
+            "apiVersion":"2016-03-01",
+            "location":"[resourceGroup().location]",
+            "copy": {
+                "name": "domains",
+                "count": "[length(parameters('customDomainsWithCerts'))]"
+            },
+            "properties":{
+                "keyVaultId": "[parameters('existingKeyVaultId')]",
+                "keyVaultSecretName":"[parameters('customDomainsWithCerts')[copyIndex()].certificateSecretName]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms',parameters('serverfarms_serviceplan_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
+            ]
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
-            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('hostNameBindingsName'))]",
             "apiVersion": "2016-08-01",
-            "location": "[parameters('location')]",
-            "scale": null,
+            "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('customDomainsWithCerts')[copyIndex()].customDomain)]",
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "domains",
+                "count": "[length(parameters('customDomainsWithCerts'))]"
+            },
             "properties": {
                 "siteName": "[parameters('sites_school_experience_name')]",
-                "domainId": null,
                 "hostNameType": "Verified",
                 "sslState": "SniEnabled",
-                "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('certificateName'))).Thumbprint]"
+                "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('customDomainsWithCerts')[copyIndex()].certificateName)).Thumbprint]"
             }
         }
     ]
