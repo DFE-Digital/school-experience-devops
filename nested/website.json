@@ -342,7 +342,10 @@
                         "value": "[parameters('serverfarms_serviceplan_name')]"
                     }
                 }
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
+            ]
         }
     ]
 }

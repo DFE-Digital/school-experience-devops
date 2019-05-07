@@ -33,10 +33,7 @@
                 "keyVaultId": "[parameters('existingKeyVaultId')]",
                 "keyVaultSecretName":"[parameters('customDomainsWithCerts')[copyIndex()].certificateSecretName]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverFarms',parameters('serverfarms_serviceplan_name'))]"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
-            ]
+            }
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
