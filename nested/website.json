@@ -327,7 +327,7 @@
                 "count": "[length(parameters('customDomainsWithCerts'))]" 
             },
             "properties":{
-                "keyVaultId": "[parameters('existingKeyVaultId']",
+                "keyVaultId": "[parameters('existingKeyVaultId')]",
                 "keyVaultSecretName":"[parameters('customDomainsWithCerts')[copyIndex()].certificateSecretName]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverFarms',parameters('serverfarms_serviceplan_name'))]"
             },
