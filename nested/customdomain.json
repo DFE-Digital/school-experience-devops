@@ -8,9 +8,6 @@
         "serverfarms_serviceplan_name": {
             "type": "String"
         },
-        "keyVaultSecretName": {
-            "type": "String"
-        },
         "customDomainsWithCerts": {
             "type": "array",
             "defaultValue": []
