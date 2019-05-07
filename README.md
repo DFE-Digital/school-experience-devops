@@ -33,7 +33,7 @@ Usage:
 If a deployment requires a custom domain with an accompanying SSL certificate then
 
 * The certificate must be uploaded to the Key Vault as a .pfx file 
-* A parameter file must be provided to the `az group deploy` command (not supported when `az group deploy` is invoked via the `deploy.sh` shell script) which includes the following parameter.
+* A parameter file must be provided to the `az group deployment` command (not supported when `az group deployment` is invoked via the `deploy.sh` shell script) which includes the following parameter.
 ```
     "customDomainsWithCerts": {
         "value": [
