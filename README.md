@@ -46,3 +46,9 @@ If a deployment requires a custom domain with an accompanying SSL certificate th
     }
 ```
 Note that `customDomainsWithCerts` is an array and so many custom domain plus certificate combinations can be defined.
+
+A standalone template exist in the root folder of this project which also allows a custom domain / SSL certificate to be configured:
+
+```
+az group deployment create -g schoolExperienceGroup --parameters webAppName=<web app name> customDomain=<custom domain> certificateName=<certificate name and secret name> --template-file customdomainssl.json
+```
