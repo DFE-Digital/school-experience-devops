@@ -113,6 +113,12 @@
         },
         "existingKeyVaultId": {
             "type": "string"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring"
+        },
+        "_artifactsLocation": {
+            "type": "string"
         }
     },
     "variables": {
