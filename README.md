@@ -28,26 +28,34 @@ Usage:
 
     ./deploy.sh -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch of this repo>
 
+Additional parameters can be provided to the underlying Azure Resource Manager template by creating a `parameters.json` in the root of project.
+
 ## Custom Domains and SSL certificates
 
 If a deployment requires a custom domain with an accompanying SSL certificate then
 
 * The certificate must be uploaded to the Key Vault as a .pfx file 
-* A parameter file must be provided to the `az group deployment` command (not supported when `az group deployment` is invoked via the `deploy.sh` shell script) which includes the following parameter.
+* Create a `parameters.json` file in the root of the project with contents
 ```
-    "customDomainsWithCerts": {
-        "value": [
-            {
-                "certificateSecretName": "<the name that was used when uploading the .pfx file to the key vault>",
-                "certificateName": "<the name that will be used for the certificate resource> ",
-                "customDomain": "<the custom domain>" 
-            }
-        ]
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "customDomainsWithCerts": {
+            "value": [
+                {
+                    "certificateSecretName": "<the name that was used when uploading the .pfx file to the key vault>",
+                    "certificateName": "<the name that will be used for the certificate resource> ",
+                    "customDomain": "<the custom domain>" 
+                }
+            ]
+        }
     }
+}
 ```
 Note that `customDomainsWithCerts` is an array and so many custom domain plus certificate combinations can be defined.
 
-A standalone template exist in the root folder of this project which also allows a custom domain / SSL certificate to be configured:
+An additional standalone template exists in the root folder of this project which also allows a custom domain / SSL certificate to be configured:
 
 ```
 az group deployment create -g schoolExperienceGroup --parameters webAppName=<web app name> customDomain=<custom domain> certificateName=<certificate name and secret name> --template-file customdomainssl.json

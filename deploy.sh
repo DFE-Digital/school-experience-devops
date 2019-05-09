@@ -151,9 +151,12 @@ fi
 #parameter file path
 parametersFilePath="parameters.json"
 
+echo
 if [ ! -f "$parametersFilePath" ]; then
-	echo "$parametersFilePath not found"
-	exit 1
+	echo "$parametersFilePath not supplied, this can be useful when (re)creating non development environments..."
+else
+        echo "Using $parametersFilePath for additional parameter values"
+        parametersFileString="@${parametersFilePath}"
 fi
 
 if [ -z "$subscriptionId" ] || [ -z "$resourceGroupName" ] || [ -z "$deploymentName" ]; then
@@ -281,6 +284,7 @@ echo "Using the following compose file..."
 cat compose-school-experience.yml
 
 sleep 10
+
 ####################################################
 #START DEPLOYMENT
 ####################################################
@@ -294,7 +298,7 @@ echo "Starting deployment..."
 	az group deployment create --name ${deploymentName} \
                                    --resource-group ${resourceGroupName} \
                                    --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/template.json \
-                                   --parameters "@${parametersFilePath}" dockerComposeFile=@compose-school-experience.yml registry_name=${registryName} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName} environmentName=${environmentName} _artifactsLocation=https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/ 
+                                   --parameters ${parametersFileString:-} dockerComposeFile=@compose-school-experience.yml registry_name=${registryName} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName} environmentName=${environmentName} _artifactsLocation=https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/ servers_db_createMode=Default
 )
 
 if [ $?  == 0 ];
