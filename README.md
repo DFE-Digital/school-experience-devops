@@ -1,18 +1,8 @@
 # school-experience-devops
 
-To completely bootstrap an environment including the building of the school-experience image, seeding the database and pushing of the locally built image to the registry...
+The following describes how to completely bootstrap an environment including the building of the school-experience image, seeding the database, pushing of the locally built image to the registry and the creation of a Azure Key Vault with secrets. The deployment script will generate secure passwords for the Postgres admin and user passwords and will prompt the user for the Sentry DSN, Slack webhook and DfE Signin secret value. If the user chooses not to supply values for the last three secrets then a value of `rubbish` is used for each of them.  
 
-Prerequisites:
-
-There must a Azure Key Vault set up for which the account running the `deploy.sh` [has 'get' and 'list' access](https://docs.microsoft.com/en-us/azure/key-vault/quick-create-net#assign-permissions-to-your-application-to-read-secrets-from-key-vault). The key vault must have the following secrets
-
-* `postgresAdminPassword`
-* `postgresUserPassword`
-* `slackWebhook` - required but will be ignored if slackEnv is set to '' 
-* `sentryDsn`  - required but will be ignored if set to ''
-* `dfeSigninSecret` - required nbu will be ignored if set to ''
-
-**The deploy script uses the `--template-uri` i.e. remote templates. This is required because it references Azure Key Vaults's with via [dynamic ids](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-keyvault-parameter#reference-secrets-with-dynamic-id)** 
+**The deploy script uses the `--template-uri` i.e. remote templates. This is required because it references Azure Key Vaults's via [dynamic ids](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-keyvault-parameter#reference-secrets-with-dynamic-id)** 
 
 Usage: 
 
