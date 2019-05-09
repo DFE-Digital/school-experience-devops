@@ -8,6 +8,8 @@ IFS=$'\n\t'
 
 usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch>" 1>&2; exit 1; }
 
+source common.sh
+
 declare subscriptionId=""
 declare resourceGroupName=""
 declare deploymentName=""
@@ -175,22 +177,78 @@ fi
 #set the default subscription id
 az account set --subscription $subscriptionId
 
+##################################################
+#RESOURCE GROUP CREATION
+##################################################
+echo 
 set +e
-
 #Check for existing RG
 az group show --name $resourceGroupName 1> /dev/null
 
 if [ $? != 0 ]; then
-	echo "Resource group with name" $resourceGroupName "could not be found. Creating new resource group.."
+	echo "Resource group with name $resourceGroupName could not be found. Creating new resource group to hold website, db, redis."
 	set -e
 	(
 		set -x
 		az group create --name $resourceGroupName --location $resourceGroupLocation 1> /dev/null
 	)
 	else
-	echo "Using existing resource group..."
+	echo "Using existing resource group to hold website, db amnd redis ..."
 fi
 
+##################################################
+#VAULT RESOURCE GROUP CREATION
+##################################################
+echo
+set +e
+#Check for existing Vault RG
+az group show --name $vaultResourceGroup 1> /dev/null
+
+if [ $? != 0 ]; then
+        echo "Resource group with name $vaultResourceGroup could not be found. Creating new resource group to hold Key Vault.."
+        set -e
+        (       
+                set -x
+                az group create --name $vaultResourceGroup --location $resourceGroupLocation 1> /dev/null
+        )
+        else
+        echo "Using existing resource group to hold Key Vault..."
+fi
+
+####################################################
+#VAULT CREATION
+####################################################
+echo 
+set +e
+az keyvault show -g $vaultResourceGroup -n $vaultName 1> /dev/null
+
+if [ $? != 0 ]; then
+        echo "Vault with name $vaultName could not be found. Creating new Vault.."
+        set -e
+        (
+                set -x
+                az keyvault create \
+                  --name $vaultName \
+                  --resource-group $vaultResourceGroup \
+                  --location $resourceGroupLocation \
+                  --enabled-for-template-deployment true 1> /dev/null
+                set +x
+
+                read -p "Enter value for DfE Signin Secret (set to 'rubbish' if not supplied)?" dfeSigninSecret
+                read -p "Enter value for Sentry DSN  Secret (set to 'rubbish' if not supplied)?" sentryDsn
+                read -p "Enter value for Slack webhook  Secret (set to 'rubbish' if not supplied)?" slackWebhook
+
+                setsecret dfeSigninSecret $vaultName ${dfeSigninSecret:-rubbish} 
+                setsecret postgresAdminPassword $vaultName $(randomstring 16)
+                setsecret postgresUserPassword $vaultName $(randomstring 16) 
+                setsecret sentryDsn $vaultName ${sentryDsn:-rubbish}
+                setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
+        )
+        else
+        echo "Using existing Vault..."
+fi
+
+set -e
 #####################################################
 #DOCKER COMPOSE FILE CREATION
 #####################################################
@@ -222,6 +280,7 @@ EOF
 echo "Using the following compose file..."
 cat compose-school-experience.yml
 
+sleep 10
 ####################################################
 #START DEPLOYMENT
 ####################################################
