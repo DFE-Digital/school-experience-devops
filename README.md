@@ -6,9 +6,9 @@ The following describes how to completely bootstrap an environment including the
 
 ## Prerequisites
 
-The user must have access to an Azure subscription with contributer privileges.
+The user must have access to an Azure subscription with contributor privileges and also have [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) installed on the machine where the scripts will be run.
 
-## Deployment
+## Running Deployment Script
 
 Usage: 
 
