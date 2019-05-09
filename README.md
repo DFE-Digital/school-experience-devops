@@ -4,6 +4,12 @@ The following describes how to completely bootstrap an environment including the
 
 **The deploy script uses the `--template-uri` i.e. remote templates. This is required because it references Azure Key Vaults's via [dynamic ids](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-keyvault-parameter#reference-secrets-with-dynamic-id)** 
 
+## Prerequisites
+
+The user must have access to an Azure subscription with contributer privileges.
+
+## Deployment
+
 Usage: 
 
     BUILD_APP=true ./deploy.sh -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch of this repo>
