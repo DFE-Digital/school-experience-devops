@@ -129,6 +129,7 @@
             "description": "Deny Access",
             "action": "Deny"
         },
+        "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
         "emptyArray": []
     },
     "resources": [
@@ -264,6 +265,10 @@
                         {
                             "name": "DFE_SIGNIN_SECRET",
                             "value": "[parameters('dfeSigninSecret')]"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value":  "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
                         }
                     ]
                 },
@@ -352,6 +357,18 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
             ]
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "name": "[variables('appInsightsName')]",
+            "location": "[parameters('location')]",
+            "kind": "other",
+            "properties": {
+                "Application_Type": "other",
+                "Flow_Type": "Redfield",
+                "Request_Source": "IbizaAIExtension"
+            }
         }
     ]
 }
