@@ -54,3 +54,26 @@ An additional standalone template exists in the root folder of this project whic
 ```
 az group deployment create -g schoolExperienceGroup --parameters webAppName=<web app name> customDomain=<custom domain> certificateName=<certificate name and secret name> --template-file customdomainssl.json
 ```
+
+## Enabling Alerts
+
+The ARM template for School Experience supports the creation of Azure Monitor alerts for the various server components. To enable the setting up of alerts make sure the `parameters.json` file contains something like
+```
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "applyAlerts": {
+            "value": true
+        },
+        "supportEmailAddresses": {
+             "value": [
+                  {
+                      "name": "joe.bloggs",
+                      "email": "joe.bloggs@grange.hill.co.uk"
+                  }
+             ]
+        }
+    }
+}
+```

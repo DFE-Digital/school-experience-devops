@@ -247,6 +247,22 @@
         "customDomainsWithCerts": {
             "type": "array",
             "defaultValue": []
+        },
+        "actionGroupName": {
+            "type": "string",
+            "defaultValue": "schoolExperienceSupport"
+        },
+        "actionGroupShortName": {
+            "type": "string",
+            "defaultValue": "sch-exp-sup"
+        },
+        "supportEmailAddresses": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "applyAlerts": {
+             "type": "bool",
+             "defaultValue": false
         }
     },
     "variables": {
@@ -499,6 +515,46 @@
                 }
             },
             "dependsOn": ["backend"]
+        },
+        {
+            "apiVersion": "2018-05-01",
+            "name": "alerts",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[parameters('applyAlerts')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./alerts.json', parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                    "sites_school_experience_name": {
+                        "value": "[parameters('sites_school_experience_name')]"
+                    },
+                    "servers_db_name": {
+                        "value": "[parameters('servers_db_name')]"
+                    },
+                    "redis_name": {
+                        "value": "[parameters('redis_name')]"
+                    },
+                    "_artifactsLocation": {
+                        "value": "[parameters('_artifactsLocation')]"
+                    },
+                    "_artifactsLocationSasToken": {
+                        "value": "[parameters('_artifactsLocationSasToken')]"
+                    },
+                    "actionGroupName": {
+                        "value": "[parameters('actionGroupName')]"
+                    },
+                    "actionGroupShortName": {
+                        "value": "[parameters('actionGroupShortName')]"
+                    },
+                    "supportEmailAddresses": {
+                        "value": "[parameters('supportEmailAddresses')]"
+                    }
+                }
+            },
+            "dependsOn": ["backend","website"]
         }
     ]
 }
