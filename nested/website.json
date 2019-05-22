@@ -26,9 +26,6 @@
         "redis_database_index": {
             "type": "String"
         },
-        "registry_name": {
-            "type": "String"
-        },
         "serverfarms_serviceplan_name": {
             "type": "String"
         },
@@ -122,7 +119,6 @@
         }
     },
     "variables": {
-        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]",
         "ipSecurityRestriction": {
             "ipAddress": "[parameters('ipAddressRestriction')]",
             "name": "denyaccess",
@@ -169,18 +165,6 @@
                         {
                             "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
                             "value": "false"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_URL",
-                            "value": "[variables('dockerRegistryUrl')]"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_USERNAME",
-                            "value": "[parameters('registry_name')]"
-                        },
-                        {
-                            "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
-                            "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('registry_name')), '2017-10-01').passwords[0].value]"
                         },
                         {
                             "name": "SECURE_USERNAME",

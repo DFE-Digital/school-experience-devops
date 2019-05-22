@@ -42,10 +42,6 @@
             "defaultValue": "schoolexperience-dev-db",
             "type": "String"
         },
-        "registry_name": {
-            "defaultValue": "schoolExperienceRegistry",
-            "type": "String"
-        },
         "databases_postgres_name": {
             "defaultValue": "postgres",
             "type": "String"
@@ -112,13 +108,6 @@
                 "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
             },
             "defaultValue": ""
-        },
-        "registrySku": {
-            "type": "object",
-            "defaultValue": {
-                "name": "Standard",
-                "tier": "Standard"
-            }
         },
         "postgresSku": {
             "type": "object",
@@ -266,7 +255,6 @@
         }
     },
     "variables": {
-        "dockerRegistryUrl": "[concat('https://',toLower(parameters('registry_name')), '.azurecr.io')]",
         "environmentSettings": {
             "dev": {
                 "railsEnv": "servertest",
@@ -358,9 +346,6 @@
                     "environmentName": {
                         "value": "[parameters('environmentName')]"
                     },
-                    "registry_name": {
-                        "value": "[parameters('registry_name')]"
-                    },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
                     }
@@ -401,9 +386,6 @@
                     },
                     "redis_database_index": {
                         "value": "[parameters('redis_database_index')]"
-                    },
-                    "registry_name": {
-                        "value": "[parameters('registry_name')]"
                     },
                     "serverfarms_serviceplan_name": {
                         "value": "[parameters('serverfarms_serviceplan_name')]"
