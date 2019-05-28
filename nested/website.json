@@ -314,7 +314,7 @@
             "scale": null,
             "properties": {
                 "requestTracingEnabled": false,
-                "httpLoggingEnabled": true,
+                "httpLoggingEnabled": false,
                 "logsDirectorySizeLimit": "[parameters('logsDirectorySizeLimit')]",
                 "detailedErrorLoggingEnabled": false,
                 "webSocketsEnabled": false,
