@@ -263,6 +263,10 @@
         "applyAlerts": {
              "type": "bool",
              "defaultValue": false
+        },
+        "oldSepDomains": {
+             "type": "string",
+             "defaultValue": ""
         }
     },
     "variables": {
@@ -505,6 +509,9 @@
                     },
                     "existingKeyVaultId": {
                         "value": "[resourceId(parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                    },
+                    "oldSepDomains": {
+                        "value": "[parameters('oldSepDomains')]"
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
