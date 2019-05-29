@@ -345,7 +345,7 @@
                 "groupShortName": "[parameters('actionGroupShortName')]",
                 "enabled": true,
                 "copy": [{
-                    "name": "emailRecievers",
+                    "name": "emailReceivers",
                     "count": "[length(parameters('supportEmailAddresses'))]",
                     "input": {
                          "name": "[concat('email ',parameters('supportEmailAddresses')[copyIndex('emailRecievers')].name, '_-EmailAction-')]",
