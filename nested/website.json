@@ -114,6 +114,9 @@
         "existingKeyVaultId": {
             "type": "string"
         },
+        "oldSepDomains": {
+            "type": "string"
+        },
         "_artifactsLocationSasToken": {
             "type": "securestring"
         },
@@ -265,6 +268,10 @@
                         {
                             "name": "DFE_SIGNIN_SECRET",
                             "value": "[parameters('dfeSigninSecret')]"
+                        },
+                        {
+                            "name": "OLD_SEP_DOMAINS",
+                            "value": "[parameters('oldSepDomains')]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
