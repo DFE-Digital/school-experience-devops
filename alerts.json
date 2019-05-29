@@ -348,8 +348,8 @@
                     "name": "emailReceivers",
                     "count": "[length(parameters('supportEmailAddresses'))]",
                     "input": {
-                         "name": "[concat('email ',parameters('supportEmailAddresses')[copyIndex('emailRecievers')].name, '_-EmailAction-')]",
-                         "emailAddress": "[parameters('supportEmailAddresses')[copyIndex('emailRecievers')].email]"
+                         "name": "[concat('email ',parameters('supportEmailAddresses')[copyIndex('emailReceivers')].name, '_-EmailAction-')]",
+                         "emailAddress": "[parameters('supportEmailAddresses')[copyIndex('emailReceivers')].email]"
                     }
                  }],
                 "smsReceivers": [],
