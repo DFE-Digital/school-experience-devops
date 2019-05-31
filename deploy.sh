@@ -242,8 +242,8 @@ if [ $? != 0 ]; then
                 read -p "Enter value for Slack webhook  Secret (set to 'rubbish' if not supplied)?" slackWebhook
 
                 setsecret dfeSigninSecret $vaultName ${dfeSigninSecret:-rubbish} 
-                setsecret postgresAdminPassword $vaultName $(randomstring 16)
-                setsecret postgresUserPassword $vaultName $(randomstring 16) 
+                setsecret postgresAdminPassword $vaultName $(randomalpha 1)$(randomstring 15)
+                setsecret postgresUserPassword $vaultName $(randomalpha 1)$(randomstring 15) 
                 setsecret sentryDsn $vaultName ${sentryDsn:-rubbish}
                 setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
         )
