@@ -39,7 +39,9 @@
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "domains",
-                "count": "[length(parameters('customDomainsWithCerts'))]"
+                "count": "[length(parameters('customDomainsWithCerts'))]",
+                "mode": "serial",
+                "batchSize": 1
             },
             "properties": {
                 "siteName": "[parameters('sites_school_experience_name')]",

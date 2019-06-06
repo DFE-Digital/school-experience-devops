@@ -111,6 +111,9 @@
         "existingKeyVaultId": {
             "type": "string"
         },
+        "oldSepDomains": {
+            "type": "string"
+        },
         "_artifactsLocationSasToken": {
             "type": "securestring"
         },
@@ -251,6 +254,10 @@
                             "value": "[parameters('dfeSigninSecret')]"
                         },
                         {
+                            "name": "OLD_SEP_DOMAINS",
+                            "value": "[parameters('oldSepDomains')]"
+                        },
+                        {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value":  "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
                         }
@@ -298,7 +305,7 @@
             "scale": null,
             "properties": {
                 "requestTracingEnabled": false,
-                "httpLoggingEnabled": true,
+                "httpLoggingEnabled": false,
                 "logsDirectorySizeLimit": "[parameters('logsDirectorySizeLimit')]",
                 "detailedErrorLoggingEnabled": false,
                 "webSocketsEnabled": false,
