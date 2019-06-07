@@ -117,6 +117,9 @@
         "oldSepDomains": {
             "type": "string"
         },
+        "enableAppInsightsJavascript": {
+            "type": "string"
+        },
         "_artifactsLocationSasToken": {
             "type": "securestring"
         },
@@ -276,6 +279,10 @@
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value":  "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPINSIGHTS_JAVASCRIPT_ENABLED",
+                            "value": "[parameters('enableAppInsightsJavascript')]"
                         }
                     ]
                 },
