@@ -17,3 +17,12 @@ function setsecret {
 function randomstring {
   cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | fold -w $1 | head -n 1
 }
+
+########################################################
+# write random alpha string to STDOUT
+# Example:
+#    randomalpha <length of string>
+########################################################
+function randomalpha {
+  cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z' | fold -w $1 | head -n 1
+}
