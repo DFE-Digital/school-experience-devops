@@ -15,7 +15,7 @@ function setsecret {
 #    randomstring <length of string>
 ########################################################
 function randomstring {
-  cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | fold -w $1 | head -n 1
+  cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9!"#$%&'\''()*+,-./:;<=>?[\]^_`{|}~' | fold -w $1 | head -n 1
 }
 
 ########################################################

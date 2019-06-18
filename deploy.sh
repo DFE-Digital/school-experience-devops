@@ -6,7 +6,7 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <registryName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <imageName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch> -c <registryUsername>" 1>&2; exit 1; }
 
 source common.sh
 
@@ -14,7 +14,7 @@ declare subscriptionId=""
 declare resourceGroupName=""
 declare deploymentName=""
 declare resourceGroupLocation=""
-declare registryName=""
+declare imageName=""
 declare vaultResourceGroup=""
 declare vaultName=""
 declare databaseServerName=""
@@ -24,9 +24,10 @@ declare sitesName=""
 declare redisName=""
 declare environmentName=""
 declare branch=""
+declare registryUsername=""
 
 # Initialize parameters specified from command line
-while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:b:" arg; do
+while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:b:c:" arg; do
 	case "${arg}" in
 		i)
 			subscriptionId=${OPTARG}
@@ -41,7 +42,7 @@ while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:b:" arg; do
 			resourceGroupLocation=${OPTARG}
 			;;
                 m)
-                        registryName=${OPTARG}
+                        imageName=${OPTARG}
                         ;;
                 o)
                         vaultResourceGroup=${OPTARG}
@@ -69,6 +70,9 @@ while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:b:" arg; do
                         ;;
                 b)
                         branch=${OPTARG}
+                        ;;
+                c) 
+                        registryUsername=${OPTARG}
                         ;;
 		esac
 done
@@ -103,9 +107,9 @@ if [[ -z "$resourceGroupLocation" ]]; then
 	read resourceGroupLocation
 fi
 
-if [[ -z "$registryName" ]]; then
-        echo "Enter a name for the registry:"
-        read registryName
+if [[ -z "$imageName" ]]; then
+        echo "Enter a name for the image name:"
+        read imageName
 fi
 
 if [[ -z "$vaultResourceGroup" ]]; then
@@ -167,6 +171,11 @@ fi
 if [[ -z "$branch" ]]; then
         echo "Enter a value for the branch:"
         read branch
+fi
+
+if [[ -z "$registryUsername" ]]; then
+        echo "Enter a value for the registry username:"
+        read registryUsername
 fi
 
 #login to azure using your credentials
@@ -237,15 +246,20 @@ if [ $? != 0 ]; then
                   --enabled-for-template-deployment true 1> /dev/null
                 set +x
 
-                read -p "Enter value for DfE Signin Secret (set to 'rubbish' if not supplied)?" dfeSigninSecret
-                read -p "Enter value for Sentry DSN  Secret (set to 'rubbish' if not supplied)?" sentryDsn
-                read -p "Enter value for Slack webhook  Secret (set to 'rubbish' if not supplied)?" slackWebhook
-
+                read -s -p "Enter value for DfE Signin Secret (set to 'rubbish' if not supplied)?" dfeSigninSecret
+                echo 
+                read -s -p "Enter value for Sentry DSN Secret (set to 'rubbish' if not supplied)?" sentryDsn
+                echo 
+                read -s -p "Enter value for Slack webhook Secret (set to 'rubbish' if not supplied)?" slackWebhook
+                echo
+                read -s -p "Enter value for Docker registry password Secret (set to 'rubbish' if not supplied)?" registryPassword
+                echo
                 setsecret dfeSigninSecret $vaultName ${dfeSigninSecret:-rubbish} 
                 setsecret postgresAdminPassword $vaultName $(randomalpha 1)$(randomstring 15)
                 setsecret postgresUserPassword $vaultName $(randomalpha 1)$(randomstring 15) 
                 setsecret sentryDsn $vaultName ${sentryDsn:-rubbish}
                 setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
+                setsecret registryPassword $vaultName ${registryPassword:-rubbish}
         )
         else
         echo "Using existing Vault..."
@@ -255,11 +269,10 @@ set -e
 #####################################################
 #DOCKER COMPOSE FILE CREATION
 #####################################################
-
-#REGISTRY_NAME=schoolExperienceRegistryTest
-REGISTRY_HOST="$(echo $registryName | tr '[:upper:]' '[:lower:]').azurecr.io"
-IMAGE_NAME=school-experience
+IMAGE_NAME=$imageName
 IMAGE_TAG=latest
+REGISTRY_USERNAME=$registryUsername
+REGISTRY_HOST="registry-1.docker.io"
 
 cat <<EOF > compose-school-experience.yml
 version: '3.3'
@@ -298,7 +311,7 @@ echo "Starting deployment..."
 	az group deployment create --name ${deploymentName} \
                                    --resource-group ${resourceGroupName} \
                                    --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/template.json \
-                                   --parameters ${parametersFileString:-} dockerComposeFile=@compose-school-experience.yml registry_name=${registryName} databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName} environmentName=${environmentName} _artifactsLocation=https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/ servers_db_createMode=Default
+                                   --parameters ${parametersFileString:-} dockerComposeFile=@compose-school-experience.yml  databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName} environmentName=${environmentName} _artifactsLocation=https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/ servers_db_createMode=Default
 )
 
 if [ $?  == 0 ];
@@ -322,19 +335,18 @@ PGPASSWORD=$postgresAdminPassword psql -U adminuser@"${databaseServerName}" -h "
 #BOOTSTRAP IMAGE
 ####################################################
 
-REGISTRY_USER=$registryName
-REGISTRY_PASSWORD=$(az acr credential show -n $registryName --output tsv --query passwords[0].value)
+REGISTRY_PASSWORD=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/registryPassword -o tsv --query value)
 
 if [ -n "${BUILD_APP+set}" ]; then
   git clone https://github.com/DFE-Digital/schools-experience.git /tmp/schools-experience
   cd /tmp/schools-experience
-  docker build -f Dockerfile -t $REGISTRY_HOST/school-experience:latest .
+  docker build -f Dockerfile -t $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG .
 
   echo 'RUNNING  db:migrate db:seed'
-  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/school-experience:latest rails db:migrate db:seed
+  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:migrate db:seed
 
-  docker login $REGISTRY_HOST -u $REGISTRY_USER -p $REGISTRY_PASSWORD
-  docker push $REGISTRY_HOST/school-experience:latest
+  docker login $REGISTRY_HOST -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD
+  docker push $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG
   rm -rf /tmp/schools-experience
 fi
 
