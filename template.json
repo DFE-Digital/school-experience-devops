@@ -256,6 +256,10 @@
         "oldSepDomains": {
              "type": "string",
              "defaultValue": ""
+        },
+        "enableAppInsightsJavascript": {
+             "type": "string",
+             "defaultValue": "false"
         }
     },
     "variables": {
@@ -494,6 +498,9 @@
                     },
                     "oldSepDomains": {
                         "value": "[parameters('oldSepDomains')]"
+                    },
+                    "enableAppInsightsJavascript": {
+                        "value": "[parameters('enableAppInsightsJavascript')]"
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
