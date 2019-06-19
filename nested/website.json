@@ -267,6 +267,10 @@
                         {
                             "name": "APPINSIGHTS_JAVASCRIPT_ENABLED",
                             "value": "[parameters('enableAppInsightsJavascript')]"
+                        },
+                        {
+                            "name": "SENTRY_CURRENT_ENV",
+                            "value": "[parameters('slackEnv')]"
                         }
                     ]
                 },
