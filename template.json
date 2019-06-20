@@ -356,7 +356,13 @@
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
-                    }
+                    },
+                    "applyPostgres": {
+                        "value": "[parameters('applyPostgres')]"
+                    },
+                    "applyRedis": {
+                        "value": "[parameters('applyRedis')]"
+                    }                    
                 }
             }
         },
