@@ -575,7 +575,7 @@
                     }
                 }
             },
-            "dependsOn": ["backend","website"]
+            "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
         }
     ]
 }
