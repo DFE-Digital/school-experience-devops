@@ -264,6 +264,17 @@
         "applyServicePlan": {
             "type": "bool",
             "defaultValue": true
+        },
+        "applyBackend": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "websiteDeploymentName": {
+            "type": "string",
+            "defaultValue": "website",
+            "metadata": {
+                "description": "Allows multiple websites to be deployed concurrently."
+            }
         }
     },
     "variables": {
@@ -295,6 +306,7 @@
             "apiVersion": "2018-05-01",
             "name": "backend",
             "type": "Microsoft.Resources/deployments",
+            "condition": "[parameters('applyBackend')]",            
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -372,7 +384,7 @@
         },
         {
             "apiVersion": "2018-05-01",
-            "name": "website",
+            "name": "[parameters('websiteDeploymentName')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
