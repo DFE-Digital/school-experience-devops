@@ -122,6 +122,9 @@
         },
         "_artifactsLocation": {
             "type": "string"
+        },
+        "applyServicePlan": {
+            "type": "bool"
         }
     },
     "variables": {
@@ -294,6 +297,7 @@
             "kind": "linux",
             "name": "[parameters('serverfarms_serviceplan_name')]",
             "apiVersion": "2016-09-01",
+            "condition": "[parameters('applyServicePlan')]",
             "location": "[parameters('location')]",
             "scale": null,
             "properties": {

@@ -260,6 +260,10 @@
         "enableAppInsightsJavascript": {
              "type": "string",
              "defaultValue": "false"
+        },
+        "applyServicePlan": {
+            "type": "bool",
+            "defaultValue": true
         }
     },
     "variables": {
@@ -513,6 +517,9 @@
                     },
                     "_artifactsLocationSasToken": {
                         "value": "[parameters('_artifactsLocationSasToken')]"
+                    },
+                    "applyServicePlan": {
+                        "value": "[parameters('applyServicePlan')]"
                     }
                 }
             },
