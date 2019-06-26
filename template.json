@@ -261,6 +261,22 @@
              "type": "string",
              "defaultValue": "false"
         },
+        "crmClientId": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "crmServiceUrl": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "crmClientAuthTenantId": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "crmChannelCreation": {
+             "type": "string",
+             "defaultValue": ""
+        },
         "applyServicePlan": {
             "type": "bool",
             "defaultValue": true
@@ -523,6 +539,26 @@
                     },
                     "enableAppInsightsJavascript": {
                         "value": "[parameters('enableAppInsightsJavascript')]"
+                    },
+                    "crmClientId": {
+                        "value": "[parameters('crmClientId')]"
+                    },
+                    "crmServiceUrl": {
+                        "value": "[parameters('crmServiceUrl')]"
+                    },
+                    "crmAuthTenantId": {
+                        "value": "[parameters('crmServiceUrl')]"
+                    },
+                    "crmChannelCreation": {
+                        "value": "[parameters('crmChannelCreation')]"
+                    },
+                    "crmClientSecret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "crmClientSecret"
+                        }
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
