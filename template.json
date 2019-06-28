@@ -277,6 +277,14 @@
              "type": "string",
              "defaultValue": ""
         },
+        "phase": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "fakeCrm": {
+             "type": "string",
+             "defaultValue": ""
+        },
         "applyServicePlan": {
             "type": "bool",
             "defaultValue": true
@@ -559,6 +567,12 @@
                             },
                             "secretName": "crmClientSecret"
                         }
+                    },
+                    "fakeCrm": {
+                        "value": "[parameters('fakeCrm')]"
+                    },
+                    "phase": {
+                        "value": "[parameters('phase')]"
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"

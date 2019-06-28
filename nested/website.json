@@ -140,6 +140,12 @@
         },
         "crmClientSecret": {
              "type": "securestring"
+        },
+        "fakeCrm": {
+             "type": "string"
+        },
+        "phase": {
+             "type": "string"
         }
     },
     "variables": {
@@ -309,6 +315,14 @@
                         {
                             "name": "CRM_CHANNEL_CREATION",
                             "value": "[parameters('crmChannelCreation')]"
+                        },
+                        {
+                            "name": "FAKE_CRM",
+                            "value": "[parameters('fakeCrm')]"
+                        },
+                        {
+                            "name": "PHASE",
+                            "value": "[parameters('phase')]"
                         }
                     ]
                 },
