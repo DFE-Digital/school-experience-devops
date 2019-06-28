@@ -125,6 +125,27 @@
         },
         "applyServicePlan": {
             "type": "bool"
+        },
+        "crmClientId": {
+             "type": "string"
+        },
+        "crmServiceUrl": {
+             "type": "string"
+        },
+        "crmAuthTenantId": {
+             "type": "string"
+        },
+        "crmChannelCreation": {
+             "type": "string"
+        },
+        "crmClientSecret": {
+             "type": "securestring"
+        },
+        "fakeCrm": {
+             "type": "string"
+        },
+        "phase": {
+             "type": "string"
         }
     },
     "variables": {
@@ -274,6 +295,34 @@
                         {
                             "name": "SENTRY_CURRENT_ENV",
                             "value": "[parameters('slackEnv')]"
+                        },
+                        {
+                            "name": "CRM_CLIENT_ID",
+                            "value": "[parameters('crmClientId')]"
+                        },
+                        {
+                            "name": "CRM_CLIENT_SECRET",
+                            "value": "[parameters('crmClientSecret')]"
+                        },
+                        {
+                            "name": "CRM_SERVICE_URL",
+                            "value": "[parameters('crmServiceUrl')]"
+                        },
+                        {
+                            "name": "CRM_AUTH_TENANT_ID",
+                            "value": "[parameters('crmAuthTenantId')]"
+                        },
+                        {
+                            "name": "CRM_CHANNEL_CREATION",
+                            "value": "[parameters('crmChannelCreation')]"
+                        },
+                        {
+                            "name": "FAKE_CRM",
+                            "value": "[parameters('fakeCrm')]"
+                        },
+                        {
+                            "name": "PHASE",
+                            "value": "[parameters('phase')]"
                         }
                     ]
                 },

@@ -261,6 +261,30 @@
              "type": "string",
              "defaultValue": "false"
         },
+        "crmClientId": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "crmServiceUrl": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "crmAuthTenantId": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "crmChannelCreation": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "phase": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "fakeCrm": {
+             "type": "string",
+             "defaultValue": ""
+        },
         "applyServicePlan": {
             "type": "bool",
             "defaultValue": true
@@ -523,6 +547,32 @@
                     },
                     "enableAppInsightsJavascript": {
                         "value": "[parameters('enableAppInsightsJavascript')]"
+                    },
+                    "crmClientId": {
+                        "value": "[parameters('crmClientId')]"
+                    },
+                    "crmServiceUrl": {
+                        "value": "[parameters('crmServiceUrl')]"
+                    },
+                    "crmAuthTenantId": {
+                        "value": "[parameters('crmAuthTenantId')]"
+                    },
+                    "crmChannelCreation": {
+                        "value": "[parameters('crmChannelCreation')]"
+                    },
+                    "crmClientSecret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "crmClientSecret"
+                        }
+                    },
+                    "fakeCrm": {
+                        "value": "[parameters('fakeCrm')]"
+                    },
+                    "phase": {
+                        "value": "[parameters('phase')]"
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
