@@ -269,7 +269,7 @@
              "type": "string",
              "defaultValue": ""
         },
-        "crmClientAuthTenantId": {
+        "crmAuthTenantId": {
              "type": "string",
              "defaultValue": ""
         },
@@ -555,7 +555,7 @@
                         "value": "[parameters('crmServiceUrl')]"
                     },
                     "crmAuthTenantId": {
-                        "value": "[parameters('crmServiceUrl')]"
+                        "value": "[parameters('crmAuthTenantId')]"
                     },
                     "crmChannelCreation": {
                         "value": "[parameters('crmChannelCreation')]"
