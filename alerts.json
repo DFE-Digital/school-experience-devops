@@ -25,7 +25,29 @@
         },
         "supportEmailAddresses": {
             "type": "array"
+        },
+        "thresholdHttpErrors": {
+            "type": "string"
+        },
+        "thresholdResponseTime": {
+            "type": "string"
+        },
+        "thresholdPostgresActiveConnections": {
+            "type": "string"
+        },
+        "thresholdPostgresCPUPercent": {
+            "type": "string"
+        },
+        "thresholdPostgresStoragePercent": {
+            "type": "string"
+        },
+        "thresholdRedisServerLoad": {
+            "type": "string"
+        },
+        "thresholdRedisMemoryPercentage": {
+            "type": "string"
         }
+
     },
     "resources": [
         {
@@ -61,7 +83,7 @@
                        "value": "GreaterThan"
                    },
                    "threshold": {
-                       "value": "10"
+                       "value": "[parameters('thresholdPostgresActiveConnections')]"
                    },
                    "timeAggregation": {
                        "value": "Average"
@@ -105,7 +127,7 @@
                        "value": "GreaterThan"
                    },
                    "threshold": {
-                       "value": "50"
+                       "value": "[parameters('thresholdPostgresCPUPercent')]"
                    },
                    "timeAggregation": {
                        "value": "Average"
@@ -149,7 +171,7 @@
                        "value": "GreaterThan"
                    },
                    "threshold": {
-                       "value": "50"
+                       "value": "[parameters('thresholdPostgresStoragePercent')]"
                    },
                    "timeAggregation": {
                        "value": "Average"
@@ -193,7 +215,7 @@
                        "value": "GreaterThan"
                    },
                    "threshold": {
-                       "value": "30"
+                       "value": "[parameters('thresholdResponseTime')]"
                    },
                    "timeAggregation": {
                        "value": "Average"
@@ -237,7 +259,7 @@
                        "value": "GreaterThan"
                    },
                    "threshold": {
-                       "value": "0"
+                       "value": "[parameters('thresholdHttpErrors')]"
                    },
                    "timeAggregation": {
                        "value": "Total"
@@ -281,7 +303,7 @@
                        "value": "GreaterThan"
                    },
                    "threshold": {
-                       "value": "50"
+                       "value": "[parameters('thresholdRedisServerLoad')]"
                    },
                    "timeAggregation": {
                        "value": "Average"
@@ -325,7 +347,7 @@
                        "value": "GreaterThan"
                    },
                    "threshold": {
-                       "value": "50"
+                       "value": "[parameters('thresholdRedisMemoryPercentage')]"
                    },
                    "timeAggregation": {
                        "value": "Average"
