@@ -373,15 +373,7 @@
                          "name": "[concat('email ',parameters('supportEmailAddresses')[copyIndex('emailReceivers')].name, '_-EmailAction-')]",
                          "emailAddress": "[parameters('supportEmailAddresses')[copyIndex('emailReceivers')].email]"
                     }
-                 }],
-                "smsReceivers": [],
-                "webhookReceivers": [],
-                "itsmReceivers": [],
-                "azureAppPushReceivers": [],
-                "automationRunbookReceivers": [],
-                "voiceReceivers": [],
-                "logicAppReceivers": [],
-                "azureFunctionReceivers": []
+                 }]
             }
         }
     ]
