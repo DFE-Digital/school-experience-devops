@@ -7,6 +7,7 @@
             "allowedValues": [
               "dev",
               "staging",
+              "research",
               "prod"
             ],
             "metadata": {
@@ -327,6 +328,10 @@
         "thresholdRedisMemoryPercentage": {
             "type": "string",
             "defaultValue": "50"
+        },
+        "postgresUserPasswordSecretName": {
+            "type": "string",
+            "defaultValue": "postgresUserPassword"
         }
     },
     "variables": {
@@ -340,6 +345,13 @@
             "staging": {
                 "railsEnv": "production",
                 "slackEnv": "staging",
+                "ipSecurityRestrictions": null,
+                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "railsMaxThreads": "5"
+            },
+            "staging": {
+                "railsEnv": "production",
+                "slackEnv": "research",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "railsMaxThreads": "5"
@@ -480,7 +492,7 @@
                             "keyVault": {
                                 "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
                             },
-                            "secretName": "postgresUserPassword"
+                            "secretName": "[parameters('postgresUserPasswordSecretName')]"
                         }
                     },
                     "railsEnv": {
