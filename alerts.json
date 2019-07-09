@@ -46,8 +46,14 @@
         },
         "thresholdRedisMemoryPercentage": {
             "type": "string"
+        },
+        "activityLogAlerts_name": {
+            "defaultValue": "ServiceHealthActivityLogAlert",
+            "type": "String"
         }
-
+    },
+    "variables": {
+        "alertScope":"[concat('/','subscriptions','/',subscription().subscriptionId)]"
     },
     "resources": [
         {
@@ -382,6 +388,42 @@
                 "voiceReceivers": [],
                 "logicAppReceivers": [],
                 "azureFunctionReceivers": []
+            }
+        },
+        {
+            "comments": "Service Health Activity Log Alert",
+            "type": "microsoft.insights/activityLogAlerts",
+            "name": "[parameters('activityLogAlerts_name')]",
+            "apiVersion": "2017-04-01",
+            "location": "Global",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "scopes": [
+                    "[variables('alertScope')]"
+                ],
+                "condition": {
+                    "allOf": [
+                        {
+                            "field": "category",
+                            "equals": "ServiceHealth"
+                        },
+                        {
+                            "field": "properties.incidentType",
+                            "equals": "Incident"
+                        }
+                    ]
+                },
+                "actions": {
+                    "actionGroups": [
+                        {
+                            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', parameters('actionGroupName'))]",
+                            "webhookProperties": {}
+                        }
+                    ]
+                },
+                "enabled": true,
+                "description": ""
             }
         }
     ]
