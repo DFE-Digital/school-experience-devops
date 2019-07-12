@@ -409,8 +409,30 @@
                             "equals": "ServiceHealth"
                         },
                         {
-                            "field": "properties.incidentType",
-                            "equals": "Incident"
+                            "field": "properties.impactedServices[*].ServiceName",
+                            "containsAny": [
+                                "Azure Database for PostgreSQL",
+                                "Redis Cache",
+                                "App Service / Web Apps",
+                                "App Service (Linux) / Web Apps for Containers",
+                                "App Service (Linux) / Web Apps",
+                                "Alerts",
+                                "Alerts & Metrics",
+                                "App Service",
+                                "App Service (Linux)",
+                                "Application Insights",
+                                "Azure Monitor",
+                                "Key Vault",
+                                "Log Analytics",
+                                "Storage"
+                            ]
+                        },
+                        {
+                            "field": "properties.impactedServices[*].ImpactedRegions[*].RegionName",
+                            "containsAny": [
+                                "UK South",
+                                "Global"
+                            ]
                         }
                     ]
                 },
