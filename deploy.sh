@@ -6,7 +6,7 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <imageName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch> -c <registryUsername>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -m <imageName> -o <vaultResourceGroup> -p <vaultName> -q <databaseServerName> -r <databaseName> -s <servicePlanName> -w <sitesName> -t <redisName> -v <environmentName> -b <branch> " 1>&2; exit 1; }
 
 source common.sh
 
@@ -24,7 +24,6 @@ declare sitesName=""
 declare redisName=""
 declare environmentName=""
 declare branch=""
-declare registryUsername=""
 
 # Initialize parameters specified from command line
 while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:b:c:" arg; do
@@ -70,9 +69,6 @@ while getopts ":i:g:n:l:m:o:p:q:r:s:w:t:v:b:c:" arg; do
                         ;;
                 b)
                         branch=${OPTARG}
-                        ;;
-                c) 
-                        registryUsername=${OPTARG}
                         ;;
 		esac
 done
@@ -173,11 +169,6 @@ if [[ -z "$branch" ]]; then
         read branch
 fi
 
-if [[ -z "$registryUsername" ]]; then
-        echo "Enter a value for the registry username:"
-        read registryUsername
-fi
-
 #login to azure using your credentials
 az account show 1> /dev/null
 
@@ -246,20 +237,20 @@ if [ $? != 0 ]; then
                   --enabled-for-template-deployment true 1> /dev/null
                 set +x
 
-                read -s -p "Enter value for DfE Signin Secret (set to 'rubbish' if not supplied)?" dfeSigninSecret
+                read -s -p "Enter value for DfE Signin secret (set to 'rubbish' if not supplied)?" dfeSigninSecret
                 echo 
-                read -s -p "Enter value for Sentry DSN Secret (set to 'rubbish' if not supplied)?" sentryDsn
+                read -s -p "Enter value for Sentry DSN secret (set to 'rubbish' if not supplied)?" sentryDsn
                 echo 
-                read -s -p "Enter value for Slack webhook Secret (set to 'rubbish' if not supplied)?" slackWebhook
+                read -s -p "Enter value for Slack webhook secret (set to 'rubbish' if not supplied)?" slackWebhook
                 echo
-                read -s -p "Enter value for Docker registry password Secret (set to 'rubbish' if not supplied)?" registryPassword
+                read -s -p "Enter value for CRM client secret (set to 'rubbish' if not supplied)?" crmClientSecret
                 echo
                 setsecret dfeSigninSecret $vaultName ${dfeSigninSecret:-rubbish} 
                 setsecret postgresAdminPassword $vaultName $(randomalpha 1)$(randomstring 15)
                 setsecret postgresUserPassword $vaultName $(randomalpha 1)$(randomstring 15) 
                 setsecret sentryDsn $vaultName ${sentryDsn:-rubbish}
                 setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
-                setsecret registryPassword $vaultName ${registryPassword:-rubbish}
+                setsecret crmClientSecret $vaultName ${crmClientSecret:-rubbish}
         )
         else
         echo "Using existing Vault..."
@@ -270,8 +261,7 @@ set -e
 #DOCKER COMPOSE FILE CREATION
 #####################################################
 IMAGE_NAME=$imageName
-IMAGE_TAG=latest
-REGISTRY_USERNAME=$registryUsername
+IMAGE_TAG=bootstrap
 REGISTRY_HOST="registry-1.docker.io"
 
 cat <<EOF > compose-school-experience.yml
@@ -335,17 +325,26 @@ PGPASSWORD=$postgresAdminPassword psql -U adminuser@"${databaseServerName}" -h "
 #BOOTSTRAP IMAGE
 ####################################################
 
-REGISTRY_PASSWORD=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/registryPassword -o tsv --query value)
-
 if [ -n "${BUILD_APP+set}" ]; then
+  read -rsp $'Deleting the /tmp/schools-experience folder, press any key to continue...\n' -n1 key
+  rm -rf /tmp/schools-experience
   git clone https://github.com/DFE-Digital/schools-experience.git /tmp/schools-experience
   cd /tmp/schools-experience
   docker build -f Dockerfile -t $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG .
 
-  echo 'RUNNING  db:migrate db:seed'
-  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:migrate db:seed
+  echo 'RUNNING  db:migrate'
+  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:migrate 
 
-  docker login $REGISTRY_HOST -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD
+  read -p "To seed database (Y) otherwise will be left empty, a database can only be seeded once?" SEED_DATABASE
+
+  if [ 'Y' == "$SEED_DATABASE" ]; then
+    docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:seed
+  fi
+
+  read -p "Enter value for Docker registry username?" REGISTRY_USERNAME
+  read -s -p "Enter value for Docker registry password?" REGISTRY_PASSWORD
+
+  echo "$REGISTRY_PASSWORD" | docker login $REGISTRY_HOST -u $REGISTRY_USERNAME --password-stdin
   docker push $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG
   rm -rf /tmp/schools-experience
 fi
