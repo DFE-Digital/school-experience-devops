@@ -74,9 +74,6 @@
         },
         "appServiceAppSettings": {
              "type": "array"
-        },
-        "postgresUserPassword": {
-             "type": "securestring"
         }
     },
     "variables": {
@@ -95,7 +92,7 @@
             },
             {   
                 "name": "SLACK_WEBHOOK",
-                "value": "[parameters('slackWebhook']"
+                "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackWebhook'))]"
             },
             {   
                 "name": "SENTRY_DSN",

@@ -590,10 +590,6 @@
                             "value": "[concat(parameters('servers_db_name'), '.postgres.database.azure.com')]"
                         },
                         {
-                            "name": "DB_PASSWORD",
-                            "value": "[parameters('postgresUserPassword')]"
-                        },
-                        {
                             "name": "DB_USERNAME",
                             "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
                         },
@@ -606,16 +602,8 @@
                             "value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
                         },
                         {
-                            "name": "SLACK_WEBHOOK",
-                            "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackWebhook'))]"
-                        },
-                        {
                             "name": "GA_TRACKING_ID",
                             "value": "[parameters('googleAnalyticsTrackingId')]"
-                        },
-                        {
-                            "name": "SENTRY_DSN",
-                            "value": "[parameters('sentryDsn')]"
                         },
                         {
                             "name": "NOTIFY_API_KEY",
@@ -646,10 +634,6 @@
                             "value": "[parameters('dfeSigninHost')]"
                         },
                         {
-                            "name": "DFE_SIGNIN_SECRET",
-                            "value": "[parameters('dfeSigninSecret')]"
-                        },
-                        {
                             "name": "OLD_SEP_DOMAINS",
                             "value": "[parameters('oldSepDomains')]"
                         },
@@ -664,10 +648,6 @@
                         {
                             "name": "CRM_CLIENT_ID",
                             "value": "[parameters('crmClientId')]"
-                        },
-                        {
-                            "name": "CRM_CLIENT_SECRET",
-                            "value": "[parameters('crmClientSecret')]"
                         },
                         {
                             "name": "CRM_SERVICE_URL",
