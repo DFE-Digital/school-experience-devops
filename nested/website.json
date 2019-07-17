@@ -74,6 +74,9 @@
         },
         "appServiceAppSettings": {
              "type": "array"
+        },
+        "postgresUserPassword": {
+             "type": "securestring"
         }
     },
     "variables": {
