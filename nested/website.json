@@ -149,7 +149,7 @@
                 "siteConfig": {
                     "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
                     "alwaysOn": true,
-                    "appSettings": "[parameters('appServiceAppSettingsWithSecrets')]"
+                    "appSettings": "[variables('appServiceAppSettingsWithSecrets')]"
                 },
                 "scmSiteAlsoStopped": false,
                 "hostingEnvironmentProfile": null,
