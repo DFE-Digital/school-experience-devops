@@ -147,6 +147,9 @@
         "phase": {
              "type": "string"
         },
+        "dfeServicesListUrl": {
+             "type": "string"
+        },
         "backendResourceGroup": {
              "type": "string"
         }
@@ -326,6 +329,10 @@
                         {
                             "name": "PHASE",
                             "value": "[parameters('phase')]"
+                        },
+                        {
+                            "name": "DFE_SERVICES_LIST_URL",
+                            "value": "[parameters('dfeServicesListUrl')]"
                         }
                     ]
                 },

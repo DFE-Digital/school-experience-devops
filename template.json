@@ -286,6 +286,10 @@
              "type": "string",
              "defaultValue": ""
         },
+        "dfeServicesListUrl": {
+             "type": "string",
+             "defaultValue": ""
+        },
         "applyServicePlan": {
             "type": "bool",
             "defaultValue": true
@@ -617,6 +621,9 @@
                     },
                     "phase": {
                         "value": "[parameters('phase')]"
+                    },
+                    "dfeServicesListUrl": {
+                        "value": "[parameters('dfeServicesListUrl')]"
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
