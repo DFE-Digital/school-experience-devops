@@ -105,6 +105,10 @@
             {   
                 "name": "CRM_CLIENT_SECRET",
                 "value": "[parameters('crmClientSecret']"
+            },
+            {
+                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                "value":  "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
             }
         ],
         "appServiceAppSettingsWithSecrets": "[concat(parameters('appServiceAppSettings'), parameters('secretsSettings'))]"
