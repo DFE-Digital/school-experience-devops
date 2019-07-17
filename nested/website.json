@@ -114,7 +114,7 @@
                 "value":  "TODO-reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey"
             }
         ],
-        "appServiceAppSettingsWithSecrets": "[concat(parameters('appServiceAppSettings'), parameters('secretsSettings'))]"
+        "appServiceAppSettingsWithSecrets": "[concat(parameters('appServiceAppSettings'), variables('secretsSettings'))]"
     },
     "resources": [
         {
