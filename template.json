@@ -343,6 +343,7 @@
         }
     },
     "variables": {
+        "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
         "environmentSettings": {
             "dev": {
                 "railsEnv": "servertest",
@@ -562,6 +563,9 @@
                             "secretName": "sentryDsn"
                         }
                     },
+                    "appInsightsInstrumentationKey:": {
+                        "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
+                    },
                     "appServiceAppSettings": {
                         "value": [
                         {
@@ -680,7 +684,7 @@
                   }
                 }
             },
-            "dependsOn": ["backend"]
+            "dependsOn": ["backend","[variables('appInsightsName')]"]
         },
         {
             "apiVersion": "2018-05-01",
@@ -743,6 +747,18 @@
                 }
             },
             "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "name": "[variables('appInsightsName')]",
+            "location": "[parameters('location')]",
+            "kind": "other",
+            "properties": {
+                "Application_Type": "other",
+                "Flow_Type": "Redfield",
+                "Request_Source": "IbizaAIExtension"
+            }
         }
     ]
 }

@@ -77,6 +77,9 @@
         },
         "slackEnv": {
              "type": "string"
+        },
+        "appInsightsInstrumentationKey": {
+             "type": "securestring"
         }
     },
     "variables": {
@@ -86,7 +89,6 @@
             "description": "Deny Access",
             "action": "Deny"
         },
-        "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
         "emptyArray": [],
         "secretsSettings": [
             {
@@ -111,7 +113,7 @@
             },
             {
                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                "value":  "[listKeys(resourceId('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
+                "value":  "[parameters('appInsightsInstrumentationKey')]"
             }
         ],
         "appServiceAppSettingsWithSecrets": "[concat(parameters('appServiceAppSettings'), variables('secretsSettings'))]"
