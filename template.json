@@ -563,7 +563,7 @@
                             "secretName": "sentryDsn"
                         }
                     },
-                    "appInsightsInstrumentationKey:": {
+                    "appInsightsInstrumentationKey": {
                         "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
                     },
                     "appServiceAppSettings": {
