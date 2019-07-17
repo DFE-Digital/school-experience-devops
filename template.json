@@ -527,6 +527,9 @@
                             "secretName": "[parameters('postgresUserPasswordSecretName')]"
                         }
                     },
+                    "slackEnv": {
+                        "value": "[parameters('slackEnv')]"
+                    },
                     "slackWebhook": {
                         "reference": {
                             "keyVault": {

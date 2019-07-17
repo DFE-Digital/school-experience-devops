@@ -74,6 +74,9 @@
         },
         "appServiceAppSettings": {
              "type": "array"
+        },
+        "slackEnv": {
+             "type": "string"
         }
     },
     "variables": {
