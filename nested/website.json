@@ -8,40 +8,16 @@
         "config_web_name": {
             "type": "String"
         },
-        "servers_db_name": {
-            "type": "String"
-        },
-        "databases_school_experience_name": {
-            "type": "String"
-        },
-        "postgresUserLoginName": {
-            "type": "String"
-        },
         "postgresUserPassword": {
             "type": "securestring"
         },
         "dockerComposeFile": {
             "type": "String"
         },
-        "redis_database_index": {
-            "type": "String"
-        },
         "serverfarms_serviceplan_name": {
             "type": "String"
         },
-        "redis_name": {
-            "type": "String"
-        },
         "location": {
-            "type": "String"
-        },
-        "slackWebhook": {
-            "type": "String"
-        },
-        "railsEnv": {
-            "type": "String"
-        },
-        "slackEnv": {
             "type": "String"
         },
         "slackWebhook": {
@@ -62,43 +38,13 @@
         "hostNameBindingsName": {
             "type": "String"
         },
-        "appSecureUsername": {
-            "type": "String"
-        },
-        "appSecurePassword": {
-            "type": "securestring"
-        },
-        "googleAnalyticsTrackingId": {
-            "type": "String"
-        },
         "sentryDsn": {
             "type": "securestring"
-        },
-        "secretKeyBase": {
-            "type": "string"
-        },
-        "notifyApiKey": {
-             "type": "string"
-        },
-        "bingMapsKey": {
-             "type": "string"
         },
         "logsDirectorySizeLimit": {
              "type": "string"
         },
-        "railsMaxThreads": {
-             "type": "string"
-        },
         "public_host_name": {
-             "type": "string"
-        },
-        "dfeSigninBaseUrl": {
-             "type": "string"
-        },
-        "dfeSigninClientId": {
-             "type": "string"
-        },
-        "dfeSigninHost": {
              "type": "string"
         },
         "dfeSigninSecret": {
@@ -111,12 +57,6 @@
         "existingKeyVaultId": {
             "type": "string"
         },
-        "oldSepDomains": {
-            "type": "string"
-        },
-        "enableAppInsightsJavascript": {
-            "type": "string"
-        },
         "_artifactsLocationSasToken": {
             "type": "securestring"
         },
@@ -126,32 +66,14 @@
         "applyServicePlan": {
             "type": "bool"
         },
-        "crmClientId": {
-             "type": "string"
-        },
-        "crmServiceUrl": {
-             "type": "string"
-        },
-        "crmAuthTenantId": {
-             "type": "string"
-        },
-        "crmChannelCreation": {
-             "type": "string"
-        },
         "crmClientSecret": {
              "type": "securestring"
         },
-        "fakeCrm": {
-             "type": "string"
-        },
-        "phase": {
-             "type": "string"
-        },
-        "dfeServicesListUrl": {
-             "type": "string"
-        },
         "backendResourceGroup": {
              "type": "string"
+        },
+        "appServiceAppSettings": {
+             "type": "array"
         }
     },
     "variables": {
@@ -162,7 +84,30 @@
             "action": "Deny"
         },
         "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
-        "emptyArray": []
+        "emptyArray": [],
+        "secretsSettings": [
+            {
+                "name": "POSTGRES_USER_PASSWORD",
+                "value": "[parameters('postgresUserPassword']"
+            },
+            {   
+                "name": "SLACK_WEBHOOK",
+                "value": "[parameters('slackWebhook']"
+            },
+            {   
+                "name": "SENTRY_DSN",
+                "value": "[parameters('sentryDsn']"
+            },
+            {   
+                "name": "DFE_SIGNIN_SECRET",
+                "value": "[parameters('dfeSigninSecret']"
+            },
+            {   
+                "name": "CRM_CLIENT_SECRET",
+                "value": "[parameters('crmClientSecret']"
+            }
+        ],
+        "appServiceAppSettingsWithSecrets": "[concat(parameters('appServiceAppSettings'), parameters('secretsSettings'))]"
     },
     "resources": [
         {
@@ -197,144 +142,7 @@
                 "siteConfig": {
                     "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
                     "alwaysOn": true,
-                    "appSettings": [
-                        {
-                            "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
-                            "value": "false"
-                        },
-                        {
-                            "name": "SECURE_USERNAME",
-                            "value": "[parameters('appSecureUsername')]"
-                        },
-                        {
-                            "name": "SECURE_PASSWORD",
-                            "value": "[parameters('appSecurePassword')]"
-                        },
-                        {
-                            "name": "SECRET_KEY_BASE",
-                            "value": "[parameters('secretKeyBase')]"
-                        },
-                        {
-                            "name": "REDIS_URL",
-                            "value": "[concat('rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'))]"
-                        },
-                        {
-                            "name": "DB_DATABASE",
-                            "value": "[parameters('databases_school_experience_name')]"
-                        },
-                        {
-                            "name": "DB_HOST",
-                            "value": "[concat(parameters('servers_db_name'), '.postgres.database.azure.com')]"
-                        },
-                        {
-                            "name": "DB_PASSWORD",
-                            "value": "[parameters('postgresUserPassword')]"
-                        },
-                        {
-                            "name": "DB_USERNAME",
-                            "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
-                        },
-                        {
-                            "name": "RAILS_ENV",
-                            "value": "[parameters('railsEnv')]"
-                        },
-                        {
-                            "name": "SLACK_ENV",
-                            "value": "[parameters('slackEnv')]"
-                        },
-                        {
-                            "name": "SLACK_WEBHOOK",
-                            "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackWebhook'))]"
-                        },
-                        {
-                            "name": "GA_TRACKING_ID",
-                            "value": "[parameters('googleAnalyticsTrackingId')]"
-                        },
-                        {
-                            "name": "SENTRY_DSN",
-                            "value": "[parameters('sentryDsn')]"
-                        },
-                        {
-                            "name": "NOTIFY_API_KEY",
-                            "value": "[parameters('notifyApiKey')]"
-                        },
-                        {
-                            "name": "BING_MAPS_KEY",
-                            "value": "[parameters('bingMapsKey')]"
-                        },
-                        {
-                            "name": "RAILS_MAX_THREADS",
-                            "value": "[parameters('railsMaxThreads')]"
-                        },
-                        {
-                            "name": "CANONICAL_DOMAIN",
-                            "value": "[parameters('public_host_name')]"
-                        },
-                        {
-                            "name": "DFE_SIGNIN_BASE_URL",
-                            "value": "[parameters('dfeSigninBaseUrl')]"
-                        },
-                        {
-                            "name": "DFE_SIGNIN_CLIENT_ID",
-                            "value": "[parameters('dfeSigninClientId')]"
-                        },
-                        {
-                            "name": "DFE_SIGNIN_HOST",
-                            "value": "[parameters('dfeSigninHost')]"
-                        },
-                        {
-                            "name": "DFE_SIGNIN_SECRET",
-                            "value": "[parameters('dfeSigninSecret')]"
-                        },
-                        {
-                            "name": "OLD_SEP_DOMAINS",
-                            "value": "[parameters('oldSepDomains')]"
-                        },
-                        {
-                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value":  "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
-                        },
-                        {
-                            "name": "APPINSIGHTS_JAVASCRIPT_ENABLED",
-                            "value": "[parameters('enableAppInsightsJavascript')]"
-                        },
-                        {
-                            "name": "SENTRY_CURRENT_ENV",
-                            "value": "[parameters('slackEnv')]"
-                        },
-                        {
-                            "name": "CRM_CLIENT_ID",
-                            "value": "[parameters('crmClientId')]"
-                        },
-                        {
-                            "name": "CRM_CLIENT_SECRET",
-                            "value": "[parameters('crmClientSecret')]"
-                        },
-                        {
-                            "name": "CRM_SERVICE_URL",
-                            "value": "[parameters('crmServiceUrl')]"
-                        },
-                        {
-                            "name": "CRM_AUTH_TENANT_ID",
-                            "value": "[parameters('crmAuthTenantId')]"
-                        },
-                        {
-                            "name": "CRM_CHANNEL_CREATION",
-                            "value": "[parameters('crmChannelCreation')]"
-                        },
-                        {
-                            "name": "FAKE_CRM",
-                            "value": "[parameters('fakeCrm')]"
-                        },
-                        {
-                            "name": "PHASE",
-                            "value": "[parameters('phase')]"
-                        },
-                        {
-                            "name": "DFE_SERVICES_LIST_URL",
-                            "value": "[parameters('dfeServicesListUrl')]"
-                        }
-                    ]
+                    "appSettings": "[parameters('appServiceAppSettingsWithSecrets')"
                 },
                 "scmSiteAlsoStopped": false,
                 "hostingEnvironmentProfile": null,

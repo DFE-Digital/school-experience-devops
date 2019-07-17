@@ -474,48 +474,11 @@
                     "config_web_name": {
                         "value": "[parameters('config_web_name')]"
                     },
-                    "servers_db_name": {
-                        "value": "[parameters('servers_db_name')]"
-                    },
-                    "databases_school_experience_name": {
-                        "value": "[parameters('databases_school_experience_name')]"
-                    },
-                    "postgresUserLoginName": {
-                        "value": "[parameters('postgresUserLoginName')]"
-                    },
                     "dockerComposeFile": {
                         "value": "[parameters('dockerComposeFile')]"
                     },
-                    "redis_database_index": {
-                        "value": "[parameters('redis_database_index')]"
-                    },
                     "serverfarms_serviceplan_name": {
                         "value": "[parameters('serverfarms_serviceplan_name')]"
-                    },
-                    "redis_name": {
-                        "value": "[parameters('redis_name')]"
-                    },
-                    "postgresUserPassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "[parameters('postgresUserPasswordSecretName')]"
-                        }
-                    },
-                    "railsEnv": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].railsEnv]"
-                    },
-                    "slackEnv": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
-                    },
-                    "slackWebhook": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "slackWebhook"
-                        }
                     },
                     "environmentName": {
                         "value": "[parameters('environmentName')]"
@@ -532,98 +495,17 @@
                     "hostNameBindingsName": {
                         "value": "[variables('environmentSettings')[parameters('environmentName')].hostNameBindingsName]"
                     },
-                    "appSecureUsername": {
-                        "value": "[parameters('appSecureUsername')]"
-                    },
-                    "appSecurePassword": {
-                        "value": "[parameters('appSecurePassword')]"
-                    },
-                    "googleAnalyticsTrackingId": {
-                        "value": "[parameters('googleAnalyticsTrackingId')]"
-                    },
-                    "sentryDsn": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "sentryDsn"
-                        }
-                    },
-                    "secretKeyBase": {
-                        "value": "[parameters('secretKeyBase')]"
-                    },
-                    "notifyApiKey": {
-                        "value": "[parameters('notifyApiKey')]"
-                    },
-                    "bingMapsKey": {
-                        "value": "[parameters('bingMapsKey')]"
-                    },
                     "logsDirectorySizeLimit": {
                         "value": "[parameters('logsDirectorySizeLimit')]"
                     },
-                    "railsMaxThreads": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].railsMaxThreads]"
-                    },
                     "public_host_name": {
                         "value": "[parameters('public_host_name')]"
-                    },
-                    "dfeSigninBaseUrl": {
-                        "value": "[parameters('dfeSigninBaseUrl')]"
-                    },
-                    "dfeSigninClientId": {
-                        "value": "[parameters('dfeSigninClientId')]"
-                    },
-                    "dfeSigninHost": {
-                        "value": "[parameters('dfeSigninHost')]"
-                    },
-                    "dfeSigninSecret": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "dfeSigninSecret"
-                        }
                     },
                     "customDomainsWithCerts": {
                         "value": "[parameters('customDomainsWithCerts')]"
                     },
                     "existingKeyVaultId": {
                         "value": "[resourceId(parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                    },
-                    "oldSepDomains": {
-                        "value": "[parameters('oldSepDomains')]"
-                    },
-                    "enableAppInsightsJavascript": {
-                        "value": "[parameters('enableAppInsightsJavascript')]"
-                    },
-                    "crmClientId": {
-                        "value": "[parameters('crmClientId')]"
-                    },
-                    "crmServiceUrl": {
-                        "value": "[parameters('crmServiceUrl')]"
-                    },
-                    "crmAuthTenantId": {
-                        "value": "[parameters('crmAuthTenantId')]"
-                    },
-                    "crmChannelCreation": {
-                        "value": "[parameters('crmChannelCreation')]"
-                    },
-                    "crmClientSecret": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "crmClientSecret"
-                        }
-                    },
-                    "fakeCrm": {
-                        "value": "[parameters('fakeCrm')]"
-                    },
-                    "phase": {
-                        "value": "[parameters('phase')]"
-                    },
-                    "dfeServicesListUrl": {
-                        "value": "[parameters('dfeServicesListUrl')]"
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
@@ -636,7 +518,187 @@
                     },
                     "backendResourceGroup": {
                         "value": "[parameters('backendResourceGroup')]"
-                    }
+                    },
+                    "postgresUserPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "[parameters('postgresUserPasswordSecretName')]"
+                        }
+                    },
+                    "slackWebhook": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "slackWebhook"
+                        }
+                    },
+                    "crmClientSecret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "crmClientSecret"
+                        }
+                    },
+                    "dfeSigninSecret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "dfeSigninSecret"
+                        }
+                    },
+                    "sentryDsn": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "sentryDsn"
+                        }
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                        {
+                            "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
+                            "value": "false"
+                        },
+                        {
+                            "name": "SECURE_USERNAME",
+                            "value": "[parameters('appSecureUsername')]"
+                        },
+                        {
+                            "name": "SECURE_PASSWORD",
+                            "value": "[parameters('appSecurePassword')]"
+                        },
+                        {
+                            "name": "SECRET_KEY_BASE",
+                            "value": "[parameters('secretKeyBase')]"
+                        },
+                        {
+                            "name": "REDIS_URL",
+                            "value": "[concat('rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'))]"
+                        },
+                        {
+                            "name": "DB_DATABASE",
+                            "value": "[parameters('databases_school_experience_name')]"
+                        },
+                        {
+                            "name": "DB_HOST",
+                            "value": "[concat(parameters('servers_db_name'), '.postgres.database.azure.com')]"
+                        },
+                        {
+                            "name": "DB_PASSWORD",
+                            "value": "[parameters('postgresUserPassword')]"
+                        },
+                        {
+                            "name": "DB_USERNAME",
+                            "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
+                        },
+                        {
+                            "name": "RAILS_ENV",
+                            "value": "[variables('environmentSettings')[parameters('environmentName')].railsEnv]"
+                        },
+                        {
+                            "name": "SLACK_ENV",
+                            "value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
+                        },
+                        {
+                            "name": "SLACK_WEBHOOK",
+                            "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackWebhook'))]"
+                        },
+                        {
+                            "name": "GA_TRACKING_ID",
+                            "value": "[parameters('googleAnalyticsTrackingId')]"
+                        },
+                        {
+                            "name": "SENTRY_DSN",
+                            "value": "[parameters('sentryDsn')]"
+                        },
+                        {
+                            "name": "NOTIFY_API_KEY",
+                            "value": "[parameters('notifyApiKey')]"
+                        },
+                        {
+                            "name": "BING_MAPS_KEY",
+                            "value": "[parameters('bingMapsKey')]"
+                        },
+                        {
+                            "name": "RAILS_MAX_THREADS",
+                            "value": "[variables('environmentSettings')[parameters('environmentName')].railsMaxThreads]"
+                        },
+                        {
+                            "name": "CANONICAL_DOMAIN",
+                            "value": "[parameters('public_host_name')]"
+                        },
+                        {
+                            "name": "DFE_SIGNIN_BASE_URL",
+                            "value": "[parameters('dfeSigninBaseUrl')]"
+                        },
+                        {
+                            "name": "DFE_SIGNIN_CLIENT_ID",
+                            "value": "[parameters('dfeSigninClientId')]"
+                        },
+                        {
+                            "name": "DFE_SIGNIN_HOST",
+                            "value": "[parameters('dfeSigninHost')]"
+                        },
+                        {
+                            "name": "DFE_SIGNIN_SECRET",
+                            "value": "[parameters('dfeSigninSecret')]"
+                        },
+                        {
+                            "name": "OLD_SEP_DOMAINS",
+                            "value": "[parameters('oldSepDomains')]"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value":  "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPINSIGHTS_JAVASCRIPT_ENABLED",
+                            "value": "[parameters('enableAppInsightsJavascript')]"
+                        },
+                        {
+                            "name": "SENTRY_CURRENT_ENV",
+                            "value": "[parameters('slackEnv')]"
+                        },
+                        {
+                            "name": "CRM_CLIENT_ID",
+                            "value": "[parameters('crmClientId')]"
+                        },
+                        {
+                            "name": "CRM_CLIENT_SECRET",
+                            "value": "[parameters('crmClientSecret')]"
+                        },
+                        {
+                            "name": "CRM_SERVICE_URL",
+                            "value": "[parameters('crmServiceUrl')]"
+                        },
+                        {
+                            "name": "CRM_AUTH_TENANT_ID",
+                            "value": "[parameters('crmAuthTenantId')]"
+                        },
+                        {
+                            "name": "CRM_CHANNEL_CREATION",
+                            "value": "[parameters('crmChannelCreation')]"
+                        },
+                        {
+                            "name": "FAKE_CRM",
+                            "value": "[parameters('fakeCrm')]"
+                        },
+                        {
+                            "name": "PHASE",
+                            "value": "[parameters('phase')]"
+                        },
+                        {
+                            "name": "DFE_SERVICES_LIST_URL",
+                            "value": "[parameters('dfeServicesListUrl')]"
+                        }
+                    ]
+                  }
                 }
             },
             "dependsOn": ["backend"]
