@@ -91,7 +91,7 @@
         "secretsSettings": [
             {
                 "name": "POSTGRES_USER_PASSWORD",
-                "value": "[parameters('postgresUserPassword']"
+                "value": "[parameters('postgresUserPassword')]"
             },
             {   
                 "name": "SLACK_WEBHOOK",
@@ -99,15 +99,15 @@
             },
             {   
                 "name": "SENTRY_DSN",
-                "value": "[parameters('sentryDsn']"
+                "value": "[parameters('sentryDsn')]"
             },
             {   
                 "name": "DFE_SIGNIN_SECRET",
-                "value": "[parameters('dfeSigninSecret']"
+                "value": "[parameters('dfeSigninSecret')]"
             },
             {   
                 "name": "CRM_CLIENT_SECRET",
-                "value": "[parameters('crmClientSecret']"
+                "value": "[parameters('crmClientSecret')]"
             },
             {
                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
