@@ -340,6 +340,32 @@
         "backendResourceGroup": {
             "type": "string",
             "defaultValue": "[resourceGroup().name]"
+        },
+        "webTestFrequencySecs": {
+             "type": "string",
+             "defaultValue": "300"
+        },
+        "webTestTimeoutSecs": {
+             "type": "string", 
+             "defaultValue": "120"
+        },
+        "webTestGUID": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "webTestLocations": {
+             "type": "array",
+             "defaultValue": [
+               { "Id": "us-il-ch1-azr"},
+               { "Id": "us-ca-sjc-azr"},
+               { "Id": "emea-fr-pra-edge"},
+               { "Id": "emea-nl-ams-azr"},
+               { "Id": "emea-gb-db3-azr"}
+             ]
+        },
+        "webTestEnabled": {
+             "type": "bool",
+             "defaultValue": false
         }
     },
     "variables": {
@@ -348,28 +374,36 @@
                 "railsEnv": "servertest",
                 "slackEnv": "",
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "railsMaxThreads": "5"
+                "railsMaxThreads": "5",
+                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "webTestExpected": "401"
             },
             "staging": {
                 "railsEnv": "production",
                 "slackEnv": "staging",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "railsMaxThreads": "5"
+                "railsMaxThreads": "5",
+                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "webTestExpected": "401"
             },
             "research": {
                 "railsEnv": "production",
                 "slackEnv": "research",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "railsMaxThreads": "5"
+                "railsMaxThreads": "5",
+                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "webTestExpected": "401"
             },
             "prod": {
                 "railsEnv": "production",
                 "slackEnv": "production",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
-                "railsMaxThreads": "15"
+                "railsMaxThreads": "15",
+                "webTestUrl": "[concat('https://',parameters('public_host_name'))]",
+                "webTestExpected": "200"
             }
         }
     },
@@ -636,6 +670,27 @@
                     },
                     "backendResourceGroup": {
                         "value": "[parameters('backendResourceGroup')]"
+                    },
+                    "webTestFrequencySecs": {
+                        "value": "[parameters('webTestFrequencySecs')]"
+                    },
+                    "webTestTimeoutSecs": {
+                        "value": "[parameters('webTestTimeoutSecs')]"
+                    },
+                    "webTestUrl": {
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].webTestUrl]"
+                    },
+                    "webTestGUID": {
+                        "value": "[parameters('webTestGUID')]"
+                    },
+                    "webTestExpected": {
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].webTestExpected]"
+                    },
+                    "webTestLocations": {
+                        "value": "[parameters('webTestLocations')]"
+                    },
+                    "webTestEnabled": {
+                        "value": "[parameters('webTestEnabled')]"
                     }
                 }
             },
