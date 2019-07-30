@@ -162,9 +162,6 @@
         "webTestUrl": {
              "type": "string"
         },      
-        "webTestGUID": {
-             "type": "string"
-        },
         "webTestExpected": {
              "type": "string"
         },

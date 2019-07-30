@@ -349,10 +349,6 @@
              "type": "string", 
              "defaultValue": "120"
         },
-        "webTestGUID": {
-             "type": "string",
-             "defaultValue": ""
-        },
         "webTestLocations": {
              "type": "array",
              "defaultValue": [
@@ -679,9 +675,6 @@
                     },
                     "webTestUrl": {
                         "value": "[variables('environmentSettings')[parameters('environmentName')].webTestUrl]"
-                    },
-                    "webTestGUID": {
-                        "value": "[parameters('webTestGUID')]"
                     },
                     "webTestExpected": {
                         "value": "[variables('environmentSettings')[parameters('environmentName')].webTestExpected]"
