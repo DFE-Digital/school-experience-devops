@@ -362,6 +362,14 @@
         "webTestEnabled": {
              "type": "bool",
              "defaultValue": false
+        },
+        "activityLogAlerts_name": {
+            "defaultValue": "ServiceHealthActivityLogAlert",
+            "type": "String"
+        },
+        "alertNamePrefix": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -745,8 +753,13 @@
                     },
                     "thresholdRedisMemoryPercentage": {
                         "value": "[parameters('thresholdRedisMemoryPercentage')]"
+                    },
+                    "activityLogAlerts_name": {
+                        "value": "[parameters('activityLogAlerts_name')]"
+                    },
+                    "alertNamePrefix": {
+                        "value": "[parameters('alertNamePrefix')]"
                     }
-
                 }
             },
             "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
