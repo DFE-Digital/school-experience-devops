@@ -334,6 +334,7 @@ rm compose-school-experience.yml
 echo "The postgres user password secret name is ${postgresUserPasswordSecretName}"
 
 postgresAdminPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresAdminPassword -o tsv --query value)
+
 export postgresUserPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/${postgresUserPasswordSecretName} -o tsv --query value)
 
 read -p "Enter value for postgres username (defaults to railsappuser if not supplied)?" dbusersupplied
