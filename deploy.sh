@@ -247,7 +247,7 @@ if [ $? != 0 ]; then
                 echo
                 setsecret dfeSigninSecret $vaultName ${dfeSigninSecret:-rubbish} 
                 setsecret postgresAdminPassword $vaultName $(randomalpha 1)$(randomstring 15)
-                setsecret postgresUserPassword $vaultName $(randomalpha 1)$(randomstring 15) 
+                setsecret postgresUserPassword $vaultName $(randomalpha 1)$(randomstring 15)
                 setsecret sentryDsn $vaultName ${sentryDsn:-rubbish}
                 setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
                 setsecret crmClientSecret $vaultName ${crmClientSecret:-rubbish}
@@ -256,7 +256,24 @@ if [ $? != 0 ]; then
         echo "Using existing Vault..."
 fi
 
+VAULT_NAME_LOWER_CASE="$(echo $vaultName | tr '[:upper:]' '[:lower:]')"
+
+echo 'A secret has already been generated for the postgres user password with a secret name of postgresUserPassword.'
+read -p "Do you want to create (if it doesn't exist) and use a secret with a different name (Y/N)?" useDifferentUserPasswordSecret
+
+postgresUserPasswordSecretName=postgresUserPassword
+
+if [ 'Y' == "$useDifferentUserPasswordSecret" ]; then
+  read -p "Enter value for postgres user password secret name and generate a value (defaults to postgresUserPassword if not supplied)?" postgresUserPasswordSecretName
+  if [ "$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/${postgresUserPasswordSecretName} -o tsv --query value)" != "" ]; then
+      echo 'secret already exists'
+    else  
+      setsecret ${postgresUserPasswordSecretName} $vaultName $(randomalpha 1)$(randomstring 15)
+  fi
+fi
+
 set -e
+
 #####################################################
 #DOCKER COMPOSE FILE CREATION
 #####################################################
@@ -293,7 +310,6 @@ sleep 10
 ####################################################
 
 export DATABASE_NAME=$databaseName
-VAULT_NAME_LOWER_CASE="$(echo $vaultName | tr '[:upper:]' '[:lower:]')"
 
 echo "Starting deployment..."
 (
@@ -315,8 +331,11 @@ rm compose-school-experience.yml
 #SET UP DATABASE
 ####################################################
 
+echo "The postgres user password secret name is ${postgresUserPasswordSecretName}"
+
 postgresAdminPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresAdminPassword -o tsv --query value)
-export postgresUserPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/postgresUserPassword -o tsv --query value)
+
+export postgresUserPassword=$(az keyvault secret show --id https://${VAULT_NAME_LOWER_CASE}.vault.azure.net/secrets/${postgresUserPasswordSecretName} -o tsv --query value)
 
 read -p "Enter value for postgres username (defaults to railsappuser if not supplied)?" dbusersupplied
 
@@ -335,20 +354,20 @@ if [ -n "${BUILD_APP+set}" ]; then
   cd /tmp/schools-experience
   docker build -f Dockerfile -t $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG .
 
-  echo 'RUNNING  db:migrate'
-  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:migrate 
-
-  read -p "To seed database (Y) otherwise will be left empty, a database can only be seeded once?" SEED_DATABASE
-
-  if [ 'Y' == "$SEED_DATABASE" ]; then
-    docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:seed
-  fi
-
   read -p "Enter value for Docker registry username?" REGISTRY_USERNAME
   read -s -p "Enter value for Docker registry password?" REGISTRY_PASSWORD
 
   echo "$REGISTRY_PASSWORD" | docker login $REGISTRY_HOST -u $REGISTRY_USERNAME --password-stdin
   docker push $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG
   rm -rf /tmp/schools-experience
+fi
+
+echo 'RUNNING  db:migrate'
+docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:migrate
+
+read -p "To seed database (Y) otherwise will be left empty, a database can only be seeded once?" SEED_DATABASE
+
+if [ 'Y' == "$SEED_DATABASE" ]; then
+  docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:seed
 fi
 
