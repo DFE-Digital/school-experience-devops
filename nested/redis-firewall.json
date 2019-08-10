@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_school_experience_name": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the web app to open access for."
+            }
+        },
+        "countOfWebAppIps": {
+            "type": "int",
+            "metadata": {
+                "description": "The number of ip adresses to iterate through."
+            }
+        },
+        "redis_name": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('redis_name'), '/',replace(parameters('sites_school_experience_name'),'-', ''), 'FirewallRule', copyIndex())]",
+            "type": "Microsoft.Cache/Redis/firewallRules",
+            "apiVersion": "2018-03-01",
+            "properties": {
+                "startIP": "[split(reference(resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name')),'2016-08-01').outboundIpAddresses,',')[copyIndex()]]",
+                "endIP": "[split(reference(resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name')),'2016-08-01').outboundIpAddresses,',')[copyIndex()]]"
+            },
+            "copy": {
+                "name": "outboundipaddress",
+                "count": "[parameters('countOfWebAppIps')]",
+                "mode": "serial",
+                "batchSize": 1
+            }
+        }
+    ]
+}

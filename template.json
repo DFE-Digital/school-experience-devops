@@ -370,6 +370,10 @@
         "alertNamePrefix": {
             "type": "string",
             "defaultValue": ""
+        },
+        "applyRedisFirewall": {
+            "type": "bool",
+            "defaultValue": true
         }
     },
     "variables": {
@@ -763,6 +767,31 @@
                 }
             },
             "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
-        }
+        },
+        {
+            "apiVersion": "2018-05-01",
+            "name": "redis-firewall",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[parameters('applyRedisFirewall')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/redis-firewall.json', parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                    "sites_school_experience_name": {
+                        "value": "[parameters('sites_school_experience_name')]"
+                    },
+                "countOfWebAppIps": {
+                        "value": "[reference(parameters('websiteDeploymentName')).outputs.countOfWebAppIps.value]"
+                    },
+                "redis_name": {
+                        "value": "[parameters('redis_name')]"
+                    }
+                }
+             },
+            "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
+         }
     ]
 }
