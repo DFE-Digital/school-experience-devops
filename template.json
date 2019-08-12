@@ -784,8 +784,8 @@
                     "sites_school_experience_name": {
                         "value": "[parameters('sites_school_experience_name')]"
                     },
-                    "countOfWebAppIps": {
-                        "value": "[reference(parameters('websiteDeploymentName')).outputs.countOfWebAppIps.value]"
+                    "webAppIps": {
+                        "value": "[reference(parameters('websiteDeploymentName')).outputs.webAppIps.value]"
                     },
                     "redis_name": {
                         "value": "[parameters('redis_name')]"

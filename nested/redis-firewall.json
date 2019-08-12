@@ -8,10 +8,10 @@
                 "description": "The name of the web app to open access for."
             }
         },
-        "countOfWebAppIps": {
-            "type": "int",
+        "webAppIps": {
+            "type": "array",
             "metadata": {
-                "description": "The number of ip adresses to iterate through."
+                "description": "The ip adresses to iterate through."
             }
         },
         "redis_name": {
@@ -24,12 +24,12 @@
             "type": "Microsoft.Cache/Redis/firewallRules",
             "apiVersion": "2018-03-01",
             "properties": {
-                "startIP": "[split(reference(resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name')),'2016-08-01').outboundIpAddresses,',')[copyIndex()]]",
-                "endIP": "[split(reference(resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name')),'2016-08-01').outboundIpAddresses,',')[copyIndex()]]"
+                "startIP": "[parameters('webAppIps')[copyIndex()]]",
+                "endIP": "[parameters('webAppIps')[copyIndex()]]"
             },
             "copy": {
                 "name": "outboundipaddress",
-                "count": "[parameters('countOfWebAppIps')]",
+                "count": "[length(parameters('webAppIps'))]",
                 "mode": "serial",
                 "batchSize": 1
             }

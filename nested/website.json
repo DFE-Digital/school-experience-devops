@@ -480,9 +480,9 @@
         }
     ],
     "outputs": {
-        "countOfWebAppIps": {
-            "type": "int",
-            "value": "[length(split(reference(resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name')),'2016-08-01').outboundIpAddresses, ','))]"
+        "webAppIps": {
+            "type": "array",
+            "value": "[split(reference(resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name')),'2016-08-01').outboundIpAddresses, ',')]"
         }
     }
 }
