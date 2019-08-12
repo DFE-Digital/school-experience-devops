@@ -773,6 +773,7 @@
             "name": "redis-firewall",
             "type": "Microsoft.Resources/deployments",
             "condition": "[parameters('applyRedisFirewall')]",
+            "resourceGroup": "[parameters('backendResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -783,10 +784,10 @@
                     "sites_school_experience_name": {
                         "value": "[parameters('sites_school_experience_name')]"
                     },
-                "countOfWebAppIps": {
+                    "countOfWebAppIps": {
                         "value": "[reference(parameters('websiteDeploymentName')).outputs.countOfWebAppIps.value]"
                     },
-                "redis_name": {
+                    "redis_name": {
                         "value": "[parameters('redis_name')]"
                     }
                 }
