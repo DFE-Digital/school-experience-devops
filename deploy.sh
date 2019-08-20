@@ -252,7 +252,11 @@ if [ $? != 0 ]; then
                 setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
                 setsecret crmClientSecret $vaultName ${crmClientSecret:-rubbish}
 
+                MICROSOFT_AZURE_APP_SERVICE_SPN=abfa0a7c-a6b6-4736-8310-5855508787cd
+                az keyvault set-policy --name $vaultName --spn $MICROSOFT_AZURE_APP_SERVICE_SPN --secret-permissions get
+                
                 read -s -p "Azure DevOps service connection service principal (leave blank if you don't know or is not relevant)?" serviceConnectionPrincipal
+                echo                
 
                 if [[ !  -z "$serviceConnectionPrincipal" ]]; then
                     az keyvault set-policy --name $vaultName --spn $serviceConnectionPrincipal --secret-permissions get list
