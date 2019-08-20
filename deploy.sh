@@ -251,6 +251,13 @@ if [ $? != 0 ]; then
                 setsecret sentryDsn $vaultName ${sentryDsn:-rubbish}
                 setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
                 setsecret crmClientSecret $vaultName ${crmClientSecret:-rubbish}
+
+                read -s -p "Azure DevOps service connection service principal (leave blank if you don't know or is not relevant)?" serviceConnectionPrincipal
+
+                if [[ !  -z "$serviceConnectionPrincipal" ]]; then
+                    az keyvault set-policy --name $vaultName --spn $serviceConnectionPrincipal --secret-permissions get list
+                    az keyvault set-policy --name $vaultName --spn $serviceConnectionPrincipal --certificate-permissions get list
+                fi
         )
         else
         echo "Using existing Vault..."
