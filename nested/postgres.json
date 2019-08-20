@@ -26,9 +26,6 @@
         "postgresAdminPassword": {
             "type": "securestring"
         },
-        "location": {
-            "type": "String"
-        },
         "sku": {
             "type": "object"
         },
@@ -45,7 +42,7 @@
             "sku": "[parameters('sku')]",
             "name": "[parameters('servers_db_name')]",
             "apiVersion": "2017-12-01-preview",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
                 "storageProfile": "[parameters('storageProfile')]",

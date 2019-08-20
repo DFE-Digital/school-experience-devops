@@ -14,13 +14,6 @@
                 "description": "Specify either dev, test or prod for configuration values."
             }
         },
-        "location": {
-            "defaultValue": "uksouth",
-            "type": "String",
-            "metadata": {
-                "description": "The location where resources will be deployed."
-            }       
-        },
         "servers_db_createMode": {
             "defaultValue": null,
             "type": "SecureString"
@@ -428,9 +421,6 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./backend.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
                     "servers_db_createMode": {
                         "value": "[parameters('servers_db_createMode')]"
                     },
@@ -507,9 +497,6 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/website.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
                     "sites_school_experience_name": {
                         "value": "[parameters('sites_school_experience_name')]"
                     },
