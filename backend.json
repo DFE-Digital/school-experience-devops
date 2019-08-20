@@ -5,13 +5,6 @@
         "environmentName": {
             "type": "String"
         },
-        "location": {
-            "defaultValue": "uksouth",
-            "type": "String",
-            "metadata": {
-                "description": "The location where resources will be deployed."
-            }       
-        },
         "servers_db_createMode": {
             "defaultValue": null,
             "type": "SecureString"
@@ -157,9 +150,6 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres.json', parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
                     "servers_db_createMode": {
                         "value": "[parameters('servers_db_createMode')]"
                     },
@@ -208,9 +198,6 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/', if(equals(parameters('environmentName'), 'prod'), 'redis-storage.json', 'redis-nostorage.json'), parameters('_artifactsLocationSasToken')))]"
                 },
                 "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
                     "redis_name": {
                         "value": "[parameters('redis_name')]"
                     },

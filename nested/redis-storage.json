@@ -2,9 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "type": "String"
-        },
         "redis_name": {
             "type": "String"
         },
@@ -26,7 +23,7 @@
             "type": "Microsoft.Cache/Redis",
             "name": "[parameters('redis_name')]",
             "apiVersion": "2017-10-01",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "tags": {},
             "scale": null,
             "properties": {
@@ -57,7 +54,7 @@
             "kind": "StorageV2",
             "name": "[parameters('redisStorageAccountName')]",
             "apiVersion": "2018-07-01",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "tags": {},
             "scale": null,
             "properties": {

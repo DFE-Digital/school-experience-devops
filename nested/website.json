@@ -32,9 +32,6 @@
         "redis_name": {
             "type": "String"
         },
-        "location": {
-            "type": "String"
-        },
         "slackWebhook": {
             "type": "String"
         },
@@ -189,7 +186,7 @@
             "kind": "app,linux,container",
             "name": "[parameters('sites_school_experience_name')]",
             "apiVersion": "2016-08-01",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
                 "enabled": true,
@@ -376,7 +373,7 @@
             "name": "[parameters('serverfarms_serviceplan_name')]",
             "apiVersion": "2016-09-01",
             "condition": "[parameters('applyServicePlan')]",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
                 "name": "[parameters('serverfarms_serviceplan_name')]",
@@ -394,7 +391,7 @@
             "type": "Microsoft.Web/sites/config",
             "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('config_web_name'))]",
             "apiVersion": "2018-02-01",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
                 "requestTracingEnabled": false,
@@ -446,7 +443,7 @@
             "name": "[variables('webTestName')]",
             "apiVersion": "2015-05-01",
             "type": "microsoft.insights/webtests",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "tags": {
                "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('appInsightsName')))]": "Resource"
             },
@@ -470,7 +467,7 @@
             "type": "microsoft.insights/components",
             "apiVersion": "2015-05-01",
             "name": "[variables('appInsightsName')]",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "kind": "other",
             "properties": {
                 "Application_Type": "other",
