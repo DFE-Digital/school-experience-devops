@@ -147,6 +147,12 @@
         "dfeServicesListUrl": {
              "type": "string"
         },
+        "crmOwnerId": {
+             "type": "string"
+        },
+        "crmCountryId": {
+             "type": "string"
+        },
         "backendResourceGroup": {
              "type": "string"
         },
@@ -337,6 +343,14 @@
                         {
                             "name": "CRM_CHANNEL_CREATION",
                             "value": "[parameters('crmChannelCreation')]"
+                        },
+                        {
+                            "name": "CRM_OWNER_ID",
+                            "value": "[parameters('crmOwnerId')]"
+                        },
+                        {
+                            "name": "CRM_COUNTRY_ID",
+                            "value": "[parameters('crmCountryId')]"
                         },
                         {
                             "name": "FAKE_CRM",

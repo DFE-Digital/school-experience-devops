@@ -283,6 +283,14 @@
              "type": "string",
              "defaultValue": ""
         },
+        "crmOwnerId": {
+             "type": "string",
+             "defaultValue": ""
+        },
+        "crmCountryId": {
+             "type": "string",
+             "defaultValue": ""
+        },
         "applyServicePlan": {
             "type": "bool",
             "defaultValue": true
@@ -653,6 +661,12 @@
                     },
                     "dfeServicesListUrl": {
                         "value": "[parameters('dfeServicesListUrl')]"
+                    },
+                    "crmOwnerId": {
+                        "value": "[parameters('crmOwnerId')]"
+                    },
+                    "crmCountryId": {
+                        "value": "[parameters('crmCountryId')]"
                     },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
