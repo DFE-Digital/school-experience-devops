@@ -352,7 +352,14 @@ read -p "Enter value for postgres username (defaults to railsappuser if not supp
 
 export dbuser=${dbusersupplied:-railsappuser}
 
+if [ 'dev' != "$environmentName" ]; then
+  echo 'adding firewall rule for deploy script'
+  clientIpAddress=$(curl -s https://api.ipify.org)
+  az postgres server firewall-rule create -g ${resourceGroupName} -s ${databaseServerName} -n allow-deploy-script --start-ip-address ${clientIpAddress} --end-ip-address ${clientIpAddress}
+fi
+
 PGPASSWORD=$postgresAdminPassword psql -U adminuser@"${databaseServerName}" -h "${databaseServerName}".postgres.database.azure.com postgres -f createdb.sql
+
 
 ####################################################
 #BOOTSTRAP IMAGE
@@ -382,3 +389,7 @@ if [ 'Y' == "$SEED_DATABASE" ]; then
   docker run -e RAILS_ENV=production -e DB_HOST="${databaseServerName}.postgres.database.azure.com"  -e DB_DATABASE=${DATABASE_NAME} -e DB_USERNAME="${dbuser}@${databaseServerName}" -e DB_PASSWORD=$postgresUserPassword -e SECRET_KEY_BASE=stubbed -e SKIP_REDIS=true --rm $REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG rails db:seed
 fi
 
+if [ 'dev' != "$environmentName" ]; then
+  echo 'removing firewall rule for deploy script'
+  az postgres server firewall-rule delete -g ${resourceGroupName} -s ${databaseServerName} -n allow-deploy-script --yes
+fi
