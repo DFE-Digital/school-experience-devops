@@ -375,6 +375,10 @@
         "applyRedisFirewall": {
             "type": "bool",
             "defaultValue": true
+        },
+        "slackEnvPrefix": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -389,7 +393,7 @@
             },
             "staging": {
                 "railsEnv": "production",
-                "slackEnv": "staging",
+                "slackEnv": "[concat(parameters('slackEnvPrefix'),'staging')]",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "railsMaxThreads": "5",
@@ -398,7 +402,7 @@
             },
             "research": {
                 "railsEnv": "production",
-                "slackEnv": "research",
+                "slackEnv": "[concat(parameters('slackEnvPrefix'),'research')]",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "railsMaxThreads": "5",
@@ -407,7 +411,7 @@
             },
             "prod": {
                 "railsEnv": "production",
-                "slackEnv": "production",
+                "slackEnv": "[concat(parameters('slackEnvPrefix'),'production')]",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
                 "railsMaxThreads": "15",
