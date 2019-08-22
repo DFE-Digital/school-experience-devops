@@ -376,10 +376,6 @@
             "type": "bool",
             "defaultValue": true
         },
-        "applyPostgresFirewall": {
-            "type": "bool",
-            "defaultValue": true
-        },
         "slackEnvPrefix": {
             "type": "string",
             "defaultValue": ""
@@ -798,32 +794,6 @@
                     },
                     "redis_name": {
                         "value": "[parameters('redis_name')]"
-                    }
-                }
-             },
-            "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
-         },
-        {
-            "apiVersion": "2018-05-01",
-            "name": "postgres-firewall",
-            "type": "Microsoft.Resources/deployments",
-            "condition": "[parameters('applyPostgresFirewall')]",
-            "resourceGroup": "[parameters('backendResourceGroup')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres-firewall.json', parameters('_artifactsLocationSasToken')))]"
-                },
-                "parameters": {
-                    "sites_school_experience_name": {
-                        "value": "[parameters('sites_school_experience_name')]"
-                    },
-                    "webAppIps": {
-                        "value": "[reference(parameters('websiteDeploymentName')).outputs.webAppIps.value]"
-                    },
-                    "servers_db_name": {
-                        "value": "[parameters('servers_db_name')]"
                     }
                 }
              },
