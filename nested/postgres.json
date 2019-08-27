@@ -95,12 +95,13 @@
         },
         {
             "type": "Microsoft.DBforPostgreSQL/servers/firewallRules",
-            "name": "[concat(parameters('servers_db_name'), '/', if(equals(parameters('environmentName'), 'dev'), 'AllowAllIps', 'AllowAzureResourceIps'))]",
+            "name": "[concat(parameters('servers_db_name'), '/', 'AllowAllIps')]",
+            "condition": "[equals(parameters('environmentName'), 'dev')]",
             "apiVersion": "2017-12-01-preview",
             "scale": null,
             "properties": {
                 "startIpAddress": "0.0.0.0",
-                "endIpAddress": "[if(equals(parameters('environmentName'), 'dev'), '255.255.255.255', '0.0.0.0')]"
+                "endIpAddress": "255.255.255.255"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('servers_db_name'))]"
