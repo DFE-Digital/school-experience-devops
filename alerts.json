@@ -52,10 +52,32 @@
         },
         "alertNamePrefix": {
             "type": "string"
+        },
+        "webTestName": {
+            "type": "String"
+        },
+        "appInsightsName": {
+            "type": "String"
+        },
+        "supportWebhook": {
+            "type": "securestring",
+            "defaultValue": ""
+        },
+        "addSupportWebhook": {
+            "type": "bool",
+            "defaultValue": false
         }
     },
     "variables": {
-        "alertScope":"[concat('/','subscriptions','/',subscription().subscriptionId)]"
+        "alertScope":"[concat('/','subscriptions','/',subscription().subscriptionId)]",
+        "emptyArray": [],
+        "supportWebhooks": [
+                    {
+                        "name": "notify-slack",
+                        "serviceUri": "[parameters('supportWebhook')]",
+                        "useCommonAlertSchema": false
+                    }
+        ]
     },
     "resources": [
         {
@@ -368,7 +390,7 @@
         },
         {
             "type": "microsoft.insights/actionGroups",
-            "apiVersion": "2018-03-01",
+            "apiVersion": "2019-06-01",
             "name": "[parameters('actionGroupName')]",
             "location": "Global",
             "properties": {
@@ -383,7 +405,7 @@
                     }
                  }],
                 "smsReceivers": [],
-                "webhookReceivers": [],
+                "webhookReceivers": "[if(parameters('addSupportWebhook'), variables('supportWebhooks'), variables('emptyArray'))]",
                 "itsmReceivers": [],
                 "azureAppPushReceivers": [],
                 "automationRunbookReceivers": [],
@@ -449,6 +471,39 @@
                 "enabled": true,
                 "description": ""
             }
+        },
+        {
+          "name": "[concat(parameters('webTestName'), '-alert')]",
+          "type": "Microsoft.Insights/metricAlerts",
+          "apiVersion": "2018-03-01",
+          "location": "global",
+          "tags": {
+                "[concat('hidden-link:', resourceId('microsoft.insights/components/', parameters('appInsightsName')))]": "Resource",
+                "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', parameters('webTestName')))]": "Resource"
+          },
+          "properties": {
+              "description": "[concat('Alert rule for availability test \"', parameters('webTestName'), '\"')]",
+              "severity": 1,
+              "enabled": true,
+              "scopes": [
+                  "[resourceId('microsoft.insights/components/', parameters('appInsightsName'))]",
+                  "[resourceId('microsoft.insights/webtests/', parameters('webTestName'))]"
+              ],
+              "evaluationFrequency": "PT1M",
+              "windowSize": "PT5M",
+              "templateType": 0,
+              "criteria": {
+                  "odata.type": "Microsoft.Azure.Monitor.WebtestLocationAvailabilityCriteria",
+                  "webTestId": "[resourceId('microsoft.insights/webtests/', parameters('webTestName'))]",
+                  "componentId": "[resourceId('microsoft.insights/components/', parameters('appInsightsName'))]",
+                  "failedLocationCount": 2
+              },
+              "actions": [
+                  {
+                      "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', parameters('actionGroupName'))]"
+                  }
+              ]
+          }
         }
     ]
 }
