@@ -722,8 +722,11 @@
                             "secretName": "crmClientSecret"
                         }
                     },
-                    "redisUrl": {
-                        "value": "[concat('rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'))]"
+                    "redis_name": {
+                        "value": "[parameters('redis_name')]" 
+                    },
+                    "redis_database_index": {
+                        "value": "[parameters('redis_database_index')]"
                     },
                     "appInsightsInstrumentationKey": {
                         "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName')),'2015-05-01').InstrumentationKey]"

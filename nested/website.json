@@ -54,9 +54,6 @@
             "type": "array",
             "defaultValue": []
         },
-        "redisUrl": {
-            "type": "securestring"
-        },
         "appInsightsInstrumentationKey": {
             "type": "securestring"
         },
@@ -104,6 +101,12 @@
         },
         "slackEnv": {
              "type": "string"
+        },
+        "redis_name": {
+             "type": "string"
+        },
+        "redis_database_index": {
+             "type": "string"
         }
     },
     "variables": {
@@ -115,10 +118,6 @@
         },
         "emptyArray": [],
         "secureAppSettings": [
-            {   
-                "name": "REDIS_URL",
-                "value": "[parameters('redisUrl')]"
-            },  
             {   
                 "name": "DB_PASSWORD",
                 "value": "[parameters('postgresUserPassword')]"
@@ -178,7 +177,7 @@
                 "siteConfig": {
                     "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
                     "alwaysOn": true,
-                    "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'))]"
+                    "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'), json(concat('[{\"name\":\"REDIS_URL\", \"value\":\"','rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'), '\"}]')))]"
                 },
                 "scmSiteAlsoStopped": false,
                 "hostingEnvironmentProfile": null,
