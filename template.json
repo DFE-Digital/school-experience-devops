@@ -383,9 +383,15 @@
         "slackEnvPrefix": {
             "type": "string",
             "defaultValue": ""
+        },
+        "addSupportWebhook": {
+            "type": "bool",
+            "defaultValue": false
         }
     },
     "variables": {
+        "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
+        "webTestName": "[concat(parameters('sites_school_experience_name'),'-webtest')]",
         "environmentSettings": {
             "dev": {
                 "railsEnv": "servertest",
@@ -705,6 +711,12 @@
                     },
                     "webTestEnabled": {
                         "value": "[parameters('webTestEnabled')]"
+                    },
+                    "webTestName": {
+                        "value": "[variables('webTestName')]"
+                    },
+                    "appInsightsName": {
+                        "value": "[variables('appInsightsName')]"
                     }
                 }
             },
@@ -772,7 +784,25 @@
                     },
                     "alertNamePrefix": {
                         "value": "[parameters('alertNamePrefix')]"
+                    },
+                    "webTestName": {
+                        "value": "[variables('webTestName')]"
+                    },
+                    "appInsightsName": {
+                        "value": "[variables('appInsightsName')]"
+                    },
+                    "addSupportWebhook": {
+                        "value": "[parameters('addSupportWebhook')]"
+                    },
+                    "supportWebhook": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "supportWebhook"
+                        }
                     }
+                    
                 }
             },
             "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]

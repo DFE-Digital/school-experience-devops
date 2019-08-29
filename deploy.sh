@@ -245,12 +245,15 @@ if [ $? != 0 ]; then
                 echo
                 read -s -p "Enter value for CRM client secret (set to 'rubbish' if not supplied)?" crmClientSecret
                 echo
+                read -s -p "Enter value for Azure Support Group (slack) webhook secret (set to 'rubbish' if not supplied)?" supportWebhook
+                echo
                 setsecret dfeSigninSecret $vaultName ${dfeSigninSecret:-rubbish} 
                 setsecret postgresAdminPassword $vaultName $(randomalpha 1)$(randomstring 15)
                 setsecret postgresUserPassword $vaultName $(randomalpha 1)$(randomstring 15)
                 setsecret sentryDsn $vaultName ${sentryDsn:-rubbish}
                 setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
                 setsecret crmClientSecret $vaultName ${crmClientSecret:-rubbish}
+                setsecret supportWebhook $vaultName ${supportWebhook:-rubbish}
 
                 MICROSOFT_AZURE_APP_SERVICE_SPN=abfa0a7c-a6b6-4736-8310-5855508787cd
                 az keyvault set-policy --name $vaultName --spn $MICROSOFT_AZURE_APP_SERVICE_SPN --secret-permissions get
