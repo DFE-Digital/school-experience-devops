@@ -107,6 +107,9 @@
         },
         "redis_database_index": {
              "type": "string"
+        },
+        "deployToSlot": {
+             "type": "bool"
         }
     },
     "variables": {
@@ -150,10 +153,10 @@
             "kind": "app,linux,container",
             "name": "[parameters('sites_school_experience_name')]",
             "apiVersion": "2016-08-01",
+            "condition": "[not(parameters('deployToSlot'))]",
             "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
-                "enabled": true,
                 "hostNameSslStates": [
                     {
                         "name": "[concat(parameters('sites_school_experience_name'),'.azurewebsites.net')]",
@@ -173,25 +176,46 @@
                     }
                 ],
                 "serverFarmId": "[resourceId(parameters('backendResourceGroup'),'Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]",
-                "reserved": true,
                 "siteConfig": {
                     "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
                     "alwaysOn": true,
                     "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'), json(concat('[{\"name\":\"REDIS_URL\", \"value\":\"','rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'), '\"}]')))]"
                 },
-                "scmSiteAlsoStopped": false,
-                "hostingEnvironmentProfile": null,
+                "enabled": true,
+                "reserved": true,
                 "clientAffinityEnabled": false,
-                "clientCertEnabled": false,
-                "hostNamesDisabled": false,
-                "containerSize": 0,
-                "dailyMemoryTimeQuota": 0,
-                "cloningInfo": null,
                 "httpsOnly": true
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
             ]
+        },
+        {
+           "type": "Microsoft.Web/sites/slots",
+           "kind": "app,linux,container",
+           "name": "[concat(parameters('sites_school_experience_name'), '/staging-slot')]",
+           "apiVersion": "2016-08-01",
+           "condition": "[parameters('deployToSlot')]",
+           "location": "[resourceGroup().location]",
+           "comments": "This specifies the staging slot in any deployment, not to be confused with the staging environment.",
+           "tags": {
+               "displayName": "WebAppSlots"
+           },
+           "properties": {
+               "siteConfig": {
+                    "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
+                    "alwaysOn": true,
+                    "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'), json(concat('[{\"name\":\"REDIS_URL\", \"value\":\"','rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'), '\"}]')))]"
+                },
+               "serverFarmId": "[resourceId(parameters('backendResourceGroup'),'Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]",
+               "enabled": true,
+               "reserved": true,
+               "clientAffinityEnabled": false,
+               "httpsOnly": true
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Web/Sites', parameters('sites_school_experience_name'))]"
+           ]
         },
         {
             "type": "Microsoft.Web/serverfarms",
