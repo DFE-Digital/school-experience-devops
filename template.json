@@ -387,6 +387,13 @@
         "addSupportWebhook": {
             "type": "bool",
             "defaultValue": false
+        },
+        "deployToSlot": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Whether to deploy to a slot, when creating a new environment from script we deploy directly to the main slot hence a default value of false. When deploying from within a pipeline we deploy to a slot and then use the slot swap mechanism to deploy with zero downtime."
+            }
         }
     },
     "variables": {
@@ -769,6 +776,9 @@
                     },
                     "appInsightsName": {
                         "value": "[variables('appInsightsName')]"
+                    },
+                    "deployToSlot": {
+                        "value": "[parameters('deployToSlot')]"
                     }
                 }
             },
