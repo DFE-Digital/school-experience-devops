@@ -364,6 +364,13 @@
              "type": "bool",
              "defaultValue": false
         },
+        "webTestPath": {
+             "type": "string",
+             "defaultValue": "",
+             "metadata": {
+                "description": "Forms part of the URL used to test the health of the application i.e. https://<web app name>.azurewebsites.net/<webTestPath>"
+            }
+        },
         "activityLogAlerts_name": {
             "defaultValue": "ServiceHealthActivityLogAlert",
             "type": "String"
@@ -405,7 +412,7 @@
                 "slackEnv": "",
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "railsMaxThreads": "5",
-                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401"
             },
             "staging": {
@@ -414,7 +421,7 @@
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "railsMaxThreads": "5",
-                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401"
             },
             "research": {
@@ -423,7 +430,7 @@
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "railsMaxThreads": "5",
-                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401"
             },
             "prod": {
@@ -432,7 +439,7 @@
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
                 "railsMaxThreads": "15",
-                "webTestUrl": "[concat('https://',parameters('public_host_name'))]",
+                "webTestUrl": "[concat('https://',parameters('public_host_name'), '/', parameters('webTestPath'))]",
                 "webTestExpected": "200"
             }
         },
