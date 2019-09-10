@@ -75,7 +75,7 @@
                     {
                         "name": "notify-slack",
                         "serviceUri": "[parameters('supportWebhook')]",
-                        "useCommonAlertSchema": false
+                        "useCommonAlertSchema": true
                     }
         ]
     },
