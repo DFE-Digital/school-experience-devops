@@ -110,6 +110,12 @@
         },
         "deployToSlot": {
              "type": "bool"
+        },
+        "deploymentPassword": {
+             "type": "securestring"
+        },
+        "deploymentUsername": {
+             "type": "string"
         }
     },
     "variables": {
@@ -144,6 +150,10 @@
             {   
                 "name": "CRM_CLIENT_SECRET",
                 "value": "[parameters('crmClientSecret')]"
+            },
+            {
+                "name": "DEPLOYMENT_PASSWORD",
+                "value": "[if(empty(parameters('deploymentUsername')), '', parameters('deploymentPassword'))]"
             }
         ]
     },

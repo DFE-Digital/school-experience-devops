@@ -254,6 +254,7 @@ if [ $? != 0 ]; then
                 setsecret slackWebhook $vaultName ${slackWebhook:-rubbish}
                 setsecret crmClientSecret $vaultName ${crmClientSecret:-rubbish}
                 setsecret supportWebhook $vaultName ${supportWebhook:-rubbish}
+                setsecret deploymentPassword $vaultName $(randomalpha 16)
 
                 MICROSOFT_AZURE_APP_SERVICE_SPN=abfa0a7c-a6b6-4736-8310-5855508787cd
                 az keyvault set-policy --name $vaultName --spn $MICROSOFT_AZURE_APP_SERVICE_SPN --secret-permissions get
