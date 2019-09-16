@@ -401,7 +401,18 @@
             "metadata": {
                 "description": "Whether to deploy to a slot, when creating a new environment from script we deploy directly to the main slot hence a default value of false. When deploying from within a pipeline we deploy to a slot and then use the slot swap mechanism to deploy with zero downtime."
             }
-        }
+        },
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "A string that should uniquely identify the deployment so that the deployer can confirm the deployment has taken place via custom application endpoint."
+            }
+        },
+        "deploymentUsername": {
+            "type": "string",
+            "defaultValue": ""
+        } 
     },
     "variables": {
         "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
@@ -559,6 +570,14 @@
             {
                 "name": "DFE_SERVICES_LIST_URL",
                 "value": "[parameters('dfeServicesListUrl')]"
+            },
+            {
+                "name": "DEPLOYMENT_ID",
+                "value": "[parameters('deploymentId')]"
+            },
+            {
+                "name": "DEPLOYMENT_USERNAME",
+                "value": "[parameters('deploymentUsername')]"
             }
         ]
     },
@@ -786,6 +805,17 @@
                     },
                     "deployToSlot": {
                         "value": "[parameters('deployToSlot')]"
+                    },
+                    "deploymentUsername": {
+                        "value": "[parameters('deploymentUsername')]"
+                    },
+                    "deploymentPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "deploymentPassword"
+                        }
                     }
                 }
             },
