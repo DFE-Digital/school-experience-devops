@@ -291,31 +291,11 @@ set -e
 #####################################################
 #DOCKER COMPOSE FILE CREATION
 #####################################################
-IMAGE_NAME=$imageName
-IMAGE_TAG=bootstrap
-REGISTRY_HOST="registry-1.docker.io"
+export IMAGE_NAME=$imageName
+export IMAGE_TAG=bootstrap
+export REGISTRY_HOST="registry-1.docker.io"
 
-cat <<EOF > compose-school-experience.yml
-version: '3.3'
-
-services:
-   school-experience:
-     image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
-     ports:
-       - "3000:3000"
-     restart: always
-     healthcheck:
-       disable: true
-
-   delayed-jobs:
-     image: ${REGISTRY_HOST}/${IMAGE_NAME}:${IMAGE_TAG}
-     command: rake jobs:work
-     restart: always
-     healthcheck:
-       disable: true
-EOF
-echo "Using the following compose file..."
-cat compose-school-experience.yml
+./compose-school-experience.sh
 
 sleep 10
 
