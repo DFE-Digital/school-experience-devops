@@ -334,6 +334,14 @@
             "type": "string",
             "defaultValue": "50"
         },
+        "thresholdServicePlanCPU": {
+            "type": "string",
+            "defaultValue": "60"
+        },
+        "thresholdMemoryPercentage": {
+            "type": "string",
+            "defaultValue": "90"
+        },
         "postgresUserPasswordSecretName": {
             "type": "string",
             "defaultValue": "postgresUserPassword"
@@ -842,6 +850,9 @@
                     "redis_name": {
                         "value": "[parameters('redis_name')]"
                     },
+                    "serverfarms_serviceplan_name": {
+                        "value": "[parameters('serverfarms_serviceplan_name')]"
+                    },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
                     },
@@ -877,6 +888,12 @@
                     },
                     "thresholdRedisMemoryPercentage": {
                         "value": "[parameters('thresholdRedisMemoryPercentage')]"
+                    },
+                    "thresholdServicePlanCPU": {
+                        "value": "[parameters('thresholdServicePlanCPU')]"
+                    },
+                    "thresholdMemoryPercentage": {
+                        "value": "[parameters('thresholdMemoryPercentage')]"
                     },
                     "activityLogAlerts_name": {
                         "value": "[parameters('activityLogAlerts_name')]"

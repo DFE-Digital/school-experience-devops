@@ -11,6 +11,9 @@
         "servers_db_name": {
             "type": "String"
         },
+        "serverfarms_serviceplan_name": {
+            "type": "String"
+        },
         "_artifactsLocation": {
             "type": "string"
         },
@@ -45,6 +48,12 @@
             "type": "string"
         },
         "thresholdRedisMemoryPercentage": {
+            "type": "string"
+        },
+        "thresholdServicePlanCPU": {
+            "type": "string"
+        },
+        "thresholdMemoryPercentage": {
             "type": "string"
         },
         "activityLogAlerts_name": {
@@ -378,6 +387,94 @@
                    },
                    "threshold": {
                        "value": "[parameters('thresholdRedisMemoryPercentage')]"
+                   },
+                   "timeAggregation": {
+                       "value": "Average"
+                   },
+                   "actionGroupId": {
+                       "value": "[resourceId('Microsoft.Insights/actionGroups', parameters('actionGroupName'))]"
+                   }
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-05-01",
+            "name": "service-plan-cpu-alert",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/simplestaticmetricalert.json', parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                   "alertName": {
+                       "value": "[concat(parameters('alertNamePrefix'),'service-plan-cpu-alert')]"
+                   },
+                   "alertDescription": {
+                       "value": "Service Plan CPU usage is high"
+                   },
+                   "alertSeverity": {
+                       "value":2
+                   },
+                   "isEnabled": {
+                       "value": true
+                   },
+                   "resourceId": {
+                       "value": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
+                   },
+                   "metricName": {
+                       "value": "CpuPercentage"
+                   },
+                   "operator": {
+                       "value": "GreaterThan"
+                   },
+                   "threshold": {
+                       "value": "[parameters('thresholdServicePlanCPU')]"
+                   },
+                   "timeAggregation": {
+                       "value": "Average"
+                   },
+                   "actionGroupId": {
+                       "value": "[resourceId('Microsoft.Insights/actionGroups', parameters('actionGroupName'))]"
+                   }
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-05-01",
+            "name": "service-plan-memory-alert",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/simplestaticmetricalert.json', parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                   "alertName": {
+                       "value": "[concat(parameters('alertNamePrefix'),'service-plan-memory-alert')]"
+                   },
+                   "alertDescription": {
+                       "value": "Service Plan memory usage is high"
+                   },
+                   "alertSeverity": {
+                       "value":2
+                   },
+                   "isEnabled": {
+                       "value": true
+                   },
+                   "resourceId": {
+                       "value": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
+                   },
+                   "metricName": {
+                       "value": "MemoryPercentage"
+                   },
+                   "operator": {
+                       "value": "GreaterThan"
+                   },
+                   "threshold": {
+                       "value": "[parameters('thresholdMemoryPercentage')]"
                    },
                    "timeAggregation": {
                        "value": "Average"
