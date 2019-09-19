@@ -77,3 +77,31 @@ The ARM template for School Experience supports the creation of Azure Monitor al
     }
 }
 ```
+
+## Old SEP Domains
+
+A list of old SEP domains that if present will redirect traffic to a informational page, this assumes that relevant DNS records have been set up to point to the web application and that SSL certificates and custom domains have been configured (see previous section).
+
+
+## Other Parameters
+
+This is a **non-exhaustive** list of other parameters.
+
+| Parameter Name | Description   | Default |
+| -------------- | ------------- | ------- |
+| `appSecureUsername`  | Enables basic auth for the web application if specified, ends up as the environment variable `SECURE_USERNAME`  | |
+| `appSecurePassword`  | Enables basic auth for the web application is specified, ends up as the environment variable `SECURE_PASSWORD`  | |
+| `applyPostgres`      | Whether to apply the PostgreSQL ARM template | `true` |
+| `applyRedis`         | Whether to apply the Redis ARM template | `true` |
+| `enableAppInsightsJavascript` | Whether to add the App Insights Javascript library to the page | `false`, though generally the app is deployed with a `true` setting |
+| `phase` | The phase (i.e. what features) that app will run with, when left blank will use the default phase configured in the application code | |
+| `applyServicePlan` | Whether to apply the Service Plan template | `true` |
+| `applyBackend` | Whether to apply the backend (PostgreSQL, Redis) ARM template | `true` |
+| `webTestEnabled` | Whether to enable the web test | `false` |
+| `applyRedisFirewall` | Whether to apply the Redis firewall | `true` |
+| `applyPostgresFirewall` | Whether to apply the PostgreSQL firewall | `true` |
+| `addSupportWebhook` | Whether to add the webhook to the Azure support group | `false` |
+| `deployToSlot` | Whether to deploy to a staging slot rather than the default produciton slot ( see https://docs.microsoft.com/en-us/azure/app-service/deploy-staging-slots) | `false` |
+| `deploymentId` | An identifier that the application will return on the `/deployment.txt` endpoint, ends up as the environment variable `DEPLOYMENT_ID` | |
+| `deploymentUsername` | The basic auth username that will be used for the `/deployment.txt` endpoint, ends up as the environment vairable `DEPLOYMENT_PASSWORD` | |
+
