@@ -291,6 +291,10 @@
              "type": "string",
              "defaultValue": ""
         },
+        "railsMaxThreads": {
+             "type": "string",
+             "defaultValue": "5"
+        },
         "applyServicePlan": {
             "type": "bool",
             "defaultValue": true
@@ -430,7 +434,6 @@
                 "railsEnv": "servertest",
                 "slackEnv": "",
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "railsMaxThreads": "5",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401"
             },
@@ -439,7 +442,6 @@
                 "slackEnv": "[concat(parameters('slackEnvPrefix'),'staging')]",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "railsMaxThreads": "5",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401"
             },
@@ -448,7 +450,6 @@
                 "slackEnv": "[concat(parameters('slackEnvPrefix'),'research')]",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "railsMaxThreads": "5",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401"
             },
@@ -457,7 +458,6 @@
                 "slackEnv": "[concat(parameters('slackEnvPrefix'),'production')]",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
-                "railsMaxThreads": "15",
                 "webTestUrl": "[concat('https://',parameters('public_host_name'), '/', parameters('webTestPath'))]",
                 "webTestExpected": "200"
             }
@@ -513,7 +513,7 @@
             },
             {
                 "name": "RAILS_MAX_THREADS",
-                "value": "[variables('environmentSettings')[parameters('environmentName')].railsMaxThreads]"
+                "value": "[parameters('railsMaxThreads')]"
             },
             {
                 "name": "CANONICAL_DOMAIN",
