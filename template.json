@@ -378,7 +378,7 @@
         },
         "webTestPath": {
              "type": "string",
-             "defaultValue": "",
+             "defaultValue": "healthcheck.txt",
              "metadata": {
                 "description": "Forms part of the URL used to test the health of the application i.e. https://<web app name>.azurewebsites.net/<webTestPath>"
             }
@@ -435,7 +435,8 @@
                 "slackEnv": "",
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
-                "webTestExpected": "401"
+                "webTestExpected": "200",
+                "webTestText": "healthy"
             },
             "staging": {
                 "railsEnv": "production",
@@ -443,7 +444,8 @@
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
-                "webTestExpected": "401"
+                "webTestExpected": "200",
+                "webTestText": "healthy"
             },
             "research": {
                 "railsEnv": "production",
@@ -451,7 +453,8 @@
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
-                "webTestExpected": "401"
+                "webTestExpected": "200",
+                "webTestText": "healthy"
             },
             "prod": {
                 "railsEnv": "production",
@@ -459,7 +462,8 @@
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
                 "webTestUrl": "[concat('https://',parameters('public_host_name'), '/', parameters('webTestPath'))]",
-                "webTestExpected": "200"
+                "webTestExpected": "200",
+                "webTestText": "healthy"
             }
         },
         "appSettings": [
@@ -798,6 +802,9 @@
                     },
                     "webTestExpected": {
                         "value": "[variables('environmentSettings')[parameters('environmentName')].webTestExpected]"
+                    },
+                    "webTestText": {
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].webTestText]"
                     },
                     "webTestLocations": {
                         "value": "[parameters('webTestLocations')]"
