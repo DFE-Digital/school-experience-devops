@@ -271,7 +271,7 @@
            },  
            "properties": {
                "siteConfig": {
-                    "linuxFxVersion": "[concat('DOCKER|', parameters('dockerImage')))]",
+                    "linuxFxVersion": "[concat('DOCKER|', parameters('dockerImage'))]",
                     "appCommandLine": "rake jobs:work", 
                     "alwaysOn": true,
                     "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'), json(concat('[{\"name\":\"REDIS_URL\", \"value\":\"','rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'), '\"}]')))]"
