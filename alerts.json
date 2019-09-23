@@ -104,7 +104,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'active-connections-alert')]"
                    },
                    "alertDescription": {
-                       "value": "Active connections too high"
+                       "value": "[format('Active connections too high (greater than {0})', parameters('thresholdPostgresActiveConnections'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -148,7 +148,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'cpu-percentage-alert')]"
                    },
                    "alertDescription": {
-                       "value": "CPU percent too high"
+                       "value": "[format('CPU percent too high (greater than {0}%)', parameters('thresholdPostgresCPUPercent'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -192,7 +192,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'storage-percent-alert')]"
                    },
                    "alertDescription": {
-                       "value": "Storage percent too high"
+                       "value": "[format('Storage percent too high (greater than {0}%)', parameters('thresholdPostgresStoragePercent'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -236,7 +236,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'average-response-alert')]"
                    },
                    "alertDescription": {
-                       "value": "Average Response Time too high"
+                       "value": "[format('Average Response Time too high (greater than {0} secs)',parameters('thresholdResponseTime'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -280,7 +280,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'http-server-errors-alert')]"
                    },
                    "alertDescription": {
-                       "value": "Http Server Errors too high"
+                       "value": "[format('Http Server Errors too high (greater than {0})', parameters('thresholdHttpErrors'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -324,7 +324,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'server-load-alert')]"
                    },
                    "alertDescription": {
-                       "value": "Server Load too high"
+                       "value": "[format('Server Load too high (greater than {0}%)', parameters('thresholdRedisServerLoad'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -368,7 +368,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'used-memory-percentage-alert')]"
                    },
                    "alertDescription": {
-                       "value": "Used Memory Percentage too high"
+                       "value": "[format('Used Memory Percentage too high (greater than {0}%)',parameters('thresholdRedisMemoryPercentage'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -412,7 +412,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'service-plan-cpu-alert')]"
                    },
                    "alertDescription": {
-                       "value": "Service Plan CPU usage is high"
+                       "value": "[format('Service Plan CPU usage is high (greater than {0}%)', parameters('thresholdServicePlanCPU'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -456,7 +456,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'service-plan-memory-alert')]"
                    },
                    "alertDescription": {
-                       "value": "Service Plan memory usage is high"
+                       "value": "[format('Service Plan memory usage is high (greater than {0}%)', parameters('thresholdMemoryPercentage'))]"
                    },
                    "alertSeverity": {
                        "value":2
