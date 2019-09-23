@@ -26,6 +26,9 @@
         "sku": {
             "type": "object"
         },
+        "sku-delayed-jobs": {
+            "type": "object"
+        },
         "ipAddressRestriction": {
             "type": "String"
         },
