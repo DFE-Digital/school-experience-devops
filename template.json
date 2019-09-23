@@ -834,6 +834,9 @@
                             },
                             "secretName": "deploymentPassword"
                         }
+                    },
+                    "dockerImage": {
+                        "value": "[parameters('dockerImage')]"
                     }
                 }
             },
