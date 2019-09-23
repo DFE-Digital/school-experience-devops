@@ -228,7 +228,7 @@
                 "httpsOnly": true
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('serverfarms_serviceplan_name'),'-delayed-jobs')]"
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('serverfarms_serviceplan_name'),'-delayed-jobs'))]"
             ]
         },
         {
