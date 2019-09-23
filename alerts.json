@@ -368,7 +368,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'used-memory-percentage-alert')]"
                    },
                    "alertDescription": {
-                       "value": "[format('Used Memory Percentage too high (greater than {0}%)',parameters('thresholdRedisMemoryPercentage'))] "
+                       "value": "[format('Used Memory Percentage too high (greater than {0}%)',parameters('thresholdRedisMemoryPercentage'))]"
                    },
                    "alertSeverity": {
                        "value":2
@@ -412,7 +412,7 @@
                        "value": "[concat(parameters('alertNamePrefix'),'service-plan-cpu-alert')]"
                    },
                    "alertDescription": {
-                       "value": "[format('Service Plan CPU usage is high (greater than {0}%)', parameters('thresholdServicePlanCPU'))] "
+                       "value": "[format('Service Plan CPU usage is high (greater than {0}%)', parameters('thresholdServicePlanCPU'))]"
                    },
                    "alertSeverity": {
                        "value":2
