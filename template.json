@@ -424,6 +424,9 @@
         "deploymentUsername": {
             "type": "string",
             "defaultValue": ""
+        },
+        "dockerImage": {
+            "type": "string"
         } 
     },
     "variables": {

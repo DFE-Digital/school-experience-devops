@@ -119,6 +119,9 @@
         },
         "deploymentUsername": {
              "type": "string"
+        },
+        "dockerImage": {
+             "type": "string"
         }
     },
     "variables": {
@@ -190,7 +193,7 @@
                 ],
                 "serverFarmId": "[resourceId(parameters('backendResourceGroup'),'Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]",
                 "siteConfig": {
-                    "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
+                    "linuxFxVersion": "[concat('DOCKER|', parameters('dockerImage'))]",
                     "alwaysOn": true,
                     "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'), json(concat('[{\"name\":\"REDIS_URL\", \"value\":\"','rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'), '\"}]')))]"
                 },
@@ -201,6 +204,31 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_serviceplan_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "kind": "app,linux,container",
+            "name": "[concat(parameters('sites_school_experience_name'),'-delayed-jobs')]",
+            "apiVersion": "2016-08-01",
+            "condition": "[not(parameters('deployToSlot'))]",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "serverFarmId": "[resourceId(parameters('backendResourceGroup'),'Microsoft.Web/serverfarms', concat(parameters('serverfarms_serviceplan_name'), '-delayed-jobs'))]",
+                "siteConfig": {
+                    "linuxFxVersion": "[concat('DOCKER|', parameters('dockerImage'))]",
+                    "appCommandLine": "rake jobs:work",
+                    "alwaysOn": true,
+                    "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'), json(concat('[{\"name\":\"REDIS_URL\", \"value\":\"','rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'), '\"}]')))]"
+                },
+                "enabled": true,
+                "reserved": true,
+                "clientAffinityEnabled": false,
+                "httpsOnly": true
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('serverfarms_serviceplan_name'),'-delayed-jobs')]"
             ]
         },
         {
@@ -216,7 +244,7 @@
            },
            "properties": {
                "siteConfig": {
-                    "linuxFxVersion": "[concat('COMPOSE|', base64(parameters('dockerComposeFile')))]",
+                    "linuxFxVersion": "[concat('DOCKER|', parameters('dockerImage'))]",
                     "alwaysOn": true,
                     "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'), json(concat('[{\"name\":\"REDIS_URL\", \"value\":\"','rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'), '\"}]')))]"
                 },
@@ -230,6 +258,34 @@
                "[resourceId('Microsoft.Web/Sites', parameters('sites_school_experience_name'))]"
            ]
         },
+        {  
+           "type": "Microsoft.Web/sites/slots",
+           "kind": "app,linux,container",
+           "name": "[concat(parameters('sites_school_experience_name'), '-delayed-jobs/staging-slot')]",
+           "apiVersion": "2016-08-01",
+           "condition": "[parameters('deployToSlot')]", 
+           "location": "[resourceGroup().location]",
+           "comments": "This specifies the staging slot in any deployment, not to be confused with the staging environment.",
+           "tags": {
+               "displayName": "WebAppSlots"
+           },  
+           "properties": {
+               "siteConfig": {
+                    "linuxFxVersion": "[concat('DOCKER|', parameters('dockerImage')))]",
+                    "appCommandLine": "rake jobs:work", 
+                    "alwaysOn": true,
+                    "appSettings": "[concat(parameters('appSettings'), variables('secureAppSettings'), json(concat('[{\"name\":\"REDIS_URL\", \"value\":\"','rediss://:',uriComponent(listKeys(resourceId(parameters('backendResourceGroup'),'Microsoft.Cache/Redis', parameters('redis_name')), '2017-10-01').primaryKey), '@', parameters('redis_name'), '.redis.cache.windows.net:6380/', parameters('redis_database_index'), '\"}]')))]"
+                },
+               "serverFarmId": "[resourceId(parameters('backendResourceGroup'),'Microsoft.Web/serverfarms', concat(parameters('serverfarms_serviceplan_name'), '-delayed-jobs'))]",
+               "enabled": true,
+               "reserved": true,
+               "clientAffinityEnabled": false,
+               "httpsOnly": true
+           },  
+           "dependsOn": [
+               "[resourceId('Microsoft.Web/Sites', concat(parameters('sites_school_experience_name'), '-delayed-jobs'))]"
+           ]
+        },  
         {
             "type": "Microsoft.Web/serverfarms",
             "sku": "[parameters('sku')]",
@@ -241,6 +297,27 @@
             "scale": null,
             "properties": {
                 "name": "[parameters('serverfarms_serviceplan_name')]",
+                "workerTierName": null,
+                "adminSiteName": null,
+                "hostingEnvironmentProfile": null,
+                "perSiteScaling": false,
+                "reserved": true,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "sku": "[parameters('sku-delayed-jobs')]",
+            "kind": "linux",
+            "name": "[concat(parameters('serverfarms_serviceplan_name'),'delayed-jobs')]",
+            "apiVersion": "2016-09-01",
+            "condition": "[parameters('applyServicePlan')]",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "name": "[concat(parameters('serverfarms_serviceplan_name'), 'delayed-jobs')]",
                 "workerTierName": null,
                 "adminSiteName": null,
                 "hostingEnvironmentProfile": null,

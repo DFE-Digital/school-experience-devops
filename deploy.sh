@@ -296,8 +296,6 @@ export IMAGE_NAME=$imageName
 export IMAGE_TAG=bootstrap
 export REGISTRY_HOST="registry-1.docker.io"
 
-./compose-school-experience.sh
-
 sleep 10
 
 ####################################################
@@ -312,7 +310,7 @@ echo "Starting deployment..."
 	az group deployment create --name ${deploymentName} \
                                    --resource-group ${resourceGroupName} \
                                    --template-uri https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/template.json \
-                                   --parameters ${parametersFileString:-} dockerComposeFile=@compose-school-experience.yml  databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName} environmentName=${environmentName} _artifactsLocation=https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/ servers_db_createMode=Default
+                                   --parameters ${parametersFileString:-} dockerComposeFile=@compose-school-experience.yml  databases_school_experience_name=${DATABASE_NAME} servers_db_name=${databaseServerName} vaultName=${vaultName} vaultResourceGroupName=${vaultResourceGroup} serverfarms_serviceplan_name=${servicePlanName} sites_school_experience_name=${sitesName} redis_name=${redisName} environmentName=${environmentName} _artifactsLocation=https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/${branch}/ servers_db_createMode=Default imageName=$REGISTRY_HOST/$IMAGE_NAME:$IMAGE_TAG
 )
 
 if [ $?  == 0 ];
