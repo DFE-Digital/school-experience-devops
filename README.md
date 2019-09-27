@@ -117,6 +117,6 @@ The Azure Logic App exposes a web hook URL, it is printed as an output from the 
 
 After the template deployment has completed, there is a manual step that you must complete before the messages can be posted to the channel. You have to log in to your Slack account via the Logic apps UI in order to consent to give Logic apps access to your Slack:
 
-** Once the template has completed, navigate to the resource group you deployed it to.
-** Find the Logic app in the resource list, and click it.
-** Should see now that the connection needs to be verified.
+* Once the template has completed, navigate to the resource group you deployed it to.
+* Find the Logic app in the resource list, and click it.
+* Should see now that the connection needs to be verified.
