@@ -105,3 +105,18 @@ This is a **non-exhaustive** list of other parameters.
 | `deploymentId` | An identifier that the application will return on the `/deployment.txt` endpoint, ends up as the environment variable `DEPLOYMENT_ID` | |
 | `deploymentUsername` | The basic auth username that will be used for the `/deployment.txt` endpoint, ends up as the environment vairable `DEPLOYMENT_PASSWORD` | |
 
+## Integrating Alerts with Slack
+
+A template has been created that enables the creation of an Azure Logic App which translates the Azure Alerting common schema into a text message that can be sent to slack.
+
+      az group deployment create -g <<LOGIC APP GROUP NAME>> --template-file template-notify-slack.json --parameters logicAppName=<<SLACK LOGIC APP NAME>>  slackConnectionName=<<SLACK CONNECTION NAME>>
+
+The Azure Logic App exposes a web hook URL, it is printed as an output from the template. This web hook URL must then be added as a secret with name `supportWebhook` to the key vault (or updated if it already exists). A redeployment of the  application is then required.
+
+### Authorizing with Slack
+
+After the template deployment has completed, there is a manual step that you must complete before the messages can be posted to the channel. You have to log in to your Slack account via the Logic apps UI in order to consent to give Logic apps access to your Slack:
+
+** Once the template has completed, navigate to the resource group you deployed it to.
+** Find the Logic app in the resource list, and click it.
+** Should see now that the connection needs to be verified.
