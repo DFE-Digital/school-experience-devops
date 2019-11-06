@@ -359,7 +359,7 @@
              "defaultValue": "300"
         },
         "webTestTimeoutSecs": {
-             "type": "string", 
+             "type": "string",
              "defaultValue": "120"
         },
         "webTestLocations": {
@@ -424,7 +424,7 @@
         "deploymentUsername": {
             "type": "string",
             "defaultValue": ""
-        } 
+        }
     },
     "variables": {
         "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
@@ -470,6 +470,10 @@
             {
                 "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
                 "value": "false"
+            },
+            {
+                "name": "WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION",
+                "value": "0"
             },
             {
                 "name": "SECURE_USERNAME",
@@ -598,7 +602,7 @@
             "apiVersion": "2018-05-01",
             "name": "backend",
             "type": "Microsoft.Resources/deployments",
-            "condition": "[parameters('applyBackend')]",            
+            "condition": "[parameters('applyBackend')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -667,7 +671,7 @@
                     },
                     "applyRedis": {
                         "value": "[parameters('applyRedis')]"
-                    }                    
+                    }
                 }
             }
         },
@@ -768,7 +772,7 @@
                         }
                     },
                     "redis_name": {
-                        "value": "[parameters('redis_name')]" 
+                        "value": "[parameters('redis_name')]"
                     },
                     "redis_database_index": {
                         "value": "[parameters('redis_database_index')]"
@@ -925,7 +929,7 @@
                             "secretName": "supportWebhook"
                         }
                     }
-                    
+
                 }
             },
             "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
