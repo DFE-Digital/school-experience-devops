@@ -344,7 +344,7 @@
         },
         "thresholdMemoryPercentage": {
             "type": "string",
-            "defaultValue": "90"
+            "defaultValue": "80"
         },
         "postgresUserPasswordSecretName": {
             "type": "string",
