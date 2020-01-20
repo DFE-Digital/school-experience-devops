@@ -757,6 +757,14 @@
                             "secretName": "dfeSigninSecret"
                         }
                     },
+                    "dfeSigninApiSecret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "dfeSigninApiSecret"
+                        }
+                    },
                     "customDomainsWithCerts": {
                         "value": "[parameters('customDomainsWithCerts')]"
                     },

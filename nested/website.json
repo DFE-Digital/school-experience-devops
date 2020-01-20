@@ -50,6 +50,9 @@
         "dfeSigninSecret": {
              "type": "securestring"
         },
+        "dfeSigninApiSecret": {
+             "type": "securestring"
+        },
         "customDomainsWithCerts": {
             "type": "array",
             "defaultValue": []
@@ -83,7 +86,7 @@
         },
         "webTestUrl": {
              "type": "string"
-        },      
+        },
         "webTestExpected": {
              "type": "string"
         },
@@ -130,27 +133,31 @@
         },
         "emptyArray": [],
         "secureAppSettings": [
-            {   
+            {
                 "name": "DB_PASSWORD",
                 "value": "[parameters('postgresUserPassword')]"
-            },  
-            {   
+            },
+            {
                 "name": "SLACK_WEBHOOK",
                 "value": "[if(equals(parameters('slackEnv'),''), '', parameters('slackWebhook'))]"
-            },  
-            {   
+            },
+            {
                 "name": "SENTRY_DSN",
                 "value": "[parameters('sentryDsn')]"
-            },  
-            {   
+            },
+            {
                 "name": "DFE_SIGNIN_SECRET",
                 "value": "[parameters('dfeSigninSecret')]"
-            },  
-            {   
+            },
+            {
+                "name": "DFE_SIGNIN_API_SECRET",
+                "value": "[parameters('dfeSigninApiSecret')]"
+            },
+            {
                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                 "value":  "[parameters('appInsightsInstrumentationKey')]"
-            },  
-            {   
+            },
+            {
                 "name": "CRM_CLIENT_SECRET",
                 "value": "[parameters('crmClientSecret')]"
             },
