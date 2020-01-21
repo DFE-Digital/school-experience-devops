@@ -536,6 +536,10 @@
                 "value": "[parameters('dfeSigninClientId')]"
             },
             {
+                "name": "DFE_SIGNIN_API_CLIENT",
+                "value": "[parameters('dfeSigninApiClient')]"
+            },
+            {
                 "name": "DFE_SIGNIN_HOST",
                 "value": "[parameters('dfeSigninHost')]"
             },
