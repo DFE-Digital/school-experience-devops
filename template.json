@@ -227,6 +227,18 @@
             "type": "string",
             "defaultValue": ""
         },
+        "dfeSigninApiClient": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dfeSigninApiEndpoint": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dfeSigninApiEnabled": {
+            "type": "string",
+            "defaultValue": ""
+        },
         "customDomainsWithCerts": {
             "type": "array",
             "defaultValue": []
@@ -538,6 +550,14 @@
             {
                 "name": "DFE_SIGNIN_API_CLIENT",
                 "value": "[parameters('dfeSigninApiClient')]"
+            },
+            {
+                "name": "DFE_SIGNIN_API_ENDPOINT",
+                "value": "[parameters('dfeSigninApiEndpoint')]"
+            },
+            {
+                "name": "DFE_SIGNIN_API_ENABLED",
+                "value": "[parameters('dfeSigninApiEnabled')]"
             },
             {
                 "name": "DFE_SIGNIN_HOST",
