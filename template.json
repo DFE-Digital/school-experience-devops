@@ -283,6 +283,10 @@
              "type": "string",
              "defaultValue": ""
         },
+        "crmCaching": {
+            "type": "string",
+            "defaultValue": "0"
+        },
         "phase": {
              "type": "string",
              "defaultValue": ""
@@ -598,6 +602,10 @@
             {
                 "name": "CRM_COUNTRY_ID",
                 "value": "[parameters('crmCountryId')]"
+            },
+            {
+                "name": "CRM_CACHING",
+                "value": "[parameters('crmCaching')]"
             },
             {
                 "name": "FAKE_CRM",
