@@ -219,7 +219,8 @@
            "location": "[resourceGroup().location]",
            "comments": "This specifies the staging slot in any deployment, not to be confused with the staging environment.",
            "tags": {
-               "displayName": "WebAppSlots"
+               "displayName": "WebAppSlots",
+               "Tag Test": "Slots tag test"
            },
            "properties": {
                "siteConfig": {
@@ -245,6 +246,9 @@
             "apiVersion": "2016-09-01",
             "condition": "[parameters('applyServicePlan')]",
             "location": "[resourceGroup().location]",
+            "tags": {
+                "Tag Test": "Service plan tag test"
+            },
             "scale": null,
             "properties": {
                 "name": "[parameters('serverfarms_serviceplan_name')]",
@@ -263,6 +267,9 @@
             "name": "[concat(parameters('sites_school_experience_name'), '/', parameters('config_web_name'))]",
             "apiVersion": "2018-02-01",
             "location": "[resourceGroup().location]",
+            "tags": {
+                "Tag Test": "Site config tag test"
+            },
             "scale": null,
             "properties": {
                 "requestTracingEnabled": false,
@@ -316,7 +323,8 @@
             "type": "microsoft.insights/webtests",
             "location": "[resourceGroup().location]",
             "tags": {
-               "[concat('hidden-link:', resourceId('microsoft.insights/components/', parameters('appInsightsName')))]": "Resource"
+               "[concat('hidden-link:', resourceId('microsoft.insights/components/', parameters('appInsightsName')))]": "Resource",
+               "Tag Test": "app insights tag test"
             },
             "dependsOn": [
                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
