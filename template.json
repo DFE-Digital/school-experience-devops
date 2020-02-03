@@ -711,6 +711,9 @@
             "apiVersion": "2018-05-01",
             "name": "[parameters('websiteDeploymentName')]",
             "type": "Microsoft.Resources/deployments",
+            "tags": {
+                "Testing Tag": "Hello world"
+            },
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
