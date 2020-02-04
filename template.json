@@ -440,7 +440,11 @@
         "deploymentUsername": {
             "type": "string",
             "defaultValue": ""
-        }    
+        },
+        "cipEnvironmentTag": {
+            "type": "string",
+            "defaultValue": ""
+        }
     },
     "variables": {
         "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",

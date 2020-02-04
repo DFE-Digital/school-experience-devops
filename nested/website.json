@@ -122,6 +122,10 @@
         },
         "deploymentUsername": {
              "type": "string"
+        },
+        "cipEnvironmentTag": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
