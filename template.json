@@ -716,14 +716,9 @@
             }
         },
         {
-            "apiVersion": "2019-08-01",
+            "apiVersion": "2018-05-01",
             "name": "[parameters('websiteDeploymentName')]",
             "type": "Microsoft.Resources/deployments",
-            "tags": {
-                "Environment": "[variables('environmentSettings')[parameters('environmentName')].cipEnvironmentTag]",
-                "Parent Business Unit": "Teacher Training and Qualifications",
-                "Service Offering": "Schools Experience Service"
-            },
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
