@@ -248,7 +248,7 @@
             "location": "[resourceGroup().location]",
             "tags": {
                 "Tag Test": "Service plan tag test",
-                "Environment": "[parameters('cipEnvironmentTag')]",
+                "Environment": "[variables('cipEnvironmentTag')]",
                 "Parent Business Unit": "Teacher Training and Qualifications",
                 "Service Offering": "Schools Experience Service"
             },

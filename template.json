@@ -727,6 +727,9 @@
                     "contentVersion": "1.0.0.0",
                     "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/website.json', parameters('_artifactsLocationSasToken')))]"
                 },
+                "variables": {
+                    "cipEnvironmentTag": "[variables('environmentSettings')[parameters('environmentName')].cipEnvironmentTag]"
+                },
                 "parameters": {
                     "sites_school_experience_name": {
                         "value": "[parameters('sites_school_experience_name')]"
@@ -742,9 +745,6 @@
                     },
                     "appSettings": {
                         "value": "[variables('appSettings')]"
-                    },
-                    "cipEnvironmentTag": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].cipEnvironmentTag]"
                     },
                     "postgresUserPassword": {
                         "reference": {
