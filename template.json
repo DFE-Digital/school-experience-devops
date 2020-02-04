@@ -711,6 +711,9 @@
                     },
                     "applyRedis": {
                         "value": "[parameters('applyRedis')]"
+                    },
+                    "cipEnvironmentTag": {
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].cipEnvironmentTag]"
                     }
                 }
             }
@@ -979,8 +982,10 @@
                             },
                             "secretName": "supportWebhook"
                         }
+                    },
+                    "cipEnvironmentTag": {
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].cipEnvironmentTag]"
                     }
-
                 }
             },
             "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
