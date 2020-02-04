@@ -743,6 +743,9 @@
                     "appSettings": {
                         "value": "[variables('appSettings')]"
                     },
+                    "cipEnvironmentTag": {
+                        "value": "[variables('environmentSettings')[parameters('environmentName')].cipEnvironmentTag]"
+                    },
                     "postgresUserPassword": {
                         "reference": {
                             "keyVault": {
