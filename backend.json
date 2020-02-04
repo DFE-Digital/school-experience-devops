@@ -135,6 +135,10 @@
         "applyRedis": {
             "type": "bool",
             "defaultValue": true
+        },
+        "cipEnvironmentTag": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "resources": [
@@ -143,6 +147,11 @@
             "name": "postgresdb",
             "condition": "[parameters('applyPostgres')]",
             "type": "Microsoft.Resources/deployments",
+            "tags": {
+                "Environment": "[parameters('cipEnvironmentTag')]",
+                "Parent Business Unit": "Teacher Training and Qualifications",
+                "Service Offering": "Schools Experience Service"
+            },
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -191,6 +200,11 @@
             "name": "redis",
             "condition": "[parameters('applyRedis')]",
             "type": "Microsoft.Resources/deployments",
+            "tags": {
+                "Environment": "[parameters('cipEnvironmentTag')]",
+                "Parent Business Unit": "Teacher Training and Qualifications",
+                "Service Offering": "Schools Experience Service"
+            },
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
