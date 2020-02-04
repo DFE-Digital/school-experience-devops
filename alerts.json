@@ -75,10 +75,6 @@
         "addSupportWebhook": {
             "type": "bool",
             "defaultValue": false
-        },
-        "cipEnvironmentTag": {
-            "type": "string",
-            "defaultValue": ""
         }
     },
     "variables": {
@@ -521,11 +517,7 @@
             "name": "[parameters('activityLogAlerts_name')]",
             "apiVersion": "2017-04-01",
             "location": "Global",
-            "tags": {
-                "Environment": "[parameters('cipEnvironmentTag')]",
-                "Parent Business Unit": "Teacher Training and Qualifications",
-                "Service Offering": "Schools Experience Service"
-            },
+            "tags": {},
             "scale": null,
             "properties": {
                 "scopes": [
@@ -584,10 +576,7 @@
           "location": "global",
           "tags": {
                 "[concat('hidden-link:', resourceId('microsoft.insights/components/', parameters('appInsightsName')))]": "Resource",
-                "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', parameters('webTestName')))]": "Resource",
-                "Environment": "[parameters('cipEnvironmentTag')]",
-                "Parent Business Unit": "Teacher Training and Qualifications",
-                "Service Offering": "Schools Experience Service"
+                "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', parameters('webTestName')))]": "Resource"
           },
           "properties": {
               "description": "[concat('Alert rule for availability test \"', parameters('webTestName'), '\"')]",
