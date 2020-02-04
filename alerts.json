@@ -576,7 +576,10 @@
           "location": "global",
           "tags": {
                 "[concat('hidden-link:', resourceId('microsoft.insights/components/', parameters('appInsightsName')))]": "Resource",
-                "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', parameters('webTestName')))]": "Resource"
+                "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', parameters('webTestName')))]": "Resource",
+                "Environment": "[variables('environmentSettings')[parameters('environmentName')].cipEnvironmentTag]",
+                "Parent Business Unit": "Teacher Training and Qualifications",
+                "Service Offering": "Schools Experience Service"
           },
           "properties": {
               "description": "[concat('Alert rule for availability test \"', parameters('webTestName'), '\"')]",
