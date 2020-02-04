@@ -143,7 +143,7 @@
     },
     "resources": [
         {
-            "apiVersion": "2018-05-01",
+            "apiVersion": "2019-08-01",
             "name": "postgresdb",
             "condition": "[parameters('applyPostgres')]",
             "type": "Microsoft.Resources/deployments",
@@ -196,7 +196,7 @@
             }
         },
         {
-            "apiVersion": "2018-05-01",
+            "apiVersion": "2019-08-01",
             "name": "redis",
             "condition": "[parameters('applyRedis')]",
             "type": "Microsoft.Resources/deployments",
