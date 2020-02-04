@@ -179,6 +179,11 @@
             "apiVersion": "2016-08-01",
             "condition": "[not(parameters('deployToSlot'))]",
             "location": "[resourceGroup().location]",
+            "tags": {
+                "Environment": "[parameters('cipEnvironmentTag')]",
+                "Parent Business Unit": "Teacher Training and Qualifications",
+                "Service Offering": "Schools Experience Service"
+            },
             "scale": null,
             "properties": {
                 "hostNameSslStates": [
@@ -224,7 +229,9 @@
            "comments": "This specifies the staging slot in any deployment, not to be confused with the staging environment.",
            "tags": {
                "displayName": "WebAppSlots",
-               "Tag Test": "Slots tag test"
+               "Environment": "[parameters('cipEnvironmentTag')]",
+               "Parent Business Unit": "Teacher Training and Qualifications",
+               "Service Offering": "Schools Experience Service"
            },
            "properties": {
                "siteConfig": {
@@ -251,7 +258,6 @@
             "condition": "[parameters('applyServicePlan')]",
             "location": "[resourceGroup().location]",
             "tags": {
-                "Tag Test": "Service plan tag test",
                 "Environment": "[parameters('cipEnvironmentTag')]",
                 "Parent Business Unit": "Teacher Training and Qualifications",
                 "Service Offering": "Schools Experience Service"
@@ -275,7 +281,9 @@
             "apiVersion": "2018-02-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "Tag Test": "Site config tag test"
+                "Environment": "[parameters('cipEnvironmentTag')]",
+                "Parent Business Unit": "Teacher Training and Qualifications",
+                "Service Offering": "Schools Experience Service"
             },
             "scale": null,
             "properties": {
@@ -299,6 +307,11 @@
             "name": "customdomain",
             "condition": "[greater(length(parameters('customDomainsWithCerts')),0)]",
             "type": "Microsoft.Resources/deployments",
+            "tags": {
+                "Environment": "[parameters('cipEnvironmentTag')]",
+                "Parent Business Unit": "Teacher Training and Qualifications",
+                "Service Offering": "Schools Experience Service"
+            },
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -331,7 +344,9 @@
             "location": "[resourceGroup().location]",
             "tags": {
                "[concat('hidden-link:', resourceId('microsoft.insights/components/', parameters('appInsightsName')))]": "Resource",
-               "Tag Test": "app insights tag test"
+               "Environment": "[parameters('cipEnvironmentTag')]",
+               "Parent Business Unit": "Teacher Training and Qualifications",
+               "Service Offering": "Schools Experience Service"
             },
             "dependsOn": [
                "[resourceId('Microsoft.Web/sites', parameters('sites_school_experience_name'))]"
