@@ -440,7 +440,7 @@
         "deploymentUsername": {
             "type": "string",
             "defaultValue": ""
-        }
+        }    
     },
     "variables": {
         "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
@@ -452,7 +452,8 @@
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401",
-                "webTestText": "denied"
+                "webTestText": "denied",
+                "cipEnvironmentTag": "Dev"
             },
             "staging": {
                 "railsEnv": "production",
@@ -461,7 +462,8 @@
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401",
-                "webTestText": "denied"
+                "webTestText": "denied",
+                "cipEnvironmentTag": "Test"
             },
             "research": {
                 "railsEnv": "production",
@@ -470,7 +472,8 @@
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
                 "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
                 "webTestExpected": "401",
-                "webTestText": "denied"
+                "webTestText": "denied",
+                "cipEnvironmentTag": "Test"
             },
             "prod": {
                 "railsEnv": "production",
@@ -479,7 +482,8 @@
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
                 "webTestUrl": "[concat('https://',parameters('public_host_name'), '/', parameters('webTestPath'))]",
                 "webTestExpected": "200",
-                "webTestText": "healthy"
+                "webTestText": "healthy",
+                "cipEnvironmentTag": "Prod"
             }
         },
         "appSettings": [
