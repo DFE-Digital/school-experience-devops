@@ -716,6 +716,7 @@
             "name": "[parameters('websiteDeploymentName')]",
             "type": "Microsoft.Resources/deployments",
             "tags": {
+                "Testing Tag": "Hello world",
                 "Environment": "[variables('environmentSettings')[parameters('environmentName')].cipEnvironmentTag]",
                 "Parent Business Unit": "Teacher Training and Qualifications",
                 "Service Offering": "Schools Experience Service"
