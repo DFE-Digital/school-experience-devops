@@ -241,7 +241,7 @@
         },
         "dfeSigninRoleCheckEnabled": {
             "type": "string",
-            "defaultValue": ""
+            "defaultValue": "1"
         },
         "dfeSigninServiceId": {
             "type": "string",
