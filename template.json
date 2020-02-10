@@ -245,7 +245,7 @@
         },
         "dfeSigninServiceId": {
             "type": "string",
-            "defaultValue": "146FA38A-2B92-4993-A941-4D6A3405352"
+            "defaultValue": "146FA38A-2B92-4993-A941-4D6A34053522"
         },
         "dfeSigninRoleId": {
             "type": "string",
