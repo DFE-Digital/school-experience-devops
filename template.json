@@ -239,6 +239,18 @@
             "type": "string",
             "defaultValue": ""
         },
+        "dfeSigninRoleCheckEnabled": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dfeSigninServiceId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dfeSigninRoleId": {
+            "type": "string",
+            "defaultValue": ""
+        },
         "customDomainsWithCerts": {
             "type": "array",
             "defaultValue": []
@@ -566,6 +578,18 @@
             {
                 "name": "DFE_SIGNIN_HOST",
                 "value": "[parameters('dfeSigninHost')]"
+            },
+            {
+                "name": "DFE_SIGNIN_API_ROLE_CHECK_ENABLED",
+                "value": "[parameters('dfeSigninRoleCheckEnabled')]"
+            },
+            {
+                "name": "DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID",
+                "value": "[parameters('dfeSigninServiceId')]"
+            },
+            {
+                "name": "DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID",
+                "value": "[parameters('dfeSigninRoleId')]"
             },
             {
                 "name": "OLD_SEP_DOMAINS",
