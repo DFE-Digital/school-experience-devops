@@ -48,7 +48,10 @@
                 "hostNameType": "Verified",
                 "sslState": "SniEnabled",
                 "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('customDomainsWithCerts')[copyIndex()].certificateName)).Thumbprint]"
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/certificates', parameters('customDomainsWithCerts')[copyIndex()].certificateName)]"
+            ]
         }
     ]
 }
