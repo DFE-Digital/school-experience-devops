@@ -12,6 +12,10 @@
             "type": "array",
             "defaultValue": []
         },
+        "sslCertificates": {
+            "type": "array",
+            "defaultValue": []
+        },
         "existingKeyVaultId": {
             "type": "string"
         }
@@ -19,16 +23,16 @@
     "resources": [
         {
             "type":"Microsoft.Web/certificates",
-            "name":"[parameters('customDomainsWithCerts')[copyIndex()].certificateName]",
+            "name":"[parameters('sslCertificates')[copyIndex()].certificateName]",
             "apiVersion":"2016-03-01",
             "location":"[resourceGroup().location]",
             "copy": {
                 "name": "domains",
-                "count": "[length(parameters('customDomainsWithCerts'))]"
+                "count": "[length(parameters('sslCertificates'))]"
             },
             "properties":{
                 "keyVaultId": "[parameters('existingKeyVaultId')]",
-                "keyVaultSecretName":"[parameters('customDomainsWithCerts')[copyIndex()].certificateSecretName]",
+                "keyVaultSecretName":"[parameters('sslCertificates')[copyIndex()].certificateSecretName]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverFarms',parameters('serverfarms_serviceplan_name'))]"
             }
         },
@@ -48,7 +52,10 @@
                 "hostNameType": "Verified",
                 "sslState": "SniEnabled",
                 "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('customDomainsWithCerts')[copyIndex()].certificateName)).Thumbprint]"
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/certificates', parameters('customDomainsWithCerts')[copyIndex()].certificateName)]"
+            ]
         }
     ]
 }
