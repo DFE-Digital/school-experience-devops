@@ -251,6 +251,10 @@
             "type": "string",
             "defaultValue": ""
         },
+        "sslCertificates": {
+            "type": "array",
+            "defaultValue": []
+        },
         "customDomainsWithCerts": {
             "type": "array",
             "defaultValue": []
@@ -823,6 +827,9 @@
                     },
                     "customDomainsWithCerts": {
                         "value": "[parameters('customDomainsWithCerts')]"
+                    },
+                    "sslCertificates": {
+                        "value": "[parameters('sslCertificates')]"
                     },
                     "existingKeyVaultId": {
                         "value": "[resourceId(parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"

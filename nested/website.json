@@ -57,6 +57,10 @@
             "type": "array",
             "defaultValue": []
         },
+        "sslCertificates": {
+            "type": "array",
+            "defaultValue": []
+        },
         "appInsightsInstrumentationKey": {
             "type": "securestring"
         },
@@ -294,6 +298,9 @@
                 "parameters": {
                    "customDomainsWithCerts": {
                         "value": "[parameters('customDomainsWithCerts')]"
+                    },
+                    "sslCertificates": {
+                        "value": "[parameters('sslCertificates')]"
                     },
                     "existingKeyVaultId": {
                         "value": "[parameters('existingKeyVaultId')]"
