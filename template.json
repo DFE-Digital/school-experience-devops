@@ -251,6 +251,10 @@
             "type": "string",
             "defaultValue": ""
         },
+        "dfeSigninRequestOrganisationUrl": {
+            "type": "string",
+            "defaultValue": ""
+        },
         "sslCertificates": {
             "type": "array",
             "defaultValue": []
@@ -578,6 +582,10 @@
             {
                 "name": "DFE_SIGNIN_API_ENABLED",
                 "value": "[parameters('dfeSigninApiEnabled')]"
+            },
+            {
+                "name": "DFE_SIGNIN_REQUEST_ORGANISATION_URL",
+                "value": "[parameters('dfeSigninRequestOrganisationUrl')]"
             },
             {
                 "name": "DFE_SIGNIN_HOST",
