@@ -239,15 +239,19 @@
             "type": "string",
             "defaultValue": ""
         },
-        "dfeSigninRoleCheckEnabled": {
-            "type": "string",
-            "defaultValue": ""
-        },
         "dfeSigninServiceId": {
             "type": "string",
             "defaultValue": ""
         },
         "dfeSigninRoleId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dfeSigninSchoolChangeEnabled": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dfeSigninSchoolChangeApprovalUrl": {
             "type": "string",
             "defaultValue": ""
         },
@@ -584,16 +588,20 @@
                 "value": "[parameters('dfeSigninHost')]"
             },
             {
-                "name": "DFE_SIGNIN_API_ROLE_CHECK_ENABLED",
-                "value": "[parameters('dfeSigninRoleCheckEnabled')]"
-            },
-            {
                 "name": "DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID",
                 "value": "[parameters('dfeSigninServiceId')]"
             },
             {
                 "name": "DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID",
                 "value": "[parameters('dfeSigninRoleId')]"
+            },
+            {
+                "name": "DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED",
+                "value": "[parameters('dfeSigninSchoolChangeEnabled')]"
+            },
+            {
+                "name": "DFE_SIGNIN_REQUEST_ORGANISATION_URL",
+                "value": "[parameters('dfeSigninSchoolChangeApprovalUrl')]"
             },
             {
                 "name": "OLD_SEP_DOMAINS",
