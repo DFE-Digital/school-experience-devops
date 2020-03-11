@@ -307,6 +307,10 @@
              "type": "string",
              "defaultValue": ""
         },
+        "featureFlags": {
+            "type": "string",
+            "defaultValue": ""
+        },
         "fakeCrm": {
              "type": "string",
              "defaultValue": ""
@@ -642,6 +646,10 @@
             {
                 "name": "PHASE",
                 "value": "[parameters('phase')]"
+            },
+            {
+                "name": "FEATURE_FLAGS",
+                "value": "[parameters('featureFlags')]"
             },
             {
                 "name": "DFE_SERVICES_LIST_URL",
