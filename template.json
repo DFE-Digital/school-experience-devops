@@ -464,6 +464,10 @@
         "deploymentUsername": {
             "type": "string",
             "defaultValue": ""
+        },
+        "deactivateCandidates": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -670,7 +674,11 @@
             {
                 "name": "DEPLOYMENT_USERNAME",
                 "value": "[parameters('deploymentUsername')]"
-            }
+            },
+            {
+                "name": "DEACTIVATE_CANDIDATES",
+                "value": "[parameters('deactivateCandidates')]"
+            }  
         ]
     },
     "resources": [
