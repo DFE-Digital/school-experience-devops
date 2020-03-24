@@ -468,6 +468,14 @@
         "deactivateCandidates": {
             "type": "string",
             "defaultValue": ""
+        },
+        "candidateNotification": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "candidateUrnWhitelist": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -678,7 +686,15 @@
             {
                 "name": "DEACTIVATE_CANDIDATES",
                 "value": "[parameters('deactivateCandidates')]"
-            }  
+            },
+            {
+                "name": "CANDIDATE_NOTIFICATION",
+                "value": "[parameters('candidateNotification')]"
+            },
+            {
+                "name": "CANDIDATE_URN_WHITELIST",
+                "value": "[parameters('candidateUrnWhitelist')]"
+            }
         ]
     },
     "resources": [
