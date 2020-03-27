@@ -106,6 +106,9 @@
                     "postgresAdminPassword": {
                         "value": "[parameters('postgresAdminPassword')]"
                     },
+                    "sku": {
+                        "value": "[parameters('postgresSku')]"
+                    },
                     "environmentName": {
                         "value": "[parameters('environmentName')]"
                     }

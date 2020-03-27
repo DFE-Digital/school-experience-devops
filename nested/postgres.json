@@ -26,6 +26,9 @@
         "postgresAdminPassword": {
             "type": "securestring"
         },
+        "sku": {
+            "type": "object"
+        },
         "environmentName": {
             "type": "String"
         }
