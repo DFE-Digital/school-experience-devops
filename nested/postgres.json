@@ -5,33 +5,6 @@
         "servers_db_createMode": {
             "type": "SecureString"
         },
-        "servers_db_name": {
-            "type": "String"
-        },
-        "databases_postgres_name": {
-            "type": "String"
-        },
-        "databases_azure_sys_name": {
-            "type": "String"
-        },
-        "databases_azure_maintenance_name": {
-            "type": "String"
-        },
-        "databases_school_experience_name": {
-            "type": "String"
-        },
-        "postgresAdminLoginName": {
-            "type": "String"
-        },
-        "postgresAdminPassword": {
-            "type": "securestring"
-        },
-        "sku": {
-            "type": "object"
-        },
-        "storageProfile": {
-            "type": "object"
-        },
         "environmentName": {
             "type": "String"
         }

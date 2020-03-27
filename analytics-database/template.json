@@ -85,33 +85,6 @@
                     "servers_db_createMode": {
                         "value": "[parameters('servers_db_createMode')]"
                     },
-                    "servers_db_name": {
-                        "value": "[parameters('servers_db_name')]"
-                    },
-                    "databases_postgres_name": {
-                        "value": "[parameters('databases_postgres_name')]"
-                    },
-                    "databases_azure_sys_name": {
-                        "value": "[parameters('databases_azure_sys_name')]"
-                    },
-                    "databases_azure_maintenance_name": {
-                        "value": "[parameters('databases_azure_maintenance_name')]"
-                    },
-                    "databases_school_experience_name": {
-                        "value": "[parameters('databases_school_experience_name')]"
-                    },
-                    "postgresAdminLoginName": {
-                        "value": "[parameters('postgresAdminLoginName')]"
-                    },
-                    "postgresAdminPassword": {
-                        "value": "[parameters('postgresAdminPassword')]"
-                    },
-                    "sku": {
-                        "value": "[parameters('postgresSku')]"
-                    },
-                    "storageProfile": {
-                        "value": "[parameters('postgresStorageProfile')]"
-                    },
                     "environmentName": {
                         "value": "[parameters('environmentName')]"
                     }
