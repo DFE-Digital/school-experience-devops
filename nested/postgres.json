@@ -37,22 +37,6 @@
         }
     },
     "resources": [
-        {
-            "type": "Microsoft.DBforPostgreSQL/servers",
-            "sku": "[parameters('sku')]",
-            "name": "[parameters('servers_db_name')]",
-            "apiVersion": "2017-12-01-preview",
-            "location": "[resourceGroup().location]",
-            "scale": null,
-            "properties": {
-                "storageProfile": "[parameters('storageProfile')]",
-                "version": "10",
-                "sslEnforcement": "Enabled",
-                "createMode": "[parameters('servers_db_createMode')]",
-                "administratorLogin": "[parameters('postgresAdminLoginName')]",
-                "administratorLoginPassword": "[parameters('postgresAdminPassword')]"
-            },
-            "dependsOn": []
-        }
+
     ]
 }
