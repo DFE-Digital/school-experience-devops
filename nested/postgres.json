@@ -29,7 +29,7 @@
         "sku": {
             "type": "object"
         },
-        "storageProfile": {
+        "postgresStorageProfile": {
             "type": "object"
         },
         "environmentName": {
