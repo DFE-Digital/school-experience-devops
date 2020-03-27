@@ -1,0 +1,122 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentName": {
+            "type": "String",
+            "defaultValue": "ignore"
+        },
+        "servers_db_createMode": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "servers_db_name": {
+            "defaultValue": "school_experience_perf",
+            "type": "String"
+        },
+        "databases_postgres_name": {
+            "defaultValue": "postgres",
+            "type": "String"
+        },
+        "databases_azure_sys_name": {
+            "defaultValue": "azure_sys",
+            "type": "String"
+        },
+        "databases_azure_maintenance_name": {
+            "defaultValue": "azure_maintenance",
+            "type": "String"
+        },
+        "databases_school_experience_name": {
+            "defaultValue": "",
+            "type": "String"
+        },
+        "postgresAdminLoginName": {
+            "defaultValue": "adminuser",
+            "type": "String"
+        },
+        "postgresAdminPassword": {
+            "defaultValue": "Bootstrap",
+            "type": "SecureString"
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+            },
+            "defaultValue": "https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/feature/1358/perfdb/"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+            },
+            "defaultValue": ""
+        },
+        "postgresSku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "B_Gen5_1",
+                "tier": "Basic",
+                "family": "Gen5",
+                "capacity": 1
+            }
+        },
+        "postgresStorageProfile": {
+            "type": "object",
+            "defaultValue": {
+                "storageMB": 20000,
+                "backupRetentionDays": 0,
+                "geoRedundantBackup": "Disabled"
+            }
+        },
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-05-01",
+            "name": "postgresdb",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('../nested/postgres.json', parameters('_artifactsLocationSasToken')))]"
+                },
+                "parameters": {
+                    "servers_db_createMode": {
+                        "value": "[parameters('servers_db_createMode')]"
+                    },
+                    "servers_db_name": {
+                        "value": "[parameters('servers_db_name')]"
+                    },
+                    "databases_postgres_name": {
+                        "value": "[parameters('databases_postgres_name')]"
+                    },
+                    "databases_azure_sys_name": {
+                        "value": "[parameters('databases_azure_sys_name')]"
+                    },
+                    "databases_azure_maintenance_name": {
+                        "value": "[parameters('databases_azure_maintenance_name')]"
+                    },
+                    "databases_school_experience_name": {
+                        "value": "[parameters('databases_school_experience_name')]"
+                    },
+                    "postgresAdminLoginName": {
+                        "value": "[parameters('postgresAdminLoginName')]"
+                    },
+                    "postgresAdminPassword": {
+                        "value": "[parameters('postgresAdminPassword')]"
+                    },
+                    "sku": {
+                        "value": "[parameters('postgresSku')]"
+                    },
+                    "storageProfile": {
+                        "value": "[parameters('postgresStorageProfile')]"
+                    },
+                    "environmentName": {
+                        "value": "[parameters('environmentName')]"
+                    }
+                }
+            }
+        }
+    ]
+}
