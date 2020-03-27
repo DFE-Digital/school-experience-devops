@@ -55,10 +55,10 @@
         "postgresSku": {
             "type": "object",
             "defaultValue": {
-                "name": "B_Gen5_1",
+                "name": "B_Gen5_2",
                 "tier": "Basic",
                 "family": "Gen5",
-                "capacity": 1
+                "capacity": 2
             }
         },
         "postgresStorageProfile": {
@@ -84,6 +84,12 @@
                 "parameters": {
                     "servers_db_createMode": {
                         "value": "[parameters('servers_db_createMode')]"
+                    },
+                    "sku": {
+                        "value": "[parameters('postgresSku')]"
+                    },
+                    "storageProfile": {
+                        "value": "[parameters('postgresStorageProfile')]"
                     },
                     "environmentName": {
                         "value": "[parameters('environmentName')]"

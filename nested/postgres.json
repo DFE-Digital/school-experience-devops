@@ -5,6 +5,12 @@
         "servers_db_createMode": {
             "type": "SecureString"
         },
+        "sku": {
+            "type": "object"
+        },
+        "storageProfile": {
+            "type": "object"
+        },
         "environmentName": {
             "type": "String"
         }
