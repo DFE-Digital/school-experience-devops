@@ -7,7 +7,7 @@
             "defaultValue": "ignore"
         },
         "servers_db_createMode": {
-            "defaultValue": null,
+            "defaultValue": "Default",
             "type": "SecureString"
         },
         "servers_db_name": {
