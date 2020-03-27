@@ -68,7 +68,7 @@
                 "backupRetentionDays": 0,
                 "geoRedundantBackup": "Disabled"
             }
-        },
+        }
     },
     "resources": [
         {
