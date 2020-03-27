@@ -109,6 +109,9 @@
                     "sku": {
                         "value": "[parameters('postgresSku')]"
                     },
+                    "storageProfile": {
+                        "value": "[parameters('postgresStorageProfile')]"
+                    },
                     "environmentName": {
                         "value": "[parameters('environmentName')]"
                     }

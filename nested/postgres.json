@@ -29,6 +29,9 @@
         "sku": {
             "type": "object"
         },
+        "storageProfile": {
+            "type": "object"
+        },
         "environmentName": {
             "type": "String"
         }
