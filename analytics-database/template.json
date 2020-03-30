@@ -64,7 +64,7 @@
         "postgresStorageProfile": {
             "type": "object",
             "defaultValue": {
-                "storageMB": 20000,
+                "storageMB": 39936,
                 "backupRetentionDays": 0,
                 "geoRedundantBackup": "Disabled"
             }
