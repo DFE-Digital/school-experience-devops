@@ -11,7 +11,7 @@
             "type": "SecureString"
         },
         "servers_db_name": {
-            "defaultValue": "school_experience_perf",
+            "defaultValue": "s105d01-db-perfdb-01",
             "type": "String"
         },
         "databases_postgres_name": {
