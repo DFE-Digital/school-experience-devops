@@ -29,7 +29,7 @@
         "sku": {
             "type": "object"
         },
-        "postgresStorageProfile": {
+        "storageProfile": {
             "type": "object"
         },
         "environmentName": {
@@ -45,7 +45,7 @@
             "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
-                "storageProfile": "[parameters('postgresStorageProfile')]",
+                "storageProfile": "[parameters('storageProfile')]",
                 "version": "10",
                 "sslEnforcement": "Enabled",
                 "createMode": "[parameters('servers_db_createMode')]",
@@ -53,6 +53,45 @@
                 "administratorLoginPassword": "[parameters('postgresAdminPassword')]"
             },
             "dependsOn": []
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/servers/databases",
+            "name": "[concat(parameters('servers_db_name'), '/', parameters('databases_postgres_name'))]",
+            "apiVersion": "2017-12-01-preview",
+            "scale": null,
+            "properties": {
+                "charset": "UTF8",
+                "collation": "English_United States.1252"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('servers_db_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/servers/databases",
+            "name": "[concat(parameters('servers_db_name'), '/', parameters('databases_azure_maintenance_name'))]",
+            "apiVersion": "2017-12-01-preview",
+            "scale": null,
+            "properties": {
+                "charset": "UTF8",
+                "collation": "English_United States.1252"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('servers_db_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/servers/databases",
+            "name": "[concat(parameters('servers_db_name'), '/', parameters('databases_azure_sys_name'))]",
+            "apiVersion": "2017-12-01-preview",
+            "scale": null,
+            "properties": {
+                "charset": "UTF8",
+                "collation": "English_United States.1252"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('servers_db_name'))]"
+            ]
         },
         {
             "type": "Microsoft.DBforPostgreSQL/servers/firewallRules",
