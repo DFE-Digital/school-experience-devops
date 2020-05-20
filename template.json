@@ -130,6 +130,12 @@
                 "capacity": 1
             }
         },
+        "mapsSku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "S0",
+            }
+        },
         "public_host_name": {
             "type": "string",
             "defaultValue": ""
@@ -200,6 +206,10 @@
             "defaultValue": ""
         },
         "bingMapsKey": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "azureMapsKey": {
             "type": "string",
             "defaultValue": ""
         },
@@ -480,6 +490,7 @@
     },
     "variables": {
         "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
+        "mapsAccountName": "[concat(parameters('sites_school_experience_name'), '-maps')]",
         "webTestName": "[concat(parameters('sites_school_experience_name'),'-webtest')]",
         "environmentSettings": {
             "dev": {
@@ -570,6 +581,10 @@
             {
                 "name": "BING_MAPS_KEY",
                 "value": "[parameters('bingMapsKey')]"
+            },
+            {
+                "name": "AZURE_MAPS_KEY",
+                "value": "[parameters('azureMapsKey')]"
             },
             {
                 "name": "RAILS_MAX_THREADS",
@@ -894,6 +909,9 @@
                     "appInsightsName": {
                         "value": "[variables('appInsightsName')]"
                     },
+                    "mapsAccountName": {
+                        "value": "[variables('mapsAccountName')]"
+                    },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
                     },
@@ -929,9 +947,6 @@
                     },
                     "webTestName": {
                         "value": "[variables('webTestName')]"
-                    },
-                    "appInsightsName": {
-                        "value": "[variables('appInsightsName')]"
                     },
                     "deployToSlot": {
                         "value": "[parameters('deployToSlot')]"
@@ -1108,6 +1123,13 @@
                 "Flow_Type": "Redfield",
                 "Request_Source": "IbizaAIExtension"
             }
+        },
+        {
+            "type": "Microsoft.Maps/accounts",
+            "apiVersion": "2018-05-01",
+            "name": "[variables('mapsAccountName')]",
+            "location": "[resourceGroup().location]",
+            "sku": "[parameters('webAppSku')]"
         }
     ]
 }
