@@ -495,7 +495,14 @@
 			"defaultValue": {
 				"name": "S0"
 			}
-		}
+		},
+    "guid": {
+      "type": "string",
+      "defaultValue": "[guid(resourceGroup().id)]",
+      "metadata": {
+        "description": "Input string for new GUID associated with assigning built in role types"
+      }
+    }
 	},
 	"variables": {
 		"appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
