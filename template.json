@@ -1,1113 +1,1168 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "environmentName": {
-            "type": "string",
-            "allowedValues": [
-              "dev",
-              "staging",
-              "research",
-              "prod"
-            ],
-            "metadata": {
-                "description": "Specify either dev, test or prod for configuration values."
-            }
-        },
-        "servers_db_createMode": {
-            "defaultValue": null,
-            "type": "SecureString"
-        },
-        "sites_school_experience_name": {
-            "type": "String"
-        },
-        "redis_name": {
-            "type": "String"
-        },
-        "config_web_name": {
-            "defaultValue": "web",
-            "type": "String"
-        },
-        "serverfarms_serviceplan_name": {
-            "defaultValue": "schoolExperienceServicePlan",
-            "type": "String"
-        },
-        "servers_db_name": {
-            "defaultValue": "schoolexperience-dev-db",
-            "type": "String"
-        },
-        "databases_postgres_name": {
-            "defaultValue": "postgres",
-            "type": "String"
-        },
-        "databases_azure_sys_name": {
-            "defaultValue": "azure_sys",
-            "type": "String"
-        },
-        "databases_azure_maintenance_name": {
-            "defaultValue": "azure_maintenance",
-            "type": "String"
-        },
-        "databases_school_experience_name": {
-            "defaultValue": "school_experience_test",
-            "type": "String"
-        },
-        "postgresAdminLoginName": {
-            "defaultValue": "adminuser",
-            "type": "String"
-        },
-        "postgresUserLoginName": {
-            "defaultValue": "railsappuser",
-            "type": "String"
-        },
-        "dockerComposeFile": {
-            "defaultValue": null,
-            "type": "String"
-        },
-        "redis_database_index": {
-            "defaultValue": "15",
-            "type": "String"
-        },
-        "vaultName": {
-            "type": "string",
-            "defaultValue": "schoolExperienceVault",
-            "metadata": {
-                "description": "The name of the keyvault that contains the secret."
-            }
-        },
-        "vaultResourceGroupName": {
-            "type": "string",
-            "defaultValue": "schoolExperienceVaultGroup",
-            "metadata": {
-                "description": "The name of the resource group that contains the keyvault."
-            }
-        },
-        "vaultSubscription": {
-            "type": "string",
-            "defaultValue": "[subscription().subscriptionId]",
-            "metadata": {
-                "description": "The name of the subscription that contains the keyvault."
-            }
-        },
-        "_artifactsLocation": {
-            "type": "string",
-            "metadata": {
-                "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
-            },
-            "defaultValue": "https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/master/"
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
-            },
-            "defaultValue": ""
-        },
-        "postgresSku": {
-            "type": "object",
-            "defaultValue": {
-                "name": "B_Gen5_2",
-                "tier": "Basic",
-                "family": "Gen5",
-                "capacity": 2
-            }
-        },
-        "redisSku": {
-            "type": "object",
-            "defaultValue": {
-                "name": "Basic",
-                "family": "C",
-                "capacity": 0
-            }
-        },
-        "webAppSku": {
-            "type": "object",
-            "defaultValue": {
-                "name": "B1",
-                "tier": "Basic",
-                "size": "B1",
-                "family": "B",
-                "capacity": 1
-            }
-        },
-        "public_host_name": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "ipAddressRestriction": {
-            "type": "string",
-            "defaultValue": "0.0.0.0/0"
-        },
-        "subnetMaskRestriction": {
-            "type": "string",
-            "defaultValue": "0.0.0.0"
-        },
-        "postgresStorageProfile": {
-            "type": "object",
-            "defaultValue": {
-                "storageMB": 51200,
-                "backupRetentionDays": 7,
-                "geoRedundantBackup": "Disabled"
-            }
-        },
-        "redisStorageAccountName": {
-            "type": "string",
-            "defaultValue": "schoolexperiencestorage",
-            "metadata": {
-                "description": "The storage account name used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
-            }
-        },
-        "redisStorageAccountType": {
-            "type": "string",
-            "defaultValue": "Standard_LRS",
-            "metadata": {
-                "description": "The storage account type used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
-            }
-        },
-        "redisStorageAccessTier": {
-            "type": "string",
-            "defaultValue": "Hot",
-            "metadata": {
-                "description": "The storage access tier used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
-            }
-        },
-        "appSecureUsername": {
-            "type": "string",
-            "defaultValue": "school"
-        },
-        "appSecurePassword": {
-            "type": "securestring",
-            "defaultValue": "experience"
-        },
-        "googleAnalyticsTrackingId": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "websiteCertificateResourceName": {
-            "type": "string",
-            "defaultValue": "school-experience-certificate"
-        },
-        "websiteCertificateSecretName": {
-            "type": "string",
-            "defaultValue": "website-certificate"
-        },
-        "secretKeyBase": {
-            "type": "string",
-            "defaultValue": "stubbed"
-        },
-        "notifyApiKey": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "bingMapsKey": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "logsDirectorySizeLimit": {
-            "type": "string",
-            "defaultValue": "100"
-        },
-        "applyPostgres": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "applyRedis": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "dfeSigninBaseUrl": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "dfeSigninClientId": {
-            "type": "string",
-            "defaultValue": "schoolexperience"
-        },
-        "dfeSigninHost": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "dfeSigninApiClient": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "dfeSigninApiEndpoint": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "dfeSigninApiEnabled": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "dfeSigninServiceId": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "dfeSigninRoleId": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "dfeSigninSchoolChangeEnabled": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "dfeSigninSchoolChangeApprovalUrl": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "sslCertificates": {
-            "type": "array",
-            "defaultValue": []
-        },
-        "customDomainsWithCerts": {
-            "type": "array",
-            "defaultValue": []
-        },
-        "actionGroupName": {
-            "type": "string",
-            "defaultValue": "schoolExperienceSupport"
-        },
-        "actionGroupShortName": {
-            "type": "string",
-            "defaultValue": "sch-exp-sup"
-        },
-        "supportEmailAddresses": {
-            "type": "array",
-            "defaultValue": []
-        },
-        "applyAlerts": {
-             "type": "bool",
-             "defaultValue": false
-        },
-        "oldSepDomains": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "enableAppInsightsJavascript": {
-             "type": "string",
-             "defaultValue": "false"
-        },
-        "crmClientId": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "crmServiceUrl": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "crmAuthTenantId": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "crmChannelCreation": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "crmCaching": {
-            "type": "string",
-            "defaultValue": "0"
-        },
-        "phase": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "featureFlags": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "fakeCrm": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "dfeServicesListUrl": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "crmOwnerId": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "crmCountryId": {
-             "type": "string",
-             "defaultValue": ""
-        },
-        "railsMaxThreads": {
-             "type": "string",
-             "defaultValue": "5"
-        },
-        "applyServicePlan": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "applyBackend": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "websiteDeploymentName": {
-            "type": "string",
-            "defaultValue": "website",
-            "metadata": {
-                "description": "Allows multiple websites to be deployed concurrently."
-            }
-        },
-        "thresholdHttpErrors": {
-            "type": "string",
-            "defaultValue": "2"
-        },
-        "thresholdResponseTime": {
-            "type": "string",
-            "defaultValue": "30"
-        },
-        "thresholdPostgresActiveConnections": {
-            "type": "string",
-            "defaultValue": "10"
-        },
-        "thresholdPostgresCPUPercent": {
-            "type": "string",
-            "defaultValue": "50"
-        },
-        "thresholdPostgresStoragePercent": {
-            "type": "string",
-            "defaultValue": "50"
-        },
-        "thresholdRedisServerLoad": {
-            "type": "string",
-            "defaultValue": "50"
-        },
-        "thresholdRedisMemoryPercentage": {
-            "type": "string",
-            "defaultValue": "50"
-        },
-        "thresholdServicePlanCPU": {
-            "type": "string",
-            "defaultValue": "60"
-        },
-        "thresholdMemoryPercentage": {
-            "type": "string",
-            "defaultValue": "80"
-        },
-        "postgresUserPasswordSecretName": {
-            "type": "string",
-            "defaultValue": "postgresUserPassword"
-        },
-        "backendResourceGroup": {
-            "type": "string",
-            "defaultValue": "[resourceGroup().name]"
-        },
-        "webTestFrequencySecs": {
-             "type": "string",
-             "defaultValue": "300"
-        },
-        "webTestTimeoutSecs": {
-             "type": "string",
-             "defaultValue": "120"
-        },
-        "webTestLocations": {
-             "type": "array",
-             "defaultValue": [
-               { "Id": "us-il-ch1-azr"},
-               { "Id": "us-ca-sjc-azr"},
-               { "Id": "emea-fr-pra-edge"},
-               { "Id": "emea-nl-ams-azr"},
-               { "Id": "emea-gb-db3-azr"}
-             ]
-        },
-        "webTestEnabled": {
-             "type": "bool",
-             "defaultValue": false
-        },
-        "webTestPath": {
-             "type": "string",
-             "defaultValue": "healthcheck.txt",
-             "metadata": {
-                "description": "Forms part of the URL used to test the health of the application i.e. https://<web app name>.azurewebsites.net/<webTestPath>"
-            }
-        },
-        "activityLogAlerts_name": {
-            "defaultValue": "ServiceHealthActivityLogAlert",
-            "type": "String"
-        },
-        "alertNamePrefix": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "applyRedisFirewall": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "applyPostgresFirewall": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "slackEnvPrefix": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "addSupportWebhook": {
-            "type": "bool",
-            "defaultValue": false
-        },
-        "deployToSlot": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Whether to deploy to a slot, when creating a new environment from script we deploy directly to the main slot hence a default value of false. When deploying from within a pipeline we deploy to a slot and then use the slot swap mechanism to deploy with zero downtime."
-            }
-        },
-        "deploymentId": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "A string that should uniquely identify the deployment so that the deployer can confirm the deployment has taken place via custom application endpoint."
-            }
-        },
-        "deploymentUsername": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "deactivateCandidates": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "candidateNotification": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "candidateUrnWhitelist": {
-            "type": "string",
-            "defaultValue": ""
-        }
-    },
-    "variables": {
-        "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
-        "webTestName": "[concat(parameters('sites_school_experience_name'),'-webtest')]",
-        "environmentSettings": {
-            "dev": {
-                "railsEnv": "servertest",
-                "slackEnv": "",
-                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
-                "webTestExpected": "401",
-                "webTestText": "denied"
-            },
-            "staging": {
-                "railsEnv": "production",
-                "slackEnv": "[concat(parameters('slackEnvPrefix'),'staging')]",
-                "ipSecurityRestrictions": null,
-                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
-                "webTestExpected": "401",
-                "webTestText": "denied"
-            },
-            "research": {
-                "railsEnv": "production",
-                "slackEnv": "[concat(parameters('slackEnvPrefix'),'research')]",
-                "ipSecurityRestrictions": null,
-                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
-                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
-                "webTestExpected": "401",
-                "webTestText": "denied"
-            },
-            "prod": {
-                "railsEnv": "production",
-                "slackEnv": "[concat(parameters('slackEnvPrefix'),'production')]",
-                "ipSecurityRestrictions": null,
-                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
-                "webTestUrl": "[concat('https://',parameters('public_host_name'), '/', parameters('webTestPath'))]",
-                "webTestExpected": "200",
-                "webTestText": "healthy"
-            }
-        },
-        "appSettings": [
-            {
-                "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
-                "value": "false"
-            },
-            {
-                "name": "WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION",
-                "value": "0"
-            },
-            {
-                "name": "SECURE_USERNAME",
-                "value": "[parameters('appSecureUsername')]"
-            },
-            {
-                "name": "SECURE_PASSWORD",
-                "value": "[parameters('appSecurePassword')]"
-            },
-            {
-                "name": "SECRET_KEY_BASE",
-                "value": "[parameters('secretKeyBase')]"
-            },
-            {
-                "name": "DB_DATABASE",
-                "value": "[parameters('databases_school_experience_name')]"
-            },
-            {
-                "name": "DB_HOST",
-                "value": "[concat(parameters('servers_db_name'), '.postgres.database.azure.com')]"
-            },
-            {
-                "name": "DB_USERNAME",
-                "value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
-            },
-            {
-                "name": "RAILS_ENV",
-                "value": "[variables('environmentSettings')[parameters('environmentName')].railsEnv]"
-            },
-            {
-                "name": "SLACK_ENV",
-                "value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
-            },
-            {
-                "name": "GA_TRACKING_ID",
-                "value": "[parameters('googleAnalyticsTrackingId')]"
-            },
-            {
-                "name": "NOTIFY_API_KEY",
-                "value": "[parameters('notifyApiKey')]"
-            },
-            {
-                "name": "BING_MAPS_KEY",
-                "value": "[parameters('bingMapsKey')]"
-            },
-            {
-                "name": "RAILS_MAX_THREADS",
-                "value": "[parameters('railsMaxThreads')]"
-            },
-            {
-                "name": "CANONICAL_DOMAIN",
-                "value": "[parameters('public_host_name')]"
-            },
-            {
-                "name": "DFE_SIGNIN_BASE_URL",
-                "value": "[parameters('dfeSigninBaseUrl')]"
-            },
-            {
-                "name": "DFE_SIGNIN_CLIENT_ID",
-                "value": "[parameters('dfeSigninClientId')]"
-            },
-            {
-                "name": "DFE_SIGNIN_API_CLIENT",
-                "value": "[parameters('dfeSigninApiClient')]"
-            },
-            {
-                "name": "DFE_SIGNIN_API_ENDPOINT",
-                "value": "[parameters('dfeSigninApiEndpoint')]"
-            },
-            {
-                "name": "DFE_SIGNIN_API_ENABLED",
-                "value": "[parameters('dfeSigninApiEnabled')]"
-            },
-            {
-                "name": "DFE_SIGNIN_HOST",
-                "value": "[parameters('dfeSigninHost')]"
-            },
-            {
-                "name": "DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID",
-                "value": "[parameters('dfeSigninServiceId')]"
-            },
-            {
-                "name": "DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID",
-                "value": "[parameters('dfeSigninRoleId')]"
-            },
-            {
-                "name": "DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED",
-                "value": "[parameters('dfeSigninSchoolChangeEnabled')]"
-            },
-            {
-                "name": "DFE_SIGNIN_REQUEST_ORGANISATION_URL",
-                "value": "[parameters('dfeSigninSchoolChangeApprovalUrl')]"
-            },
-            {
-                "name": "OLD_SEP_DOMAINS",
-                "value": "[parameters('oldSepDomains')]"
-            },
-            {
-                "name": "APPINSIGHTS_JAVASCRIPT_ENABLED",
-                "value": "[parameters('enableAppInsightsJavascript')]"
-            },
-            {
-                "name": "SENTRY_CURRENT_ENV",
-                "value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
-            },
-            {
-                "name": "CRM_CLIENT_ID",
-                "value": "[parameters('crmClientId')]"
-            },
-            {
-                "name": "CRM_SERVICE_URL",
-                "value": "[parameters('crmServiceUrl')]"
-            },
-            {
-                "name": "CRM_AUTH_TENANT_ID",
-                "value": "[parameters('crmAuthTenantId')]"
-            },
-            {
-                "name": "CRM_CHANNEL_CREATION",
-                "value": "[parameters('crmChannelCreation')]"
-            },
-            {
-                "name": "CRM_OWNER_ID",
-                "value": "[parameters('crmOwnerId')]"
-            },
-            {
-                "name": "CRM_COUNTRY_ID",
-                "value": "[parameters('crmCountryId')]"
-            },
-            {
-                "name": "CRM_CACHING",
-                "value": "[parameters('crmCaching')]"
-            },
-            {
-                "name": "FAKE_CRM",
-                "value": "[parameters('fakeCrm')]"
-            },
-            {
-                "name": "PHASE",
-                "value": "[parameters('phase')]"
-            },
-            {
-                "name": "FEATURE_FLAGS",
-                "value": "[parameters('featureFlags')]"
-            },
-            {
-                "name": "DFE_SERVICES_LIST_URL",
-                "value": "[parameters('dfeServicesListUrl')]"
-            },
-            {
-                "name": "DEPLOYMENT_ID",
-                "value": "[parameters('deploymentId')]"
-            },
-            {
-                "name": "DEPLOYMENT_USERNAME",
-                "value": "[parameters('deploymentUsername')]"
-            },
-            {
-                "name": "DEACTIVATE_CANDIDATES",
-                "value": "[parameters('deactivateCandidates')]"
-            },
-            {
-                "name": "CANDIDATE_NOTIFICATION",
-                "value": "[parameters('candidateNotification')]"
-            },
-            {
-                "name": "CANDIDATE_URN_WHITELIST",
-                "value": "[parameters('candidateUrnWhitelist')]"
-            }
-        ]
-    },
-    "resources": [
-        {
-            "apiVersion": "2018-05-01",
-            "name": "backend",
-            "type": "Microsoft.Resources/deployments",
-            "condition": "[parameters('applyBackend')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./backend.json', parameters('_artifactsLocationSasToken')))]"
-                },
-                "parameters": {
-                    "servers_db_createMode": {
-                        "value": "[parameters('servers_db_createMode')]"
-                    },
-                    "servers_db_name": {
-                        "value": "[parameters('servers_db_name')]"
-                    },
-                    "databases_postgres_name": {
-                        "value": "[parameters('databases_postgres_name')]"
-                    },
-                    "databases_azure_sys_name": {
-                        "value": "[parameters('databases_azure_sys_name')]"
-                    },
-                    "databases_azure_maintenance_name": {
-                        "value": "[parameters('databases_azure_maintenance_name')]"
-                    },
-                    "databases_school_experience_name": {
-                        "value": "[parameters('databases_school_experience_name')]"
-                    },
-                    "postgresAdminLoginName": {
-                        "value": "[parameters('postgresAdminLoginName')]"
-                    },
-                    "postgresAdminPassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "postgresAdminPassword"
-                        }
-                    },
-                    "postgresSku": {
-                        "value": "[parameters('postgresSku')]"
-                    },
-                    "postgresStorageProfile": {
-                        "value": "[parameters('postgresStorageProfile')]"
-                    },
-                    "redis_name": {
-                        "value": "[parameters('redis_name')]"
-                    },
-                    "redisSku": {
-                        "value": "[parameters('redisSku')]"
-                    },
-                    "redisStorageAccountName": {
-                        "value": "[parameters('redisStorageAccountName')]"
-                    },
-                    "redisStorageAccountType": {
-                        "value": "[parameters('redisStorageAccountType')]"
-                    },
-                    "redisStorageAccessTier": {
-                        "value": "[parameters('redisStorageAccessTier')]"
-                    },
-                    "environmentName": {
-                        "value": "[parameters('environmentName')]"
-                    },
-                    "_artifactsLocation": {
-                        "value": "[parameters('_artifactsLocation')]"
-                    },
-                    "applyPostgres": {
-                        "value": "[parameters('applyPostgres')]"
-                    },
-                    "applyRedis": {
-                        "value": "[parameters('applyRedis')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2018-05-01",
-            "name": "[parameters('websiteDeploymentName')]",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/website.json', parameters('_artifactsLocationSasToken')))]"
-                },
-                "parameters": {
-                    "sites_school_experience_name": {
-                        "value": "[parameters('sites_school_experience_name')]"
-                    },
-                    "config_web_name": {
-                        "value": "[parameters('config_web_name')]"
-                    },
-                    "dockerComposeFile": {
-                        "value": "[parameters('dockerComposeFile')]"
-                    },
-                    "serverfarms_serviceplan_name": {
-                        "value": "[parameters('serverfarms_serviceplan_name')]"
-                    },
-                    "appSettings": {
-                        "value": "[variables('appSettings')]"
-                    },
-                    "postgresUserPassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "[parameters('postgresUserPasswordSecretName')]"
-                        }
-                    },
-                    "slackWebhook": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "slackWebhook"
-                        }
-                    },
-                    "slackEnv": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
-                    },
-                    "environmentName": {
-                        "value": "[parameters('environmentName')]"
-                    },
-                    "sku": {
-                        "value": "[parameters('webAppSku')]"
-                    },
-                    "ipAddressRestriction": {
-                        "value": "[parameters('ipAddressRestriction')]"
-                    },
-                    "subnetMaskRestriction": {
-                        "value": "[parameters('subnetMaskRestriction')]"
-                    },
-                    "hostNameBindingsName": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].hostNameBindingsName]"
-                    },
-                    "sentryDsn": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "sentryDsn"
-                        }
-                    },
-                    "logsDirectorySizeLimit": {
-                        "value": "[parameters('logsDirectorySizeLimit')]"
-                    },
-                    "public_host_name": {
-                        "value": "[parameters('public_host_name')]"
-                    },
-                    "dfeSigninSecret": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "dfeSigninSecret"
-                        }
-                    },
-                    "dfeSigninApiSecret": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "dfeSigninApiSecret"
-                        }
-                    },
-                    "customDomainsWithCerts": {
-                        "value": "[parameters('customDomainsWithCerts')]"
-                    },
-                    "sslCertificates": {
-                        "value": "[parameters('sslCertificates')]"
-                    },
-                    "existingKeyVaultId": {
-                        "value": "[resourceId(parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                    },
-                    "crmClientSecret": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "crmClientSecret"
-                        }
-                    },
-                    "redis_name": {
-                        "value": "[parameters('redis_name')]"
-                    },
-                    "redis_database_index": {
-                        "value": "[parameters('redis_database_index')]"
-                    },
-                    "appInsightsInstrumentationKey": {
-                        "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName')),'2015-05-01').InstrumentationKey]"
-                    },
-                    "appInsightsName": {
-                        "value": "[variables('appInsightsName')]"
-                    },
-                    "_artifactsLocation": {
-                        "value": "[parameters('_artifactsLocation')]"
-                    },
-                    "_artifactsLocationSasToken": {
-                        "value": "[parameters('_artifactsLocationSasToken')]"
-                    },
-                    "applyServicePlan": {
-                        "value": "[parameters('applyServicePlan')]"
-                    },
-                    "backendResourceGroup": {
-                        "value": "[parameters('backendResourceGroup')]"
-                    },
-                    "webTestFrequencySecs": {
-                        "value": "[parameters('webTestFrequencySecs')]"
-                    },
-                    "webTestTimeoutSecs": {
-                        "value": "[parameters('webTestTimeoutSecs')]"
-                    },
-                    "webTestUrl": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].webTestUrl]"
-                    },
-                    "webTestExpected": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].webTestExpected]"
-                    },
-                    "webTestText": {
-                        "value": "[variables('environmentSettings')[parameters('environmentName')].webTestText]"
-                    },
-                    "webTestLocations": {
-                        "value": "[parameters('webTestLocations')]"
-                    },
-                    "webTestEnabled": {
-                        "value": "[parameters('webTestEnabled')]"
-                    },
-                    "webTestName": {
-                        "value": "[variables('webTestName')]"
-                    },
-                    "appInsightsName": {
-                        "value": "[variables('appInsightsName')]"
-                    },
-                    "deployToSlot": {
-                        "value": "[parameters('deployToSlot')]"
-                    },
-                    "deploymentUsername": {
-                        "value": "[parameters('deploymentUsername')]"
-                    },
-                    "deploymentPassword": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "deploymentPassword"
-                        }
-                    }
-                }
-            },
-            "dependsOn": ["backend", "[variables('appInsightsName')]"]
-        },
-        {
-            "apiVersion": "2018-05-01",
-            "name": "alerts",
-            "type": "Microsoft.Resources/deployments",
-            "condition": "[parameters('applyAlerts')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./alerts.json', parameters('_artifactsLocationSasToken')))]"
-                },
-                "parameters": {
-                    "sites_school_experience_name": {
-                        "value": "[parameters('sites_school_experience_name')]"
-                    },
-                    "servers_db_name": {
-                        "value": "[parameters('servers_db_name')]"
-                    },
-                    "redis_name": {
-                        "value": "[parameters('redis_name')]"
-                    },
-                    "serverfarms_serviceplan_name": {
-                        "value": "[parameters('serverfarms_serviceplan_name')]"
-                    },
-                    "_artifactsLocation": {
-                        "value": "[parameters('_artifactsLocation')]"
-                    },
-                    "_artifactsLocationSasToken": {
-                        "value": "[parameters('_artifactsLocationSasToken')]"
-                    },
-                    "actionGroupName": {
-                        "value": "[parameters('actionGroupName')]"
-                    },
-                    "actionGroupShortName": {
-                        "value": "[parameters('actionGroupShortName')]"
-                    },
-                    "supportEmailAddresses": {
-                        "value": "[parameters('supportEmailAddresses')]"
-                    },
-                    "thresholdHttpErrors": {
-                        "value": "[parameters('thresholdHttpErrors')]"
-                    },
-                    "thresholdResponseTime": {
-                        "value": "[parameters('thresholdResponseTime')]"
-                    },
-                    "thresholdPostgresActiveConnections": {
-                        "value": "[parameters('thresholdPostgresActiveConnections')]"
-                    },
-                    "thresholdPostgresCPUPercent": {
-                        "value": "[parameters('thresholdPostgresCPUPercent')]"
-                    },
-                    "thresholdPostgresStoragePercent": {
-                        "value": "[parameters('thresholdPostgresStoragePercent')]"
-                    },
-                    "thresholdRedisServerLoad": {
-                        "value": "[parameters('thresholdRedisServerLoad')]"
-                    },
-                    "thresholdRedisMemoryPercentage": {
-                        "value": "[parameters('thresholdRedisMemoryPercentage')]"
-                    },
-                    "thresholdServicePlanCPU": {
-                        "value": "[parameters('thresholdServicePlanCPU')]"
-                    },
-                    "thresholdMemoryPercentage": {
-                        "value": "[parameters('thresholdMemoryPercentage')]"
-                    },
-                    "activityLogAlerts_name": {
-                        "value": "[parameters('activityLogAlerts_name')]"
-                    },
-                    "alertNamePrefix": {
-                        "value": "[parameters('alertNamePrefix')]"
-                    },
-                    "webTestName": {
-                        "value": "[variables('webTestName')]"
-                    },
-                    "appInsightsName": {
-                        "value": "[variables('appInsightsName')]"
-                    },
-                    "addSupportWebhook": {
-                        "value": "[parameters('addSupportWebhook')]"
-                    },
-                    "supportWebhook": {
-                        "reference": {
-                            "keyVault": {
-                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                            },
-                            "secretName": "supportWebhook"
-                        }
-                    }
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"environmentName": {
+			"type": "string",
+			"allowedValues": [
+				"dev",
+				"staging",
+				"research",
+				"prod"
+			],
+			"metadata": {
+				"description": "Specify either dev, test or prod for configuration values."
+			}
+		},
+		"servers_db_createMode": {
+			"defaultValue": null,
+			"type": "SecureString"
+		},
+		"sites_school_experience_name": {
+			"type": "String"
+		},
+		"redis_name": {
+			"type": "String"
+		},
+		"config_web_name": {
+			"defaultValue": "web",
+			"type": "String"
+		},
+		"serverfarms_serviceplan_name": {
+			"defaultValue": "schoolExperienceServicePlan",
+			"type": "String"
+		},
+		"servers_db_name": {
+			"defaultValue": "schoolexperience-dev-db",
+			"type": "String"
+		},
+		"databases_postgres_name": {
+			"defaultValue": "postgres",
+			"type": "String"
+		},
+		"databases_azure_sys_name": {
+			"defaultValue": "azure_sys",
+			"type": "String"
+		},
+		"databases_azure_maintenance_name": {
+			"defaultValue": "azure_maintenance",
+			"type": "String"
+		},
+		"databases_school_experience_name": {
+			"defaultValue": "school_experience_test",
+			"type": "String"
+		},
+		"postgresAdminLoginName": {
+			"defaultValue": "adminuser",
+			"type": "String"
+		},
+		"postgresUserLoginName": {
+			"defaultValue": "railsappuser",
+			"type": "String"
+		},
+		"dockerComposeFile": {
+			"defaultValue": null,
+			"type": "String"
+		},
+		"redis_database_index": {
+			"defaultValue": "15",
+			"type": "String"
+		},
+		"vaultName": {
+			"type": "string",
+			"defaultValue": "schoolExperienceVault",
+			"metadata": {
+				"description": "The name of the keyvault that contains the secret."
+			}
+		},
+		"vaultResourceGroupName": {
+			"type": "string",
+			"defaultValue": "schoolExperienceVaultGroup",
+			"metadata": {
+				"description": "The name of the resource group that contains the keyvault."
+			}
+		},
+		"vaultSubscription": {
+			"type": "string",
+			"defaultValue": "[subscription().subscriptionId]",
+			"metadata": {
+				"description": "The name of the subscription that contains the keyvault."
+			}
+		},
+		"_artifactsLocation": {
+			"type": "string",
+			"metadata": {
+				"description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+			},
+			"defaultValue": "https://raw.githubusercontent.com/DFE-Digital/school-experience-devops/master/"
+		},
+		"_artifactsLocationSasToken": {
+			"type": "securestring",
+			"metadata": {
+				"description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+			},
+			"defaultValue": ""
+		},
+		"postgresSku": {
+			"type": "object",
+			"defaultValue": {
+				"name": "B_Gen5_2",
+				"tier": "Basic",
+				"family": "Gen5",
+				"capacity": 2
+			}
+		},
+		"redisSku": {
+			"type": "object",
+			"defaultValue": {
+				"name": "Basic",
+				"family": "C",
+				"capacity": 0
+			}
+		},
+		"webAppSku": {
+			"type": "object",
+			"defaultValue": {
+				"name": "B1",
+				"tier": "Basic",
+				"size": "B1",
+				"family": "B",
+				"capacity": 1
+			}
+		},
+		"public_host_name": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"ipAddressRestriction": {
+			"type": "string",
+			"defaultValue": "0.0.0.0/0"
+		},
+		"subnetMaskRestriction": {
+			"type": "string",
+			"defaultValue": "0.0.0.0"
+		},
+		"postgresStorageProfile": {
+			"type": "object",
+			"defaultValue": {
+				"storageMB": 51200,
+				"backupRetentionDays": 7,
+				"geoRedundantBackup": "Disabled"
+			}
+		},
+		"redisStorageAccountName": {
+			"type": "string",
+			"defaultValue": "schoolexperiencestorage",
+			"metadata": {
+				"description": "The storage account name used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+			}
+		},
+		"redisStorageAccountType": {
+			"type": "string",
+			"defaultValue": "Standard_LRS",
+			"metadata": {
+				"description": "The storage account type used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+			}
+		},
+		"redisStorageAccessTier": {
+			"type": "string",
+			"defaultValue": "Hot",
+			"metadata": {
+				"description": "The storage access tier used by redis, this is ignored in all environments other than production (only production Redis uses persistence)."
+			}
+		},
+		"appSecureUsername": {
+			"type": "string",
+			"defaultValue": "school"
+		},
+		"appSecurePassword": {
+			"type": "securestring",
+			"defaultValue": "experience"
+		},
+		"googleAnalyticsTrackingId": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"websiteCertificateResourceName": {
+			"type": "string",
+			"defaultValue": "school-experience-certificate"
+		},
+		"websiteCertificateSecretName": {
+			"type": "string",
+			"defaultValue": "website-certificate"
+		},
+		"secretKeyBase": {
+			"type": "string",
+			"defaultValue": "stubbed"
+		},
+		"notifyApiKey": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"bingMapsKey": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"azureMapsKey": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"logsDirectorySizeLimit": {
+			"type": "string",
+			"defaultValue": "100"
+		},
+		"applyPostgres": {
+			"type": "bool",
+			"defaultValue": true
+		},
+		"applyRedis": {
+			"type": "bool",
+			"defaultValue": true
+		},
+		"dfeSigninBaseUrl": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeSigninClientId": {
+			"type": "string",
+			"defaultValue": "schoolexperience"
+		},
+		"dfeSigninHost": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeSigninApiClient": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeSigninApiEndpoint": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeSigninApiEnabled": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeSigninServiceId": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeSigninRoleId": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeSigninSchoolChangeEnabled": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeSigninSchoolChangeApprovalUrl": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"sslCertificates": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"customDomainsWithCerts": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"actionGroupName": {
+			"type": "string",
+			"defaultValue": "schoolExperienceSupport"
+		},
+		"actionGroupShortName": {
+			"type": "string",
+			"defaultValue": "sch-exp-sup"
+		},
+		"supportEmailAddresses": {
+			"type": "array",
+			"defaultValue": []
+		},
+		"applyAlerts": {
+			"type": "bool",
+			"defaultValue": false
+		},
+		"oldSepDomains": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"enableAppInsightsJavascript": {
+			"type": "string",
+			"defaultValue": "false"
+		},
+		"crmClientId": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"crmServiceUrl": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"crmAuthTenantId": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"crmChannelCreation": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"crmCaching": {
+			"type": "string",
+			"defaultValue": "0"
+		},
+		"phase": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"featureFlags": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"fakeCrm": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"dfeServicesListUrl": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"crmOwnerId": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"crmCountryId": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"railsMaxThreads": {
+			"type": "string",
+			"defaultValue": "5"
+		},
+		"applyServicePlan": {
+			"type": "bool",
+			"defaultValue": true
+		},
+		"applyBackend": {
+			"type": "bool",
+			"defaultValue": true
+		},
+		"websiteDeploymentName": {
+			"type": "string",
+			"defaultValue": "website",
+			"metadata": {
+				"description": "Allows multiple websites to be deployed concurrently."
+			}
+		},
+		"thresholdHttpErrors": {
+			"type": "string",
+			"defaultValue": "2"
+		},
+		"thresholdResponseTime": {
+			"type": "string",
+			"defaultValue": "30"
+		},
+		"thresholdPostgresActiveConnections": {
+			"type": "string",
+			"defaultValue": "10"
+		},
+		"thresholdPostgresCPUPercent": {
+			"type": "string",
+			"defaultValue": "50"
+		},
+		"thresholdPostgresStoragePercent": {
+			"type": "string",
+			"defaultValue": "50"
+		},
+		"thresholdRedisServerLoad": {
+			"type": "string",
+			"defaultValue": "50"
+		},
+		"thresholdRedisMemoryPercentage": {
+			"type": "string",
+			"defaultValue": "50"
+		},
+		"thresholdServicePlanCPU": {
+			"type": "string",
+			"defaultValue": "60"
+		},
+		"thresholdMemoryPercentage": {
+			"type": "string",
+			"defaultValue": "80"
+		},
+		"postgresUserPasswordSecretName": {
+			"type": "string",
+			"defaultValue": "postgresUserPassword"
+		},
+		"backendResourceGroup": {
+			"type": "string",
+			"defaultValue": "[resourceGroup().name]"
+		},
+		"webTestFrequencySecs": {
+			"type": "string",
+			"defaultValue": "300"
+		},
+		"webTestTimeoutSecs": {
+			"type": "string",
+			"defaultValue": "120"
+		},
+		"webTestLocations": {
+			"type": "array",
+			"defaultValue": [{
+					"Id": "us-il-ch1-azr"
+				},
+				{
+					"Id": "us-ca-sjc-azr"
+				},
+				{
+					"Id": "emea-fr-pra-edge"
+				},
+				{
+					"Id": "emea-nl-ams-azr"
+				},
+				{
+					"Id": "emea-gb-db3-azr"
+				}
+			]
+		},
+		"webTestEnabled": {
+			"type": "bool",
+			"defaultValue": false
+		},
+		"webTestPath": {
+			"type": "string",
+			"defaultValue": "healthcheck.txt",
+			"metadata": {
+				"description": "Forms part of the URL used to test the health of the application i.e. https://<web app name>.azurewebsites.net/<webTestPath>"
+			}
+		},
+		"activityLogAlerts_name": {
+			"defaultValue": "ServiceHealthActivityLogAlert",
+			"type": "String"
+		},
+		"alertNamePrefix": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"applyRedisFirewall": {
+			"type": "bool",
+			"defaultValue": true
+		},
+		"applyPostgresFirewall": {
+			"type": "bool",
+			"defaultValue": true
+		},
+		"slackEnvPrefix": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"addSupportWebhook": {
+			"type": "bool",
+			"defaultValue": false
+		},
+		"deployToSlot": {
+			"type": "bool",
+			"defaultValue": false,
+			"metadata": {
+				"description": "Whether to deploy to a slot, when creating a new environment from script we deploy directly to the main slot hence a default value of false. When deploying from within a pipeline we deploy to a slot and then use the slot swap mechanism to deploy with zero downtime."
+			}
+		},
+		"deploymentId": {
+			"type": "string",
+			"defaultValue": "",
+			"metadata": {
+				"description": "A string that should uniquely identify the deployment so that the deployer can confirm the deployment has taken place via custom application endpoint."
+			}
+		},
+		"deploymentUsername": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"deactivateCandidates": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"candidateNotification": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"candidateUrnWhitelist": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"azureMapsSku": {
+			"type": "object",
+			"defaultValue": {
+				"name": "S0"
+			}
+		},
+    "guid": {
+      "type": "string",
+      "defaultValue": "[guid(resourceGroup().id)]",
+      "metadata": {
+        "description": "Input string for new GUID associated with assigning built in role types"
+      }
+    }
+	},
+	"variables": {
+		"appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
+		"webTestName": "[concat(parameters('sites_school_experience_name'),'-webtest')]",
+		"azureMapsAccountName": "[concat(parameters('sites_school_experience_name'), '-maps')]",
+		"userAssignedIdentityName": "[concat(parameters('sites_school_experience_name'), '-maps-user')]",
+		"azureMapsDataReader": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '423170ca-a8f6-4b0f-8487-9e4eb8f49bfa')]",
+		"environmentSettings": {
+			"dev": {
+				"railsEnv": "servertest",
+				"slackEnv": "",
+				"hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+				"webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
+				"webTestExpected": "401",
+				"webTestText": "denied"
+			},
+			"staging": {
+				"railsEnv": "production",
+				"slackEnv": "[concat(parameters('slackEnvPrefix'),'staging')]",
+				"ipSecurityRestrictions": null,
+				"hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+				"webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
+				"webTestExpected": "401",
+				"webTestText": "denied"
+			},
+			"research": {
+				"railsEnv": "production",
+				"slackEnv": "[concat(parameters('slackEnvPrefix'),'research')]",
+				"ipSecurityRestrictions": null,
+				"hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+				"webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
+				"webTestExpected": "401",
+				"webTestText": "denied"
+			},
+			"prod": {
+				"railsEnv": "production",
+				"slackEnv": "[concat(parameters('slackEnvPrefix'),'production')]",
+				"ipSecurityRestrictions": null,
+				"hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('public_host_name'))]",
+				"webTestUrl": "[concat('https://',parameters('public_host_name'), '/', parameters('webTestPath'))]",
+				"webTestExpected": "200",
+				"webTestText": "healthy"
+			}
+		},
+		"appSettings": [{
+				"name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
+				"value": "false"
+			},
+			{
+				"name": "WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION",
+				"value": "0"
+			},
+			{
+				"name": "SECURE_USERNAME",
+				"value": "[parameters('appSecureUsername')]"
+			},
+			{
+				"name": "SECURE_PASSWORD",
+				"value": "[parameters('appSecurePassword')]"
+			},
+			{
+				"name": "SECRET_KEY_BASE",
+				"value": "[parameters('secretKeyBase')]"
+			},
+			{
+				"name": "DB_DATABASE",
+				"value": "[parameters('databases_school_experience_name')]"
+			},
+			{
+				"name": "DB_HOST",
+				"value": "[concat(parameters('servers_db_name'), '.postgres.database.azure.com')]"
+			},
+			{
+				"name": "DB_USERNAME",
+				"value": "[concat(parameters('postgresUserLoginName'), '@', parameters('servers_db_name'))]"
+			},
+			{
+				"name": "RAILS_ENV",
+				"value": "[variables('environmentSettings')[parameters('environmentName')].railsEnv]"
+			},
+			{
+				"name": "SLACK_ENV",
+				"value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
+			},
+			{
+				"name": "GA_TRACKING_ID",
+				"value": "[parameters('googleAnalyticsTrackingId')]"
+			},
+			{
+				"name": "NOTIFY_API_KEY",
+				"value": "[parameters('notifyApiKey')]"
+			},
+			{
+				"name": "BING_MAPS_KEY",
+				"value": "[parameters('bingMapsKey')]"
+			},
+			{
+				"name": "AZURE_MAPS_KEY",
+				"value": "[parameters('azureMapsKey')]"
+			},
+			{
+				"name": "RAILS_MAX_THREADS",
+				"value": "[parameters('railsMaxThreads')]"
+			},
+			{
+				"name": "CANONICAL_DOMAIN",
+				"value": "[parameters('public_host_name')]"
+			},
+			{
+				"name": "DFE_SIGNIN_BASE_URL",
+				"value": "[parameters('dfeSigninBaseUrl')]"
+			},
+			{
+				"name": "DFE_SIGNIN_CLIENT_ID",
+				"value": "[parameters('dfeSigninClientId')]"
+			},
+			{
+				"name": "DFE_SIGNIN_API_CLIENT",
+				"value": "[parameters('dfeSigninApiClient')]"
+			},
+			{
+				"name": "DFE_SIGNIN_API_ENDPOINT",
+				"value": "[parameters('dfeSigninApiEndpoint')]"
+			},
+			{
+				"name": "DFE_SIGNIN_API_ENABLED",
+				"value": "[parameters('dfeSigninApiEnabled')]"
+			},
+			{
+				"name": "DFE_SIGNIN_HOST",
+				"value": "[parameters('dfeSigninHost')]"
+			},
+			{
+				"name": "DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_SERVICE_ID",
+				"value": "[parameters('dfeSigninServiceId')]"
+			},
+			{
+				"name": "DFE_SIGNIN_SCHOOL_EXPERIENCE_ADMIN_ROLE_ID",
+				"value": "[parameters('dfeSigninRoleId')]"
+			},
+			{
+				"name": "DFE_SIGNIN_API_SCHOOL_CHANGE_ENABLED",
+				"value": "[parameters('dfeSigninSchoolChangeEnabled')]"
+			},
+			{
+				"name": "DFE_SIGNIN_REQUEST_ORGANISATION_URL",
+				"value": "[parameters('dfeSigninSchoolChangeApprovalUrl')]"
+			},
+			{
+				"name": "OLD_SEP_DOMAINS",
+				"value": "[parameters('oldSepDomains')]"
+			},
+			{
+				"name": "APPINSIGHTS_JAVASCRIPT_ENABLED",
+				"value": "[parameters('enableAppInsightsJavascript')]"
+			},
+			{
+				"name": "SENTRY_CURRENT_ENV",
+				"value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
+			},
+			{
+				"name": "CRM_CLIENT_ID",
+				"value": "[parameters('crmClientId')]"
+			},
+			{
+				"name": "CRM_SERVICE_URL",
+				"value": "[parameters('crmServiceUrl')]"
+			},
+			{
+				"name": "CRM_AUTH_TENANT_ID",
+				"value": "[parameters('crmAuthTenantId')]"
+			},
+			{
+				"name": "CRM_CHANNEL_CREATION",
+				"value": "[parameters('crmChannelCreation')]"
+			},
+			{
+				"name": "CRM_OWNER_ID",
+				"value": "[parameters('crmOwnerId')]"
+			},
+			{
+				"name": "CRM_COUNTRY_ID",
+				"value": "[parameters('crmCountryId')]"
+			},
+			{
+				"name": "CRM_CACHING",
+				"value": "[parameters('crmCaching')]"
+			},
+			{
+				"name": "FAKE_CRM",
+				"value": "[parameters('fakeCrm')]"
+			},
+			{
+				"name": "PHASE",
+				"value": "[parameters('phase')]"
+			},
+			{
+				"name": "FEATURE_FLAGS",
+				"value": "[parameters('featureFlags')]"
+			},
+			{
+				"name": "DFE_SERVICES_LIST_URL",
+				"value": "[parameters('dfeServicesListUrl')]"
+			},
+			{
+				"name": "DEPLOYMENT_ID",
+				"value": "[parameters('deploymentId')]"
+			},
+			{
+				"name": "DEPLOYMENT_USERNAME",
+				"value": "[parameters('deploymentUsername')]"
+			},
+			{
+				"name": "DEACTIVATE_CANDIDATES",
+				"value": "[parameters('deactivateCandidates')]"
+			},
+			{
+				"name": "CANDIDATE_NOTIFICATION",
+				"value": "[parameters('candidateNotification')]"
+			},
+			{
+				"name": "CANDIDATE_URN_WHITELIST",
+				"value": "[parameters('candidateUrnWhitelist')]"
+			}
+		]
+	},
+	"resources": [{
+			"apiVersion": "2018-05-01",
+			"name": "backend",
+			"type": "Microsoft.Resources/deployments",
+			"condition": "[parameters('applyBackend')]",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"contentVersion": "1.0.0.0",
+					"uri": "[uri(parameters('_artifactsLocation'), concat('./backend.json', parameters('_artifactsLocationSasToken')))]"
+				},
+				"parameters": {
+					"servers_db_createMode": {
+						"value": "[parameters('servers_db_createMode')]"
+					},
+					"servers_db_name": {
+						"value": "[parameters('servers_db_name')]"
+					},
+					"databases_postgres_name": {
+						"value": "[parameters('databases_postgres_name')]"
+					},
+					"databases_azure_sys_name": {
+						"value": "[parameters('databases_azure_sys_name')]"
+					},
+					"databases_azure_maintenance_name": {
+						"value": "[parameters('databases_azure_maintenance_name')]"
+					},
+					"databases_school_experience_name": {
+						"value": "[parameters('databases_school_experience_name')]"
+					},
+					"postgresAdminLoginName": {
+						"value": "[parameters('postgresAdminLoginName')]"
+					},
+					"postgresAdminPassword": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "postgresAdminPassword"
+						}
+					},
+					"postgresSku": {
+						"value": "[parameters('postgresSku')]"
+					},
+					"postgresStorageProfile": {
+						"value": "[parameters('postgresStorageProfile')]"
+					},
+					"redis_name": {
+						"value": "[parameters('redis_name')]"
+					},
+					"redisSku": {
+						"value": "[parameters('redisSku')]"
+					},
+					"redisStorageAccountName": {
+						"value": "[parameters('redisStorageAccountName')]"
+					},
+					"redisStorageAccountType": {
+						"value": "[parameters('redisStorageAccountType')]"
+					},
+					"redisStorageAccessTier": {
+						"value": "[parameters('redisStorageAccessTier')]"
+					},
+					"environmentName": {
+						"value": "[parameters('environmentName')]"
+					},
+					"_artifactsLocation": {
+						"value": "[parameters('_artifactsLocation')]"
+					},
+					"applyPostgres": {
+						"value": "[parameters('applyPostgres')]"
+					},
+					"applyRedis": {
+						"value": "[parameters('applyRedis')]"
+					}
+				}
+			}
+		},
+		{
+			"apiVersion": "2018-05-01",
+			"name": "[parameters('websiteDeploymentName')]",
+			"type": "Microsoft.Resources/deployments",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"contentVersion": "1.0.0.0",
+					"uri": "[uri(parameters('_artifactsLocation'), concat('./nested/website.json', parameters('_artifactsLocationSasToken')))]"
+				},
+				"parameters": {
+					"sites_school_experience_name": {
+						"value": "[parameters('sites_school_experience_name')]"
+					},
+					"config_web_name": {
+						"value": "[parameters('config_web_name')]"
+					},
+					"dockerComposeFile": {
+						"value": "[parameters('dockerComposeFile')]"
+					},
+					"serverfarms_serviceplan_name": {
+						"value": "[parameters('serverfarms_serviceplan_name')]"
+					},
+					"appSettings": {
+						"value": "[variables('appSettings')]"
+					},
+					"postgresUserPassword": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "[parameters('postgresUserPasswordSecretName')]"
+						}
+					},
+					"slackWebhook": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "slackWebhook"
+						}
+					},
+					"slackEnv": {
+						"value": "[variables('environmentSettings')[parameters('environmentName')].slackEnv]"
+					},
+					"environmentName": {
+						"value": "[parameters('environmentName')]"
+					},
+					"sku": {
+						"value": "[parameters('webAppSku')]"
+					},
+					"ipAddressRestriction": {
+						"value": "[parameters('ipAddressRestriction')]"
+					},
+					"subnetMaskRestriction": {
+						"value": "[parameters('subnetMaskRestriction')]"
+					},
+					"hostNameBindingsName": {
+						"value": "[variables('environmentSettings')[parameters('environmentName')].hostNameBindingsName]"
+					},
+					"sentryDsn": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "sentryDsn"
+						}
+					},
+					"logsDirectorySizeLimit": {
+						"value": "[parameters('logsDirectorySizeLimit')]"
+					},
+					"public_host_name": {
+						"value": "[parameters('public_host_name')]"
+					},
+					"dfeSigninSecret": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "dfeSigninSecret"
+						}
+					},
+					"dfeSigninApiSecret": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "dfeSigninApiSecret"
+						}
+					},
+					"customDomainsWithCerts": {
+						"value": "[parameters('customDomainsWithCerts')]"
+					},
+					"sslCertificates": {
+						"value": "[parameters('sslCertificates')]"
+					},
+					"existingKeyVaultId": {
+						"value": "[resourceId(parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+					},
+					"crmClientSecret": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "crmClientSecret"
+						}
+					},
+					"redis_name": {
+						"value": "[parameters('redis_name')]"
+					},
+					"redis_database_index": {
+						"value": "[parameters('redis_database_index')]"
+					},
+					"appInsightsInstrumentationKey": {
+						"value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName')),'2015-05-01').InstrumentationKey]"
+					},
+					"appInsightsName": {
+						"value": "[variables('appInsightsName')]"
+					},
+					"_artifactsLocation": {
+						"value": "[parameters('_artifactsLocation')]"
+					},
+					"_artifactsLocationSasToken": {
+						"value": "[parameters('_artifactsLocationSasToken')]"
+					},
+					"applyServicePlan": {
+						"value": "[parameters('applyServicePlan')]"
+					},
+					"backendResourceGroup": {
+						"value": "[parameters('backendResourceGroup')]"
+					},
+					"webTestFrequencySecs": {
+						"value": "[parameters('webTestFrequencySecs')]"
+					},
+					"webTestTimeoutSecs": {
+						"value": "[parameters('webTestTimeoutSecs')]"
+					},
+					"webTestUrl": {
+						"value": "[variables('environmentSettings')[parameters('environmentName')].webTestUrl]"
+					},
+					"webTestExpected": {
+						"value": "[variables('environmentSettings')[parameters('environmentName')].webTestExpected]"
+					},
+					"webTestText": {
+						"value": "[variables('environmentSettings')[parameters('environmentName')].webTestText]"
+					},
+					"webTestLocations": {
+						"value": "[parameters('webTestLocations')]"
+					},
+					"webTestEnabled": {
+						"value": "[parameters('webTestEnabled')]"
+					},
+					"webTestName": {
+						"value": "[variables('webTestName')]"
+					},
+					"deployToSlot": {
+						"value": "[parameters('deployToSlot')]"
+					},
+					"deploymentUsername": {
+						"value": "[parameters('deploymentUsername')]"
+					},
+					"deploymentPassword": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "deploymentPassword"
+						}
+					}
+				}
+			},
+			"dependsOn": ["backend", "[variables('appInsightsName')]"]
+		},
+		{
+			"apiVersion": "2018-05-01",
+			"name": "alerts",
+			"type": "Microsoft.Resources/deployments",
+			"condition": "[parameters('applyAlerts')]",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"contentVersion": "1.0.0.0",
+					"uri": "[uri(parameters('_artifactsLocation'), concat('./alerts.json', parameters('_artifactsLocationSasToken')))]"
+				},
+				"parameters": {
+					"sites_school_experience_name": {
+						"value": "[parameters('sites_school_experience_name')]"
+					},
+					"servers_db_name": {
+						"value": "[parameters('servers_db_name')]"
+					},
+					"redis_name": {
+						"value": "[parameters('redis_name')]"
+					},
+					"serverfarms_serviceplan_name": {
+						"value": "[parameters('serverfarms_serviceplan_name')]"
+					},
+					"_artifactsLocation": {
+						"value": "[parameters('_artifactsLocation')]"
+					},
+					"_artifactsLocationSasToken": {
+						"value": "[parameters('_artifactsLocationSasToken')]"
+					},
+					"actionGroupName": {
+						"value": "[parameters('actionGroupName')]"
+					},
+					"actionGroupShortName": {
+						"value": "[parameters('actionGroupShortName')]"
+					},
+					"supportEmailAddresses": {
+						"value": "[parameters('supportEmailAddresses')]"
+					},
+					"thresholdHttpErrors": {
+						"value": "[parameters('thresholdHttpErrors')]"
+					},
+					"thresholdResponseTime": {
+						"value": "[parameters('thresholdResponseTime')]"
+					},
+					"thresholdPostgresActiveConnections": {
+						"value": "[parameters('thresholdPostgresActiveConnections')]"
+					},
+					"thresholdPostgresCPUPercent": {
+						"value": "[parameters('thresholdPostgresCPUPercent')]"
+					},
+					"thresholdPostgresStoragePercent": {
+						"value": "[parameters('thresholdPostgresStoragePercent')]"
+					},
+					"thresholdRedisServerLoad": {
+						"value": "[parameters('thresholdRedisServerLoad')]"
+					},
+					"thresholdRedisMemoryPercentage": {
+						"value": "[parameters('thresholdRedisMemoryPercentage')]"
+					},
+					"thresholdServicePlanCPU": {
+						"value": "[parameters('thresholdServicePlanCPU')]"
+					},
+					"thresholdMemoryPercentage": {
+						"value": "[parameters('thresholdMemoryPercentage')]"
+					},
+					"activityLogAlerts_name": {
+						"value": "[parameters('activityLogAlerts_name')]"
+					},
+					"alertNamePrefix": {
+						"value": "[parameters('alertNamePrefix')]"
+					},
+					"webTestName": {
+						"value": "[variables('webTestName')]"
+					},
+					"appInsightsName": {
+						"value": "[variables('appInsightsName')]"
+					},
+					"addSupportWebhook": {
+						"value": "[parameters('addSupportWebhook')]"
+					},
+					"supportWebhook": {
+						"reference": {
+							"keyVault": {
+								"id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+							},
+							"secretName": "supportWebhook"
+						}
+					}
 
-                }
-            },
-            "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
-        },
-        {
-            "apiVersion": "2018-05-01",
-            "name": "redis-firewall",
-            "type": "Microsoft.Resources/deployments",
-            "condition": "[parameters('applyRedisFirewall')]",
-            "resourceGroup": "[parameters('backendResourceGroup')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/redis-firewall.json', parameters('_artifactsLocationSasToken')))]"
-                },
-                "parameters": {
-                    "sites_school_experience_name": {
-                        "value": "[parameters('sites_school_experience_name')]"
-                    },
-                    "webAppIps": {
-                        "value": "[reference(parameters('websiteDeploymentName')).outputs.webAppIps.value]"
-                    },
-                    "redis_name": {
-                        "value": "[parameters('redis_name')]"
-                    }
-                }
-             },
-            "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
-         },
-        {
-            "apiVersion": "2018-05-01",
-            "name": "postgres-firewall",
-            "type": "Microsoft.Resources/deployments",
-            "condition": "[parameters('applyPostgresFirewall')]",
-            "resourceGroup": "[parameters('backendResourceGroup')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres-firewall.json', parameters('_artifactsLocationSasToken')))]"
-                },
-                "parameters": {
-                    "sites_school_experience_name": {
-                        "value": "[parameters('sites_school_experience_name')]"
-                    },
-                    "webAppIps": {
-                        "value": "[reference(parameters('websiteDeploymentName')).outputs.webAppIps.value]"
-                    },
-                    "servers_db_name": {
-                        "value": "[parameters('servers_db_name')]"
-                    }
-                }
-             },
-            "dependsOn": ["backend","[parameters('websiteDeploymentName')]"]
-         },
-        {
-            "type": "microsoft.insights/components",
-            "apiVersion": "2015-05-01",
-            "name": "[variables('appInsightsName')]",
-            "location": "[resourceGroup().location]",
-            "kind": "other",
-            "properties": {
-                "Application_Type": "other",
-                "Flow_Type": "Redfield",
-                "Request_Source": "IbizaAIExtension"
-            }
-        }
-    ]
+				}
+			},
+			"dependsOn": ["backend", "[parameters('websiteDeploymentName')]"]
+		},
+		{
+			"apiVersion": "2018-05-01",
+			"name": "redis-firewall",
+			"type": "Microsoft.Resources/deployments",
+			"condition": "[parameters('applyRedisFirewall')]",
+			"resourceGroup": "[parameters('backendResourceGroup')]",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"contentVersion": "1.0.0.0",
+					"uri": "[uri(parameters('_artifactsLocation'), concat('./nested/redis-firewall.json', parameters('_artifactsLocationSasToken')))]"
+				},
+				"parameters": {
+					"sites_school_experience_name": {
+						"value": "[parameters('sites_school_experience_name')]"
+					},
+					"webAppIps": {
+						"value": "[reference(parameters('websiteDeploymentName')).outputs.webAppIps.value]"
+					},
+					"redis_name": {
+						"value": "[parameters('redis_name')]"
+					}
+				}
+			},
+			"dependsOn": ["backend", "[parameters('websiteDeploymentName')]"]
+		},
+		{
+			"apiVersion": "2018-05-01",
+			"name": "postgres-firewall",
+			"type": "Microsoft.Resources/deployments",
+			"condition": "[parameters('applyPostgresFirewall')]",
+			"resourceGroup": "[parameters('backendResourceGroup')]",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"contentVersion": "1.0.0.0",
+					"uri": "[uri(parameters('_artifactsLocation'), concat('./nested/postgres-firewall.json', parameters('_artifactsLocationSasToken')))]"
+				},
+				"parameters": {
+					"sites_school_experience_name": {
+						"value": "[parameters('sites_school_experience_name')]"
+					},
+					"webAppIps": {
+						"value": "[reference(parameters('websiteDeploymentName')).outputs.webAppIps.value]"
+					},
+					"servers_db_name": {
+						"value": "[parameters('servers_db_name')]"
+					}
+				}
+			},
+			"dependsOn": ["backend", "[parameters('websiteDeploymentName')]"]
+		},
+		{
+			"type": "microsoft.insights/components",
+			"apiVersion": "2015-05-01",
+			"name": "[variables('appInsightsName')]",
+			"location": "[resourceGroup().location]",
+			"kind": "other",
+			"properties": {
+				"Application_Type": "other",
+				"Flow_Type": "Redfield",
+				"Request_Source": "IbizaAIExtension"
+			}
+		},
+		{
+			"type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+			"apiVersion": "2018-11-30",
+			"name": "[variables('userAssignedIdentityName')]",
+			"location": "[resourceGroup().location]"
+		},
+		{
+			"type": "Microsoft.Maps/accounts",
+			"apiVersion": "2018-05-01",
+			"name": "[variables('azureMapsAccountName')]",
+			"location": "[resourceGroup().location]",
+			"sku": "[parameters('azureMapsSku')]"
+		},
+		{
+			"type": "Microsoft.Maps/accounts/providers/roleAssignments",
+			"apiVersion": "2018-09-01-preview",
+			"name": "[concat(variables('azureMapsAccountName'), '/Microsoft.Authorization/', parameters('guid'))]",
+			"dependsOn": [
+				"[variables('azureMapsAccountName')]",
+				"[variables('userAssignedIdentityName')]"
+			],
+			"properties": {
+				"roleDefinitionId": "[variables('azureMapsDataReader')]",
+				"principalId": "[reference(variables('userAssignedIdentityName')).principalId]",
+				"principalType": "ServicePrincipal"
+			}
+		}
+	]
 }
