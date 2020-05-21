@@ -480,6 +480,12 @@
         "candidateUrnWhitelist": {
             "type": "string",
             "defaultValue": ""
+        },
+        "azureMapsSku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "S0",
+            }
         }
     },
     "variables": {
@@ -954,16 +960,7 @@
                             },
                             "secretName": "deploymentPassword"
                         }
-                    },
-                    "mapsAccountName": {
-                        "value": "[variables('mapsAccountName')]"
-                    },
-                    "azureMapsSku": {
-                        "type": "object",
-                        "defaultValue": {
-                            "name": "S0",
-                        }
-                    },
+                    }
                 }
             },
             "dependsOn": ["backend", "[variables('appInsightsName')]"]
