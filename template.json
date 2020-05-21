@@ -130,12 +130,6 @@
                 "capacity": 1
             }
         },
-        "mapsSku": {
-            "type": "object",
-            "defaultValue": {
-                "name": "S0",
-            }
-        },
         "public_host_name": {
             "type": "string",
             "defaultValue": ""
@@ -490,8 +484,10 @@
     },
     "variables": {
         "appInsightsName": "[concat(parameters('sites_school_experience_name'), '-insights')]",
-        "mapsAccountName": "[concat(parameters('sites_school_experience_name'), '-maps')]",
         "webTestName": "[concat(parameters('sites_school_experience_name'),'-webtest')]",
+        "azureMapsAccountName": "[concat(parameters('sites_school_experience_name'), '-maps')]",
+        "userAssignedIdentityName": "[concat(parameters('sites_school_experience_name'), '-maps-user')]",
+        "azureMapsDataReader": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '423170ca-a8f6-4b0f-8487-9e4eb8f49bfa')]",
         "environmentSettings": {
             "dev": {
                 "railsEnv": "servertest",
@@ -909,9 +905,6 @@
                     "appInsightsName": {
                         "value": "[variables('appInsightsName')]"
                     },
-                    "mapsAccountName": {
-                        "value": "[variables('mapsAccountName')]"
-                    },
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
                     },
@@ -961,7 +954,16 @@
                             },
                             "secretName": "deploymentPassword"
                         }
-                    }
+                    },
+                    "mapsAccountName": {
+                        "value": "[variables('mapsAccountName')]"
+                    },
+                    "azureMapsSku": {
+                        "type": "object",
+                        "defaultValue": {
+                            "name": "S0",
+                        }
+                    },
                 }
             },
             "dependsOn": ["backend", "[variables('appInsightsName')]"]
@@ -1125,11 +1127,31 @@
             }
         },
         {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "name": "[variables('userAssignedIdentityName')]",
+            "location": "[resourceGroup().location]",
+        },
+        {
             "type": "Microsoft.Maps/accounts",
             "apiVersion": "2018-05-01",
-            "name": "[variables('mapsAccountName')]",
+            "name": "[variables('azureMapsAccountName')]",
             "location": "[resourceGroup().location]",
-            "sku": "[parameters('webAppSku')]"
+            "sku": "[parameters('azureMapsSku')]"
+        },
+        {
+            "type": "Microsoft.Maps/accounts/providers/roleAssignments",
+            "apiVersion": "2018-09-01-preview",
+            "name": "[concat(variables('azureMapsAccountName'), '/Microsoft.Authorization/', parameters('guid'))]",
+            "dependsOn": [
+                "[variables('azureMapsAccountName')]",
+                "[variables('userAssignedIdentityName')]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('azureMapsDataReader')]",
+                "principalId": "[reference(variables('userAssignedIdentityName')).principalId]",
+                "principalType": "ServicePrincipal"
+            }
         }
     ]
 }
