@@ -203,6 +203,10 @@
             "type": "string",
             "defaultValue": ""
         },
+        "googleMapsKey": {
+            "type": "string",
+            "defaultValue": ""
+        },
         "logsDirectorySizeLimit": {
             "type": "string",
             "defaultValue": "100"
@@ -570,6 +574,10 @@
             {
                 "name": "BING_MAPS_KEY",
                 "value": "[parameters('bingMapsKey')]"
+            },
+            {
+                "name": "GOOGLE_MAPS_KEY",
+                "value": "[parameters('googleMapsKey')]"
             },
             {
                 "name": "RAILS_MAX_THREADS",
