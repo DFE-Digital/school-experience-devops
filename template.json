@@ -495,7 +495,7 @@
                 "webTestText": "denied"
             },
             "staging": {
-                "railsEnv": "production",
+                "railsEnv": "staging",
                 "slackEnv": "[concat(parameters('slackEnvPrefix'),'staging')]",
                 "ipSecurityRestrictions": null,
                 "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
