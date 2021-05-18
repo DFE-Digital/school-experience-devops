@@ -291,6 +291,14 @@
              "type": "string",
              "defaultValue": "false"
         },
+         "flipperPassword": {
+             "type": "string",
+             "defaultValue": ""
+        },
+         "gitApiToken": {
+             "type": "string",
+             "defaultValue": ""
+        },
         "crmClientId": {
              "type": "string",
              "defaultValue": ""
@@ -646,6 +654,14 @@
             {
                 "name": "CRM_SERVICE_URL",
                 "value": "[parameters('crmServiceUrl')]"
+            },
+            {
+                "name": "FLIPPER_PASSWORD",
+                "value": "[parameters('flipperPassword')]"
+            },
+            {
+                "name": "GIT_API_TOKEN",
+                "value": "[parameters('gitApiToken')]"
             },
             {
                 "name": "CRM_AUTH_TENANT_ID",
