@@ -1,3 +1,5 @@
+echo Build Source Branch is $BUILD_SOURCEBRANCHNAME
+
 if [ $BUILD_SOURCEBRANCHNAME == 'master' ]; then
   echo "##vso[task.setvariable variable=schoolExperienceImageTag]v${BUILD_BUILDID}"
   echo "##vso[task.setvariable variable=schoolExperienceImageTagStable]v${BUILD_BUILDID}-stable"
