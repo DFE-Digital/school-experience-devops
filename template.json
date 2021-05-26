@@ -8,6 +8,7 @@
               "dev",
               "staging",
               "research",
+              "review",
               "prod"
             ],
             "metadata": {
@@ -503,6 +504,15 @@
                 "webTestText": "denied"
             },
             "staging": {
+                "railsEnv": "staging",
+                "slackEnv": "[concat(parameters('slackEnvPrefix'),'staging')]",
+                "ipSecurityRestrictions": null,
+                "hostNameBindingsName": "[concat(parameters('sites_school_experience_name'), '/', parameters('sites_school_experience_name'), '.azurewebsites.net')]",
+                "webTestUrl": "[concat('https://',parameters('sites_school_experience_name'), '.azurewebsites.net', '/', parameters('webTestPath'))]",
+                "webTestExpected": "401",
+                "webTestText": "denied"
+            },
+            "review": {
                 "railsEnv": "staging",
                 "slackEnv": "[concat(parameters('slackEnvPrefix'),'staging')]",
                 "ipSecurityRestrictions": null,
